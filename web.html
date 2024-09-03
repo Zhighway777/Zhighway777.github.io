@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open the Mind</title>
+  <style>
+    /* 全局样式 */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background: #f1f1f1;
+      color: #333;
+    }
+    
+    .header {
+      padding: 30px;
+      text-align: center;
+      background: #4CAF50; /* 使用统一的配色方案 */
+      color: white;
+    }
+    
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    /* 使用Flexbox替代浮动布局 */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .leftcolumn {
+      flex: 3;
+    }
+
+    .rightcolumn {
+      flex: 1;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .footer {
+      padding: 15px;
+      text-align: center;
+      background: #333;
+      color: white;
+      margin-top: 20px;
+    }
+
+    /* 响应式设计 */
+    @media screen and (max-width: 800px) {
+      .leftcolumn, .rightcolumn {
+        flex: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Open the Mind</h1>
+  <p>欢迎来到我的个人博客</p>
+</div>
+
+<div class="topnav">
+  <a href="#">学习方法</a>
+  <a href="#">心理学与认知</a>
+  <a href="#">嵌入式开发</a>
+  <a href="#">见闻</a>
+  <a href="#" style="float:right">声明</a>
+</div>
+
+<div class="row">
+  <div class="leftcolumn">
+    <!-- 文章内容 -->
+    <div class="card">
+      <h2>为什么要写博客？</h2>
+      <h5>2021 年 5 月 25日</h5>
+      <p>一篇博客，以这个标题为开头是很有意思的。</p>
+      <!-- 其余内容... -->
+    </div>
+    <!-- 更多卡片... -->
+  </div>
+
+  <div class="rightcolumn">
+    <!-- 侧边栏 -->
+    <div class="card">
+      <h2>关于我</h2>
+      <p>今后会在空余时间学习网站的搭建，以便对博客进行管理，目前十分简陋，希望各位谅解。</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <h2>@by Zhighway</h2>
+  <h4>tsanghaiwei777@hotmail.com</h4>
+</div>
+
+</body>
+</html>
