@@ -137,7 +137,8 @@ Visit openmind website!
 hugo 使用方法 具体参阅Hugo-quick-start
 博客内容在/content/posts文件夹下，以.md的格式存放，每增加一个.md文件，则在博客中增加一个子页面。 在.md开头部分有博客的基本信息：题目，日期，和draft状态。 drift默认被设置为ture,说明此时是草稿状态。
 保存draft后，在命令行使用 hugo server -D可以打开draft,进行实时修改。
-当修改后的内容符合要求，可以将draft调整为false，即可保存修改并对修改后的内容进行publish。 最后使用hugo命令发布网站。
+当修改后的内容符合要求，可以将draft调整为false，即可保存修改并对修改后的内容进行publish。 最后使用hugo命令发布网站。这会在本地publsh中更新相应的内容，但不会上传到真正的网站上。
+由于我通过将hugo接入github.io 因此需要再将内容进行推送后，可以将更新内容发布。
         </div>
           <a href="/posts/my-first-post/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
         
