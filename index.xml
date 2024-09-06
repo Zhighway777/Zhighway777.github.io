@@ -27,14 +27,5 @@ hugo 使用方法 具体参阅Hugo-quick-start
 Entities should not be multiplied unnecessarily (如非必要，勿增实体)</description>
     </item>
     
-    <item>
-      <title>My 1st post</title>
-      <link>https://zhighway777.github.io/posts/pageexample/</link>
-      <pubDate>Tue, 15 Sep 2020 11:30:03 +0000</pubDate>
-      
-      <guid>https://zhighway777.github.io/posts/pageexample/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>
