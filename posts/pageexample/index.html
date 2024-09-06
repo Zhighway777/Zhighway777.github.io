@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     
-    <title>My 1st post | Zeng::blog</title>
+    <title>Buddy Compiler 源码解读 | Zeng::blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
     <meta name="description" content="Desc Text.">
     <meta name="generator" content="Hugo 0.92.2" />
@@ -15,7 +15,7 @@
       <meta name="robots" content="noindex, nofollow">
     
     
-      <meta name="author" content = "Me">
+      <meta name="author" content = "Zeng">
     
 
     
@@ -36,19 +36,19 @@
       <link rel="canonical" href="https://canonical.url/to/page">
     
 
-    <meta property="og:title" content="My 1st post" />
+    <meta property="og:title" content="Buddy Compiler 源码解读" />
 <meta property="og:description" content="Desc Text." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zhighway777.github.io/posts/pageexample/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-09-15T11:30:03+00:00" />
-<meta property="article:modified_time" content="2020-09-15T11:30:03+00:00" />
+<meta property="article:published_time" content="2024-09-06T23:23:03+08:00" />
+<meta property="article:modified_time" content="2024-09-06T23:23:03+08:00" />
 
-<meta itemprop="name" content="My 1st post">
-<meta itemprop="description" content="Desc Text."><meta itemprop="datePublished" content="2020-09-15T11:30:03+00:00" />
-<meta itemprop="dateModified" content="2020-09-15T11:30:03+00:00" />
-<meta itemprop="wordCount" content="0">
-<meta itemprop="keywords" content="first," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="My 1st post"/>
+<meta itemprop="name" content="Buddy Compiler 源码解读">
+<meta itemprop="description" content="Desc Text."><meta itemprop="datePublished" content="2024-09-06T23:23:03+08:00" />
+<meta itemprop="dateModified" content="2024-09-06T23:23:03+08:00" />
+<meta itemprop="wordCount" content="1403">
+<meta itemprop="keywords" content="MLIR," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Buddy Compiler 源码解读"/>
 <meta name="twitter:description" content="Desc Text."/>
 
 	
@@ -112,24 +112,386 @@
   </div>
 
 
-      <h1 class="f1 athelas mt3 mb1">My 1st post</h1>
+      <h1 class="f1 athelas mt3 mb1">Buddy Compiler 源码解读</h1>
       
       <p class="tracked">
-        By <strong>Me</strong>
+        By <strong>Zeng</strong>
       </p>
       
       
       
-      <time class="f6 mv4 dib tracked" datetime="2020-09-15T11:30:03Z">September 15, 2020</time>
+      <time class="f6 mv4 dib tracked" datetime="2024-09-06T23:23:03+08:00">September 6, 2024</time>
       
 
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><ul class="pa0">
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h2 id="frontend">Frontend</h2>
+<p>此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。</p>
+<h3 id="frontendgen"><code>FrontendGen</code></h3>
+<p>FrontendGen中包含的库文件为：<code>CGModule.cpp</code>  <code>Diagnostics.cpp</code>  <code>Lexer.cpp</code>  <code>Parser.cpp</code>  <code>Sema.cpp</code> 在外层有一个编译器前端的驱动程序<code>frontendgen.cpp</code> 通过分析输入文件来构建 AST和其他相关文件。</p>
+<p>输入参数：使用LLVM的 CommandLine库解析 输入文件名和输出文件类型</p>
+<p>文件处理：使用自定义的Lexer, Parser,CGModule 进行代码分析</p>
+<p>结果生成：调用emit函数输出AST、ANTLR、Visitor等文件</p>
+<h3 id="inferfaces"><code>Inferfaces</code></h3>
+<p><code>buddy/core/Container.h</code></p>
+<p>定义了MemRef class 模板作为Memory reference的descriptor。 其作用是管理memory中的多维矩阵，提供类似于ML或者Numerical中的Tensor的功能</p>
+<p><code>DIP/ImageContainer.h</code></p>
+<p>用于处理多维图像的容器，提供了各种构造函数(constructors)和功能模块(functionalities)来直接或者间接的处理图像数据</p>
+<p><code>DAP/AudioContainer.h</code></p>
+<p>用于处理视频数据</p>
+<p><code>LLM/TextContainer.h</code></p>
+<p>用于处理BERT,LLAMA等NLP模型的文本token数据</p>
+<p>提供了加载词汇表、将文本处理成令牌以及有效管理内存以处理变长文本数据的方法。该类包括动态内存调整大小、处理多字节字符以及将标记化序列转换回可读文本的机制</p>
+<p><code>python/frontend.py</code> ⭐⭐</p>
+<p>实现了一个 DynamoCompiler class，作为Buddy-compiler的前端，可以将Pytorch的FX Graph 转换为等价的Buddy Graph和MLIR module，用于在MLIR中运行</p>
+<ol>
+<li>
+<p>初始化编译器，导pytorch模型</p>
+</li>
+<li>
+<p>数据类型转换，将pytorch数据类型转换为buddy中的 <code>TensorDType</code> 枚举类型</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_torch_dtype_translate</span>(self, dtype):
+        match dtype:
+            case <span style="color:#e6db74">&#34;torch.int64&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Int64
+            case <span style="color:#e6db74">&#34;torch.int32&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Int32
+            case <span style="color:#e6db74">&#34;torch.float16&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Float16
+            case <span style="color:#e6db74">&#34;torch.float32&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Float32
+            case <span style="color:#e6db74">&#34;torch.float64&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Float64
+            case <span style="color:#e6db74">&#34;torch.bool&#34;</span>:
+                <span style="color:#66d9ef">return</span> TensorDType<span style="color:#f92672">.</span>Bool
+            case _:
+                <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">NotImplementedError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Unsupported dtype: </span><span style="color:#e6db74">{</span>dtype<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div></li>
+<li>
+<p>创建节点node并根据<code>_ops_map</code>字典进行Pytorch到Buddy的操作映射</p>
+</li>
+<li>
+<p>编译FX Graph，遍历FX Graph的所有节点，将FX Graph模块<code>torch.fx.GraphModule</code> 转换并构建（也就是编译）为Buddy的Graph.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_compile_fx</span>(
+        self, gm: torch<span style="color:#f92672">.</span>fx<span style="color:#f92672">.</span>GraphModule, inputs: List[torch<span style="color:#f92672">.</span>Tensor]
+    ) <span style="color:#f92672">-&gt;</span> Any:
+<span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">        Compiles the provided FX Graph to Buddy Graph.
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        Args:
+</span><span style="color:#e6db74">            gm (torch.fx.GraphModule): The GraphModule to be compiled.
+</span><span style="color:#e6db74">            inputs (List[torch.Tensor]): The input tensors.
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        Returns:
+</span><span style="color:#e6db74">            dynamo_run: The function of the ahead-of-time compiled module,
+</span><span style="color:#e6db74">            return for torchdynamo&#39;s call.
+</span><span style="color:#e6db74">	        &#34;&#34;&#34;</span>
+</code></pre></div></li>
+<li>
+<p>运行dynamo_run 方法 其设置了MLIR ExecutionEngine,并且输入张量传递给编译后的图来计算 最后调用引擎计算  <code>return exec_buddy_graph</code></p>
+</li>
+</ol>
+<blockquote>
+<p>从MLIR的角度来看，前端应该可以完成从高级语言到高级IR的转换，并完成一系列算子优化操作。从上述python可以看到，Buddy MLIR可以将pytorch的FX图转换为 Buddy图，并调用相关引擎进行处理
+值得注意的是，每个子文件夹下都有CMakeLists.txt。</p>
+</blockquote>
+<h2 id="midend">Midend</h2>
+<h3 id="includedialect-and-libdialect"><code>include/Dialect</code> and <code>lib/Dialect</code>：</h3>
+<p>定义不同的Dialect，如Bud, DAP, DIP， RVV, Gemmini 等 每一个都有自己的方言转换规则，包含相关的<code>(*.h)</code>文件和tablegen <code>(*.td)</code>文件</p>
+<h3 id="libconversion-"><code>lib/Conversion</code> ：</h3>
+<p>有各种各样的optimization pass和transformation pass，在不同Dialect之间进行转化，如 <code>ConvOptimization</code>, <code>ConvVectorization</code>, <code>DAPVectorization</code>, <code>ExtendDAP</code>  <code>LowerBud</code>  <code>LowerGemmini</code> <code>LowerRVV</code> <code>MatMulOptimization</code> (*.cpp)文件</p>
+<p>这里分为三种：<code>XxxOptimization</code> <code>LowerXxx</code> <code>XxxVectorization</code></p>
+<h3 id="includetarget-and-libtarget-"><code>include/Target</code> and <code>lib/Target</code> ：</h3>
+<p>为目标IR进行特定代码生成，这里的目标是LLVM IR ，如 <code>ConvertBuddyToLLVMIR.cpp</code></p>
+<h3 id="utils-功能函数"><code>Utils 功能函数</code></h3>
+<p>提供项目之外的一些工具</p>
+<h2 id="backend">Backend</h2>
+<p>Buddy-Compiler的后端主要是对LLVM的后端进行了扩展和定制。增添了RISC-V的一</p>
+<h3 id="incluedllvmir"><code>inclued/llvm/IR</code></h3>
+<p>文件夹下中包含了Buddy的拓展和RISCV的拓展 (*.td 文件)</p>
+<h3 id="llvmlib"><code>llvm/lib</code></h3>
+<p>文件夹下，模仿了LLVM的源代码树结构 包含： Analysis, AsmParser, Bitcode, CodeGen, IR, IRReader, Object, ProfileData, Remarks, Taeget, Transforms</p>
+<p>Analysis： 使用LLVM optimizer对passes及你想那个分析</p>
+<p>AsmParser： 将汇编语言解析为LLVM IR 或者机器指令</p>
+<p>Bitcode：包含 Reader和Writer，负责读写LLVM的bitcode</p>
+<p>CodeGen：包含与代码生成的部分，输出assembly的AsmPrinter, Machine IR解析器：MIRParser, 和指令选择的SelectionDAG</p>
+<p>IR：LLVM的IR部分</p>
+<p>IRReader：处理各种形式的LLVM IR reading和interpreting</p>
+<p>Object：对目标文件进行操作和读取，是CodeGen Pipeline的一部分</p>
+<p>ProfileData？</p>
+<p>Remarks：输出一个含有注释的优化，有助于debugging和理解编译器的优化行为</p>
+<p>Target：包含对应目标机器语言的RISCV后端，使用Buddy进行定制</p>
+<p>Transforms：包含各种用于优化LLVM IR的 transformation passes 比如： IPO,Scalar Utils,Vectorize等</p>
+<h2 id="examples-解读">Examples 解读</h2>
+<p>首先解读关于：</p>
+<p>BudDialect, GemminiDialect, MLIRMemRef, MLIRTensor, RVVDialect, ToyDSL</p>
+<h3 id="buddialect"><code>BudDialect</code></h3>
+<p>首先打开makefile 看能执行那些make操作。</p>
+<p><code>bud-constant.mlir</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+<span style="color:#960050;background-color:#1e0010">//</span> CHECK: <span style="color:#960050;background-color:#1e0010">%</span>{{.*}} = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span>
+%i0 = bud.test_constant : <span style="color:#66d9ef">i32</span>
+}
+</code></pre></div><p>执行make bud-constant-lower后得到log.mlir,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+%c0_i32 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span>
+}
+</code></pre></div><p>比较二者区别 发现数据名称变得更加规范， dialect从bud变为了arith</p>
+<p>我们看看这里是如何发生的？ <strong>？未能解决</strong></p>
+<p>阅读makefile文件发现，这里其实是运行了buddy-opt ./bud-constant.mlir &ndash;lower-bud -o ./log.mlir</p>
+<p>官方文档的解释里 被Lower的 Target格式为：<!-- raw HTML omitted -->-<!-- raw HTML omitted --></p>
+<p><code>bud-array-attr.mlir</code></p>
+<p>Dialect：bud</p>
+<p>operation name：array</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+<span style="color:#960050;background-color:#1e0010">//声明一个名为</span>@gv的全局memory <span style="color:#960050;background-color:#1e0010">refere</span><span style="color:#66d9ef">ne</span>
+  <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">global</span> <span style="color:#e6db74">&#34;private&#34;</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; = <span style="color:#960050;background-color:#1e0010">dense</span>&lt;[[<span style="color:#ae81ff">0</span>. , <span style="color:#ae81ff">1</span>. , <span style="color:#ae81ff">2</span>. , <span style="color:#ae81ff">3</span>. ],
+                                                         [<span style="color:#ae81ff">10</span>., <span style="color:#ae81ff">11</span>., <span style="color:#ae81ff">12</span>., <span style="color:#ae81ff">13</span>.],
+                                                         [<span style="color:#ae81ff">20</span>., <span style="color:#ae81ff">21</span>., <span style="color:#ae81ff">22</span>., <span style="color:#ae81ff">23</span>.],
+                                                         [<span style="color:#ae81ff">30</span>., <span style="color:#ae81ff">31</span>., <span style="color:#ae81ff">32</span>., <span style="color:#ae81ff">33</span>.]]&gt;
+  <span style="color:#960050;background-color:#1e0010">//获取全局mem</span> <span style="color:#960050;background-color:#1e0010">ref</span> <span style="color:#960050;background-color:#1e0010">并存放在本地SSA变量</span>%mem中<span style="color:#960050;background-color:#1e0010">，同时规定其类型和tensor一致</span>
+  %mem = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">get_</span><span style="color:#66d9ef">global</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+  <span style="color:#960050;background-color:#1e0010">//调用bud</span>.<span style="color:#960050;background-color:#1e0010">test_arrat_attr</span> <span style="color:#960050;background-color:#1e0010">操作，输入是</span>%mem, <span style="color:#960050;background-color:#1e0010">属性</span> <span style="color:#960050;background-color:#1e0010">attribute是</span> <span style="color:#960050;background-color:#1e0010">coordinate</span>[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+  <span style="color:#960050;background-color:#1e0010">//期望的输入type为</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;<span style="color:#960050;background-color:#1e0010">，</span> <span style="color:#960050;background-color:#1e0010">产生一个f</span><span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">的标量结果</span>
+  %res = <span style="color:#960050;background-color:#1e0010">bud</span>.<span style="color:#960050;background-color:#1e0010">test_array_attr</span> %mem {<span style="color:#960050;background-color:#1e0010">coordinate</span> = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]} <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+}
+</code></pre></div><p>Lower: bud → memref  并且多了两个arith.constant 常量0, 1代替原始的coordinate</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+  <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">global</span> <span style="color:#e6db74">&#34;private&#34;</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; = <span style="color:#960050;background-color:#1e0010">dense</span>&lt;[[<span style="color:#ae81ff">0.000000e+00</span>, <span style="color:#ae81ff">1.000000e+00</span>, <span style="color:#ae81ff">2.000000e+00</span>, <span style="color:#ae81ff">3.000000e+00</span>], [<span style="color:#ae81ff">1.000000e+01</span>, <span style="color:#ae81ff">1.100000e+01</span>, <span style="color:#ae81ff">1.200000e+01</span>, <span style="color:#ae81ff">1.300000e+01</span>], [<span style="color:#ae81ff">2.000000e+01</span>, <span style="color:#ae81ff">2.100000e+01</span>, <span style="color:#ae81ff">2.200000e+01</span>, <span style="color:#ae81ff">2.300000e+01</span>], [<span style="color:#ae81ff">3.000000e+01</span>, <span style="color:#ae81ff">3.100000e+01</span>, <span style="color:#ae81ff">3.200000e+01</span>, <span style="color:#ae81ff">3.300000e+01</span>]]&gt;
+  %0 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">get_</span><span style="color:#66d9ef">global</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+  %c0 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+  %c1 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+  %1 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">load</span> %0[%c0, %c1] <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+}
+</code></pre></div><p><code>bud-print.mlir</code></p>
+<p>Dialect：bud</p>
+<p>Op name：print</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm">**<span style="color:#66d9ef">module</span> {
+  %i0 = bud.test_print : <span style="color:#66d9ef">i32</span>
+}**
+</code></pre></div><p>Lower：首先生成一个arith.constant 接着vector输出，<strong>和广播输出？？为什么这样做</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+  %c0_i32 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span>
+  <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %c0_i32 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span>
+  %0 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">broadcast</span> %c0_i32 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span> <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i32</span>&gt;
+  <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i32</span>&gt;
+}
+</code></pre></div><p><code>bud-inline-interface.mlir</code></p>
+<p>Opname 内联接口</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">global</span> <span style="color:#e6db74">&#34;private&#34;</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; = <span style="color:#960050;background-color:#1e0010">dense</span>&lt;[[<span style="color:#ae81ff">0</span>. , <span style="color:#ae81ff">1</span>. , <span style="color:#ae81ff">2</span>. , <span style="color:#ae81ff">3</span>. ],
+                                                       [<span style="color:#ae81ff">10</span>., <span style="color:#ae81ff">11</span>., <span style="color:#ae81ff">12</span>., <span style="color:#ae81ff">13</span>.],
+                                                       [<span style="color:#ae81ff">20</span>., <span style="color:#ae81ff">21</span>., <span style="color:#ae81ff">22</span>., <span style="color:#ae81ff">23</span>.],
+                                                       [<span style="color:#ae81ff">30</span>., <span style="color:#ae81ff">31</span>., <span style="color:#ae81ff">32</span>., <span style="color:#ae81ff">33</span>.]]&gt;
+
+<span style="color:#960050;background-color:#1e0010">//定义一个操作，名为</span> @example()<span style="color:#960050;background-color:#1e0010">接受一个参数，且类型为memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;<span style="color:#960050;background-color:#1e0010">，</span>
+<span style="color:#960050;background-color:#1e0010">//并返回一个f</span><span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">的标量结果</span>
+<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> <span style="color:#66d9ef">private</span> @example(%arg0<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;) <span style="color:#960050;background-color:#1e0010">-</span>&gt; (<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>) {
+  %res = <span style="color:#960050;background-color:#1e0010">bud</span>.<span style="color:#960050;background-color:#1e0010">test_array_attr</span> %arg0 {<span style="color:#960050;background-color:#1e0010">coordinate</span> = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]} <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+  <span style="color:#960050;background-color:#1e0010">return</span> %res <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+}
+
+<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @main() {
+  %mem = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">get_</span><span style="color:#66d9ef">global</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+  <span style="color:#960050;background-color:#1e0010">//</span> CHECK: <span style="color:#960050;background-color:#1e0010">%</span>{{.*}} = <span style="color:#960050;background-color:#1e0010">bud</span>.<span style="color:#960050;background-color:#1e0010">test_array_attr</span> {{.*}}
+  %1 = <span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#66d9ef">call</span> @example(%mem) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;) <span style="color:#960050;background-color:#1e0010">-</span>&gt; (<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>)
+  <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span> 
+  <span style="color:#960050;background-color:#1e0010">return</span>
+}
+</code></pre></div><p>Lower：这里省去了操作定义的部分，直接将func.call @example 进行了替换，对操作进行了优化</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+  <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">global</span> <span style="color:#e6db74">&#34;private&#34;</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; = <span style="color:#960050;background-color:#1e0010">dense</span>&lt;[[<span style="color:#ae81ff">0.000000e+00</span>, <span style="color:#ae81ff">1.000000e+00</span>, <span style="color:#ae81ff">2.000000e+00</span>, <span style="color:#ae81ff">3.000000e+00</span>], [<span style="color:#ae81ff">1.000000e+01</span>, <span style="color:#ae81ff">1.100000e+01</span>, <span style="color:#ae81ff">1.200000e+01</span>, <span style="color:#ae81ff">1.300000e+01</span>], [<span style="color:#ae81ff">2.000000e+01</span>, <span style="color:#ae81ff">2.100000e+01</span>, <span style="color:#ae81ff">2.200000e+01</span>, <span style="color:#ae81ff">2.300000e+01</span>], [<span style="color:#ae81ff">3.000000e+01</span>, <span style="color:#ae81ff">3.100000e+01</span>, <span style="color:#ae81ff">3.200000e+01</span>, <span style="color:#ae81ff">3.300000e+01</span>]]&gt;
+  <span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @main() {
+    %0 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">get_</span><span style="color:#66d9ef">global</span> @gv <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+    %1 = <span style="color:#960050;background-color:#1e0010">bud</span>.<span style="color:#960050;background-color:#1e0010">test_array_attr</span> %0 {<span style="color:#960050;background-color:#1e0010">coordinate</span> = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]} <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+    <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+    <span style="color:#960050;background-color:#1e0010">return</span>
+  }
+}
+</code></pre></div><h3 id="ir级别的解读">IR级别的解读</h3>
+<h3 id="mlirmemref"><code>MLIRMemRef</code></h3>
+<p><code>memref-dim.mlir</code></p>
+<p>关于memref Dialect,可以查看MLIR官方介绍</p>
+<p><code>memref.alloc</code> (memref::AllocOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefalloc-memrefallocop">¶</a>   分配memref类型的空间</p>
+<p><code>memref.dim</code> (memref::DimOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefdim-memrefdimop">¶</a>   返回矩阵的某个维度</p>
+<p><code>memref.cast</code> (memref::CastOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefcast-memrefcastop">¶</a>  1. 目的元素类型位置，则是为了擦除静态shape信息，使用动态信息表示2. 源元素未知，则是用来进行“断言”，查看输入结果和预期是否相符 同时支持跨步访存</p>
+<p><code>func.func @example(){…}</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @main() {
+	<span style="color:#960050;background-color:#1e0010">//</span>%c0 <span style="color:#66d9ef">define</span> <span style="color:#960050;background-color:#1e0010">the</span> <span style="color:#66d9ef">constant</span> <span style="color:#960050;background-color:#1e0010">value</span> <span style="color:#960050;background-color:#1e0010">c</span><span style="color:#ae81ff">0</span>
+	[<span style="color:#960050;background-color:#1e0010">//arith</span>.<span style="color:#66d9ef">constant</span>](https:<span style="color:#960050;background-color:#1e0010">//arith</span>.<span style="color:#66d9ef">constant</span><span style="color:#960050;background-color:#1e0010">/</span>) <span style="color:#960050;background-color:#1e0010">is</span> <span style="color:#960050;background-color:#1e0010">an</span> <span style="color:#960050;background-color:#1e0010">operation</span> <span style="color:#960050;background-color:#1e0010">in</span> <span style="color:#960050;background-color:#1e0010">arith</span> <span style="color:#960050;background-color:#1e0010">Dialect</span>
+	%c0 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	%c1 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	[<span style="color:#960050;background-color:#1e0010">//memref</span>.<span style="color:#960050;background-color:#1e0010">allo</span><span style="color:#66d9ef">c</span>](https:<span style="color:#960050;background-color:#1e0010">//memref</span>.<span style="color:#960050;background-color:#1e0010">allo</span><span style="color:#66d9ef">c</span><span style="color:#960050;background-color:#1e0010">/</span>) <span style="color:#960050;background-color:#1e0010">memory</span> <span style="color:#960050;background-color:#1e0010">allocatio</span> <span style="color:#960050;background-color:#1e0010">operation</span>
+	<span style="color:#960050;background-color:#1e0010">//</span>
+	%mem0 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">allo</span><span style="color:#66d9ef">c</span>() <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">3</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+	%mem1 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">cast</span> %mem0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">3</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+	%dim0 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %mem0, %c0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">3</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+	%dim1 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %mem0, %c1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">3</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+	%dim2 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %mem1, %c0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+	%dim3 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %mem1, %c1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+	<span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %dim0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	<span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %dim1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	<span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %dim2 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	<span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">print</span> %dim3 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+	<span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">deallo</span><span style="color:#66d9ef">c</span> %mem0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#ae81ff">3</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+<span style="color:#960050;background-color:#1e0010">return</span>
+}
+</code></pre></div><p>Lower：memref, vector, arith → llvm</p>
+<p>与BudDialect不同 这里又增添了许多其他选项</p>
+<p><code>${MLIR_OPT} ./memref-dim.mlir \ -finalize-memref-to-llvm -convert-arith-to-llvm -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts \ -o ./log.mlir</code></p>
+<p>新增的指令可以在官方查阅</p>
+<p><code>llvm.func</code> (LLVM::LLVMFuncOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmfunc-llvmllvmfuncop">¶</a>  这是MLIR中的LLVM Dialect, 其操作与LLVM IR兼容，但是内部使用MLIR的语法来表示。其作用是方便MLIR与LLVM IR 之间的交互和转换，允许MLIR无缝Lowering到LLVM IR中。</p>
+<p><code>*llvm.mlir.constant</code> (LLVM::ConstantOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmmlirconstant-llvmconstantop">¶</a>*   定义一个llvm类型的常量</p>
+<p><code>llvm.mlir.zero</code> (LLVM::ZeroOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmmlirzero-llvmzeroop">¶</a>  创建一个0初始值，没有任何操作数或者属性</p>
+<p><code>llvm.getelementptr</code> (LLVM::GEPOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmgetelementptr-llvmgepop">¶</a> 是LLVM IR取指针值元素的镜像操作</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#66d9ef">module</span> {
+  <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @printNewline()
+  <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @printU64(<span style="color:#66d9ef">i64</span>)
+  <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @free(!llvm.ptr)
+  <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @malloc(<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; !llvm.ptr
+  <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @main() {
+    %0 = <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">mlir</span>.<span style="color:#66d9ef">constant</span>(<span style="color:#ae81ff">2</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>) <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i64</span>
+    %1 = <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">mlir</span>.<span style="color:#66d9ef">constant</span>(<span style="color:#ae81ff">3</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>) <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i64</span>
+    %2 = llvm.mlir.zero : !llvm.ptr
+    %3 = <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">getelementptr</span> %2[<span style="color:#ae81ff">6</span>] <span style="color:#960050;background-color:#1e0010">:</span> (!llvm.ptr) <span style="color:#960050;background-color:#1e0010">-</span>&gt; !llvm.ptr, <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+    %4 = <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">ptrtoint</span> %3 <span style="color:#960050;background-color:#1e0010">:</span> !llvm.ptr <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">i64</span>
+    %5 = <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @malloc(%4) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; !llvm.ptr
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printU64(%0) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printNewline() <span style="color:#960050;background-color:#1e0010">:</span> () <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printU64(%1) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printNewline() <span style="color:#960050;background-color:#1e0010">:</span> () <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printU64(%0) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printNewline() <span style="color:#960050;background-color:#1e0010">:</span> () <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printU64(%1) <span style="color:#960050;background-color:#1e0010">:</span> (<span style="color:#66d9ef">i64</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @printNewline() <span style="color:#960050;background-color:#1e0010">:</span> () <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#66d9ef">call</span> @free(%5) <span style="color:#960050;background-color:#1e0010">:</span> (!llvm.ptr) <span style="color:#960050;background-color:#1e0010">-</span>&gt; ()
+    <span style="color:#960050;background-color:#1e0010">llvm</span>.<span style="color:#960050;background-color:#1e0010">return</span>
+  }
+}
+</code></pre></div><p>进行 make meref-dim-translate, 实际上的行为：</p>
+<p><code>${MLIR_OPT} ./memref-dim.mlir \ -finalize-memref-to-llvm -convert-arith-to-llvm -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts | \ ${MLIR_TRANSLATE} --mlir-to-llvmir -o log.ll</code></p>
+<p>Translate：将LLVM Dialect translate为真正的了LLVM IR</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#75715e">; ModuleID = &#39;LLVMDialectModule&#39;
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">source_filename</span> = <span style="color:#e6db74">&#34;LLVMDialectModule&#34;</span>
+<span style="color:#66d9ef">declare</span> <span style="color:#960050;background-color:#1e0010">ptr</span> @malloc(<span style="color:#66d9ef">i64</span>)
+<span style="color:#66d9ef">declare</span> <span style="color:#66d9ef">void</span> @free(<span style="color:#960050;background-color:#1e0010">ptr</span>)
+<span style="color:#66d9ef">declare</span> <span style="color:#66d9ef">void</span> @printNewline()
+<span style="color:#66d9ef">declare</span> <span style="color:#66d9ef">void</span> @printU64(<span style="color:#66d9ef">i64</span>)
+<span style="color:#66d9ef">define</span> <span style="color:#66d9ef">void</span> @main() {
+  %1 = <span style="color:#66d9ef">call</span> <span style="color:#960050;background-color:#1e0010">ptr</span> @malloc(<span style="color:#66d9ef">i64</span> <span style="color:#66d9ef">ptrtoint</span> (<span style="color:#960050;background-color:#1e0010">ptr</span> <span style="color:#66d9ef">getelementptr</span> (<span style="color:#66d9ef">float</span>, <span style="color:#960050;background-color:#1e0010">ptr</span> <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">i32</span> <span style="color:#ae81ff">6</span>) <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">i64</span>))
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printU64(<span style="color:#66d9ef">i64</span> <span style="color:#ae81ff">2</span>)
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printNewline()
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printU64(<span style="color:#66d9ef">i64</span> <span style="color:#ae81ff">3</span>)
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printNewline()
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printU64(<span style="color:#66d9ef">i64</span> <span style="color:#ae81ff">2</span>)
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printNewline()
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printU64(<span style="color:#66d9ef">i64</span> <span style="color:#ae81ff">3</span>)
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @printNewline()
+  <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">void</span> @free(<span style="color:#960050;background-color:#1e0010">ptr</span> %1)
+  <span style="color:#66d9ef">ret</span> <span style="color:#66d9ef">void</span>
+}
+!llvm.module.flags = !{!0}
+!0 = !{<span style="color:#66d9ef">i32</span> <span style="color:#ae81ff">2</span>, !&#34;Debug Info Version&#34;, <span style="color:#66d9ef">i32</span> <span style="color:#ae81ff">3</span>}
+</code></pre></div><p>RUN 得到结果</p>
+<p>make meref-dim-run</p>
+<p><code>${MLIR_OPT} ./memref-dim.mlir --lower-affine  \ -finalize-memref-to-llvm -convert-arith-to-llvm  -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts | \ ${MLIR_CPU_RUNNER} ${OPT_FLAG} -e main -entry-point-result=void \ -shared-libs=${MLIR_RUNNER_UTILS} -shared-libs=${MLIR_C_RUNNER_UTILS}</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#ae81ff">3</span>
+<span style="color:#ae81ff">2</span>
+<span style="color:#ae81ff">2</span>
+<span style="color:#ae81ff">3</span>
+</code></pre></div><blockquote>
+<p>总结整个流程 ：MLIR通过递降 Lowering 到 具有LLVM方言的MLIR表达，再进一步转换为LLVM IR 最后生成并在JIT执行机器代码。  这样通过多个层次的转换可以让编译器针对不同的抽象层次进行优化和调试。</p>
+</blockquote>
+<h2 id="dsapp-level-examples"><strong>DSApp Level Examples</strong></h2>
+<h3 id="conversion-example">Conversion example</h3>
+<p><strong>卷积向量化算法</strong> <code>ConvOpt/conv_2d</code></p>
+<p>这里使用一个Pass <code>conv-vectorization</code> 这个Pass实现了具备strip Mining策略的系数传播算法，而且其尺寸是可控制的。</p>
+<p>我们可以对linalg.conv_2d.mlir 操作进行Conversion.</p>
+<p><strong><code>linalg.conv_2d</code> (linalg::Conv2DOp)</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @conv_2d(%arg0<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, %arg1<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, %arg2<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;) {
+  <span style="color:#960050;background-color:#1e0010">linalg</span>.<span style="color:#960050;background-color:#1e0010">conv_</span><span style="color:#ae81ff">2</span><span style="color:#960050;background-color:#1e0010">d</span> <span style="color:#960050;background-color:#1e0010">ins</span> (%arg0, %arg1<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;)
+                 <span style="color:#960050;background-color:#1e0010">outs</span> (%arg2<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;)
+  <span style="color:#960050;background-color:#1e0010">return</span>
+}
+</code></pre></div><p><code>./buddy-opt ../../examples/ConvOpt/conv2d.mlir -conv-vectorization=&quot;strip-mining=256&quot;</code></p>
+<p><code>affine.for</code> ：执行指定次数循环体的操作。</p>
+<p><code>affine.vector_load</code>：从缓冲区切片中返回一个向量 （MLIR MemRef格式）。</p>
+<p><code>affine.vector_store</code>：将一个向量写到缓存区切片中（MLIR MemRef格式）。</p>
+<p><code>vector.broadcast</code>：将标量或向量值广播为 N-维 结果向量。</p>
+<p><code>vector.fma</code>：向量化类型的乘加混合指令。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-llvm" data-lang="llvm"><span style="color:#960050;background-color:#1e0010">#map</span> = <span style="color:#960050;background-color:#1e0010">affine_map</span>&lt;(<span style="color:#960050;background-color:#1e0010">d</span><span style="color:#ae81ff">0</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; (<span style="color:#960050;background-color:#1e0010">d</span><span style="color:#ae81ff">0</span>)&gt;
+<span style="color:#960050;background-color:#1e0010">#map</span><span style="color:#ae81ff">1</span> = <span style="color:#960050;background-color:#1e0010">affine_map</span>&lt;(<span style="color:#960050;background-color:#1e0010">d</span><span style="color:#ae81ff">0</span>) <span style="color:#960050;background-color:#1e0010">-</span>&gt; (<span style="color:#960050;background-color:#1e0010">d</span><span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">ceildiv</span> <span style="color:#ae81ff">256</span>)&gt;
+<span style="color:#66d9ef">module</span> {
+  <span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span>.<span style="color:#960050;background-color:#1e0010">fun</span><span style="color:#66d9ef">c</span> @conv_2d(%arg0<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, %arg1<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, %arg2<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;) {
+    %c0 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+    %c1 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+    %c256 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">256</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+    %cst = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">constant</span> <span style="color:#ae81ff">0.000000e+00</span> <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+    %0 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">splat</span> %cst <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+    <span style="color:#75715e">;这里%arg1是变量，memref&lt;?x?xf32&gt;是其类型。这里记录arg1，arg2的4个维度
+</span><span style="color:#75715e"></span>    %dim = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %arg1, %c0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+    %dim_0 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %arg1, %c1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+    %dim_1 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %arg2, %c0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+    %dim_2 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#960050;background-color:#1e0010">dim</span> %arg2, %c1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+    <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#66d9ef">or</span> %arg3 = <span style="color:#960050;background-color:#1e0010">#map</span>(%c0) <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">#map</span>(%dim_1) {
+      <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#66d9ef">or</span> %arg4 = <span style="color:#960050;background-color:#1e0010">#map</span>(%c0) <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">#map</span>(%dim) {
+        <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#66d9ef">or</span> %arg5 = <span style="color:#960050;background-color:#1e0010">#map</span>(%c0) <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">#map</span>(%dim_0) {
+          <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">f</span><span style="color:#66d9ef">or</span> %arg6 = <span style="color:#960050;background-color:#1e0010">#map</span>(%c0) <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">#map</span><span style="color:#ae81ff">1</span>(%dim_2) {
+            %1 = <span style="color:#960050;background-color:#1e0010">memref</span>.<span style="color:#66d9ef">load</span> %arg1[%arg4, %arg5] <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;
+            %2 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">index_cast</span> %c0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">i32</span>
+            %3 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#66d9ef">sitofp</span> %2 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">i32</span> <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+            %4 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">cmpf</span> <span style="color:#66d9ef">one</span>, %1, %3 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span>
+            <span style="color:#960050;background-color:#1e0010">scf</span>.<span style="color:#960050;background-color:#1e0010">if</span> %4 {
+              %5 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">broadcast</span> %1 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">f</span><span style="color:#ae81ff">32</span> <span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+              %6 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">muli</span> %arg6, %c256 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+              %7 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">subi</span> %dim_2, %6 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+              %8 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">cmpi</span> <span style="color:#66d9ef">sge</span>, %7, %c256 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+              <span style="color:#960050;background-color:#1e0010">scf</span>.<span style="color:#960050;background-color:#1e0010">if</span> %8 {
+                %9 = <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">vector_</span><span style="color:#66d9ef">load</span> %arg0[%arg3 <span style="color:#960050;background-color:#1e0010">+</span> %arg4, %arg5 <span style="color:#960050;background-color:#1e0010">+</span> %arg6 * <span style="color:#ae81ff">256</span>] <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                %10 = <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">vector_</span><span style="color:#66d9ef">load</span> %arg2[%arg3, %arg6 * <span style="color:#ae81ff">256</span>] <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                %11 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">fma</span> %9, %5, %10 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                <span style="color:#960050;background-color:#1e0010">affi</span><span style="color:#66d9ef">ne</span>.<span style="color:#960050;background-color:#1e0010">vector_</span><span style="color:#66d9ef">store</span> %11, %arg2[%arg3, %arg6 * <span style="color:#ae81ff">256</span>] <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+              } <span style="color:#960050;background-color:#1e0010">else</span> {
+                %9 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">create_mask</span> %7 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i1</span>&gt;
+                %10 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">addi</span> %arg3, %arg4 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+                %11 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">muli</span> %arg6, %c256 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+                %12 = <span style="color:#960050;background-color:#1e0010">arith</span>.<span style="color:#960050;background-color:#1e0010">addi</span> %arg5, %11 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">inde</span><span style="color:#66d9ef">x</span>
+                %13 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">masked</span><span style="color:#66d9ef">load</span> %arg0[%10, %12], %9, %0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i1</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; <span style="color:#960050;background-color:#1e0010">in</span><span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                %14 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">masked</span><span style="color:#66d9ef">load</span> %arg2[%arg3, %11], %9, %0 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i1</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt; <span style="color:#960050;background-color:#1e0010">in</span><span style="color:#66d9ef">to</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                %15 = <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">fma</span> %13, %5, %14 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+                <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>.<span style="color:#960050;background-color:#1e0010">masked</span><span style="color:#66d9ef">store</span> %arg2[%arg3, %11], %9, %15 <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#960050;background-color:#1e0010">memref</span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#66d9ef">x</span><span style="color:#960050;background-color:#1e0010">?xf</span><span style="color:#ae81ff">32</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">x</span><span style="color:#66d9ef">i1</span>&gt;, <span style="color:#960050;background-color:#1e0010">vect</span><span style="color:#66d9ef">or</span>&lt;<span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">xf</span><span style="color:#ae81ff">32</span>&gt;
+              }
+            }
+          }
+        }
+      }
+    }
+    <span style="color:#960050;background-color:#1e0010">return</span>
+  }
+}
+</code></pre></div><h3 id="edge-detection-example">Edge detection example</h3>
+<!-- raw HTML omitted -->
+<p>这里记录一个难点。在安装好opencv环境后，如果直接运行 <code>AutoConfig</code> 会产生报错：提示 can not find OpenCVConfig.cmake .</p>
+<p><code>解决方法</code> 需要在/path/to/opencv下使用 <code>find ./  -name &quot;OpenCVConfig.cmake&quot;</code> 并将该文件所在路径放到环境变量OpenCV_XXX_DIR中 此变量名在makefile中查找即可。</p>
+<!-- raw HTML omitted -->
+<p>具体ninjia的执行方式可以在build.ninja中查明。但是目前不熟悉ninjia的构成方式，暂时不作分析。</p>
+<p>这里可以开启副本，关注buddy-opt的benchmark</p>
+<h3 id="digital-image-processing-examples"><strong>Digital Image Processing Examples</strong></h3>
+<p><strong>Conversion example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> cd buddy-mlir/build/bin
+./buddy-opt ../../frontend/Interfaces/DIP.mlir --lower-dip<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;DIP-strip-mining=</span><span style="color:#e6db74">${</span>BUDDY_DIP_OPT_STRIP_MINING<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><p>这里DIP.mlir在前端的接口中 这里DIP.mlir是一个相当大的文件，用于处理图像数据，在进行conversion后可以观察到Dialect由dip → vector和arith等MLIR内部的Dialect 完成了一次Conversion</p>
+<p>其余步骤和之前的Edge detection相似，不再赘述。</p>
+<p>经过实际测试，目前Rotation example, Resize example， Morphological Operations example均无法运行。<strong>Digital Audio Processing Examples视频处理也无法运行。</strong></p>
+<p>原因是可以正常cmake,但是无法进行ninja的构建，换句话说，build.ninja中没有相关target.</p>
+<h2 id="testing-and-demonstrating-examples"><strong>Testing and Demonstrating Examples</strong></h2>
+<ul>
+<li></li>
+</ul>
+<ul class="pa0">
   
    <li class="list di">
-     <a href="/tags/first/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">first</a>
+     <a href="/tags/mlir/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">MLIR</a>
    </li>
   
 </ul>
