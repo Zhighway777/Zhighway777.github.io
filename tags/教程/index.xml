@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>教程 on Zeng::blog</title>
+    <link>https://zhighway777.github.io/tags/%E6%95%99%E7%A8%8B/</link>
+    <description>Recent content in 教程 on Zeng::blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 05 Sep 2024 10:52:39 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to build personal website</title>
+      <link>https://zhighway777.github.io/2024/09/05/my-first-post/</link>
+      <pubDate>Thu, 05 Sep 2024 10:52:39 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/05/my-first-post/</guid>
+      <description>Introduction 第一篇博客用于记录博客的搭建过程 模板 博客使用hugo工具进行搭建与管理，hugo提供了丰富的tamplates,同时，其draft功能使得</description>
+    </item>
+    
+  </channel>
+</rss>

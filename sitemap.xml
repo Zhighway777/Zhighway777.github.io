@@ -2,24 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://zhighway777.github.io/posts/pageexample/</loc>
+    <loc>https://zhighway777.github.io/2024/09/06/buddy_src_1/</loc>
+    <lastmod>2024-09-06T23:52:39+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/posts/</loc>
+    <lastmod>2024-09-06T23:52:39+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/</loc>
+    <lastmod>2024-09-06T23:52:39+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/2024/09/06/pageexample/</loc>
+    <lastmod>2024-09-06T23:23:03+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/categories/</loc>
     <lastmod>2024-09-06T23:23:03+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/tags/mlir/</loc>
     <lastmod>2024-09-06T23:23:03+08:00</lastmod>
   </url><url>
-    <loc>https://zhighway777.github.io/posts/</loc>
-    <lastmod>2024-09-06T23:23:03+08:00</lastmod>
-  </url><url>
     <loc>https://zhighway777.github.io/tags/</loc>
     <lastmod>2024-09-06T23:23:03+08:00</lastmod>
   </url><url>
-    <loc>https://zhighway777.github.io/</loc>
+    <loc>https://zhighway777.github.io/categories/test-categories/</loc>
     <lastmod>2024-09-06T23:23:03+08:00</lastmod>
   </url><url>
-    <loc>https://zhighway777.github.io/posts/my-first-post/</loc>
+    <loc>https://zhighway777.github.io/tags/blog/</loc>
     <lastmod>2024-09-05T10:52:39+08:00</lastmod>
   </url><url>
-    <loc>https://zhighway777.github.io/categories/</loc>
+    <loc>https://zhighway777.github.io/2024/09/05/my-first-post/</loc>
+    <lastmod>2024-09-05T10:52:39+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/hugo/</loc>
+    <lastmod>2024-09-05T10:52:39+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2024-09-05T10:52:39+08:00</lastmod>
   </url>
 </urlset>

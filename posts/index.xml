@@ -6,52 +6,32 @@
     <description>Recent content in Posts on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Sep 2024 23:23:03 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Sep 2024 23:52:39 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HBuddy 源码解读（1）</title>
+      <link>https://zhighway777.github.io/2024/09/06/buddy_src_1/</link>
+      <pubDate>Fri, 06 Sep 2024 23:52:39 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/06/buddy_src_1/</guid>
+      <description>Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro</description>
+    </item>
+    
     <item>
       <title>Buddy Compiler 源码解读(0)</title>
-      <link>https://zhighway777.github.io/posts/pageexample/</link>
+      <link>https://zhighway777.github.io/2024/09/06/pageexample/</link>
       <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
       
-      <guid>https://zhighway777.github.io/posts/pageexample/</guid>
-      <description>Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。
-FrontendGen FrontendGen中包含的库文件为：CGModule.cpp Diagnostics.cpp Lexer.cpp Parser.cpp Sema.cpp 在外层有一个编译器前端的驱动程序frontendgen.cpp 通过分析输入文件来构建 AST和其他相关文件。
-输入参数：使用LLVM的 CommandLine库解析 输入文件名和输出文件类型
-文件处理：使用自定义的Lexer, Parser,CGModule 进行代码分析
-结果生成：调用emit函数输出AST、ANTLR、Visitor等文件
-Inferfaces buddy/core/Container.h
-定义了MemRef class 模板作为Memory reference的descriptor。 其作用是管理memory中的多维矩阵，提供类似于ML或者Numerical中的Tensor的功能
-DIP/ImageContainer.h
-用于处理多维图像的容器，提供了各种构造函数(constructors)和功能模块(functionalities)来直接或者间接的处理图像数据
-DAP/AudioContainer.h
-用于处理视频数据
-LLM/TextContainer.h
-用于处理BERT,LLAMA等NLP模型的文本token数据
-提供了加载词汇表、将文本处理成令牌以及有效管理内存以处理变长文本数据的方法。该类包括动态内存调整大小、处理多字节字符以及将标记化序列转换回可读文本的机制
-python/frontend.py ⭐⭐
-实现了一个 DynamoCompiler class，作为Buddy-compiler的前端，可以将Pytorch的FX Graph 转换为等价的Buddy Graph和MLIR module，用于在MLIR中运行
-  初始化编译器，导pytorch模型
-  数据类型转换，将pytorch数据类型转换为buddy中的 TensorDType 枚举类型
-def _torch_dtype_translate(self, dtype): match dtype: case &amp;#34;torch.int64&amp;#34;: return TensorDType.Int64 case &amp;#34;torch.int32&amp;#34;: return TensorDType.Int32 case &amp;#34;torch.float16&amp;#34;: return TensorDType.Float16 case &amp;#34;torch.float32&amp;#34;: return TensorDType.Float32 case &amp;#34;torch.</description>
+      <guid>https://zhighway777.github.io/2024/09/06/pageexample/</guid>
+      <description>Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro</description>
     </item>
     
     <item>
       <title>How to build personal website</title>
-      <link>https://zhighway777.github.io/posts/my-first-post/</link>
+      <link>https://zhighway777.github.io/2024/09/05/my-first-post/</link>
       <pubDate>Thu, 05 Sep 2024 10:52:39 +0800</pubDate>
       
-      <guid>https://zhighway777.github.io/posts/my-first-post/</guid>
-      <description>Introduction 第一篇博客用于记录博客的搭建过程
-模板 博客使用hugo工具进行搭建与管理，hugo提供了丰富的tamplates,同时，其draft功能使得博客网站的开发更加简单。开发者这需要关注博客的内容本身，而不必特地学习CSS或HTML进行网站搭建，除此之外，博客内容则使用Markdown格式记录，方便不同平台的移植。
-hugo 使用方法 具体参阅Hugo-quick-start
-博客内容在/content/posts文件夹下，以.md的格式存放，每增加一个.md文件，则在博客中增加一个子页面。 在.md开头部分有博客的基本信息：题目，日期，和draft状态。 drift默认被设置为ture,说明此时是草稿状态。
-保存draft后，在命令行使用 hugo server -D可以打开draft,进行实时修改。
-当修改后的内容符合要求，可以将draft调整为false，即可保存修改并对修改后的内容进行publish。 最后使用hugo命令发布网站。这会在本地publsh中更新相应的内容，但不会上传到真正的网站上。
-由于我通过将hugo接入github.io 因此需要再将内容使用git推送后，可以将更新内容发布。
-关于博客内容 I will try my best to use English convert something clearly 我尽量使用英文来进行文章书写，并且保证语句的简单和格式的清晰。
-只输出有价值/经过思考/有趣的观点或见解。
-尽量不包含主观情绪，不涉及任何政治话题。
-使用奥卡姆剃刀原理来部署博客内容
-Entities should not be multiplied unnecessarily (如非必要，勿增实体)</description>
+      <guid>https://zhighway777.github.io/2024/09/05/my-first-post/</guid>
+      <description>Introduction 第一篇博客用于记录博客的搭建过程 模板 博客使用hugo工具进行搭建与管理，hugo提供了丰富的tamplates,同时，其draft功能使得</description>
     </item>
     
   </channel>
