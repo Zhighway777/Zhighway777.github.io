@@ -36,5 +36,14 @@ Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </descri
       <description>Introduction 第一篇博客用于记录博客的搭建过程 模板 博客使用hugo工具进行搭建与管理，hugo提供了丰富的tamplates,同时，其draft功能使得</description>
     </item>
     
+    <item>
+      <title>Top Architecture Labs</title>
+      <link>https://zhighway777.github.io/2024/09/05/top_lab/</link>
+      <pubDate>Thu, 05 Sep 2024 10:52:39 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/05/top_lab/</guid>
+      <description>体系结构 TOP实验室 国外</description>
+    </item>
+    
   </channel>
 </rss>
