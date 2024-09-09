@@ -1,0 +1,22 @@
+.embedded-html {
+  overflow: auto;  /* 让内容在容器中滚动，而不是破坏页面布局 */
+  max-width: 100%;  /* 确保内容不超过页面宽度 */
+  margin: 0 auto;  /* 居中对齐嵌入的内容 */
+  padding: 1em;  /* 添加合适的内边距，使内容美观 */
+  box-sizing: border-box;  /* 防止内容超出容器边界 */
+}
+
+.embedded-html img {
+  max-width: 100%;  /* 确保图片不超出容器宽度 */
+  height: auto;  /* 保持图片的长宽比 */
+}
+
+.embedded-html table {
+  width: 100%;  /* 表格宽度自适应页面 */
+  border-collapse: collapse;  /* 去除表格间的空隙 */
+}
+
+.embedded-html iframe {
+  max-width: 100%;  /* 限制 iframe 的宽度，防止超出页面 */
+  height: auto;
+}
