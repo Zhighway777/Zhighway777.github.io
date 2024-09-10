@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     
-    <title>HBuddy 源码解读（1） | Zeng::blog</title>
+    <title>Buddy Compiler 源码解读(1) | Zeng::blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro">
+    <meta name="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered.">
     <meta name="generator" content="Hugo 0.92.2" />
     
     
@@ -30,26 +30,27 @@
 
     
 
+		
     
 
     
       <link rel="canonical" href="https://zhighway777.github.io/2024/09/06/buddy_src_1/">
     
 
-    <meta property="og:title" content="HBuddy 源码解读（1）" />
-<meta property="og:description" content="Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro" />
+    <meta property="og:title" content="Buddy Compiler 源码解读(1)" />
+<meta property="og:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zhighway777.github.io/2024/09/06/buddy_src_1/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-09-06T23:52:39+08:00" />
-<meta property="article:modified_time" content="2024-09-06T23:52:39+08:00" />
+<meta property="article:published_time" content="2024-09-06T23:23:03+08:00" />
+<meta property="article:modified_time" content="2024-09-06T23:23:03+08:00" />
 
-<meta itemprop="name" content="HBuddy 源码解读（1）">
-<meta itemprop="description" content="Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro"><meta itemprop="datePublished" content="2024-09-06T23:52:39+08:00" />
-<meta itemprop="dateModified" content="2024-09-06T23:52:39+08:00" />
-<meta itemprop="wordCount" content="5003">
-<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="HBuddy 源码解读（1）"/>
-<meta name="twitter:description" content="Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro"/>
+<meta itemprop="name" content="Buddy Compiler 源码解读(1)">
+<meta itemprop="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."><meta itemprop="datePublished" content="2024-09-06T23:23:03+08:00" />
+<meta itemprop="dateModified" content="2024-09-06T23:23:03+08:00" />
+<meta itemprop="wordCount" content="2004">
+<meta itemprop="keywords" content="MLIR," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Buddy Compiler 源码解读(1)"/>
+<meta name="twitter:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."/>
 
 	
   </head>
@@ -128,7 +129,7 @@
   </div>
 
 
-      <h1 class="f1 athelas mt3 mb1">HBuddy 源码解读（1）</h1>
+      <h1 class="f1 athelas mt3 mb1">Buddy Compiler 源码解读(1)</h1>
       
       <p class="tracked">
         By <strong>Zeng</strong>
@@ -136,466 +137,32 @@
       
       
       
-      <time class="f6 mv4 dib tracked" datetime="2024-09-06T23:52:39+08:00">September 6, 2024</time>
+      <time class="f6 mv4 dib tracked" datetime="2024-09-06T23:23:03+08:00">September 6, 2024</time>
       
 
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h2 id="frontend">Frontend</h2>
-<p>此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。</p>
-<h3 id="frontendgen"><code>FrontendGen</code></h3>
-<p>FrontendGen中包含的库文件为：<code>CGModule.cpp</code>  <code>Diagnostics.cpp</code>  <code>Lexer.cpp</code>  <code>Parser.cpp</code>  <code>Sema.cpp</code> 在外层有一个编译器前端的驱动程序<code>frontendgen.cpp</code> 通过分析输入文件来构建 AST和其他相关文件。</p>
-<p>输入参数：使用LLVM的 CommandLine库解析 输入文件名和输出文件类型</p>
-<p>文件处理：使用自定义的Lexer, Parser,CGModule 进行代码分析</p>
-<p>结果生成：调用emit函数输出AST、ANTLR、Visitor等文件</p>
-<h3 id="inferfaces"><code>Inferfaces</code></h3>
-<p><code>buddy/core/Container.h</code></p>
-<p>定义了MemRef class 模板作为Memory reference的descriptor。 其作用是管理memory中的多维矩阵，提供类似于ML或者Numerical中的Tensor的功能</p>
-<p><code>DIP/ImageContainer.h</code></p>
-<p>用于处理多维图像的容器，提供了各种构造函数(constructors)和功能模块(functionalities)来直接或者间接的处理图像数据</p>
-<p><code>DAP/AudioContainer.h</code></p>
-<p>用于处理视频数据</p>
-<p><code>LLM/TextContainer.h</code></p>
-<p>用于处理BERT,LLAMA等NLP模型的文本token数据</p>
-<p>提供了加载词汇表、将文本处理成令牌以及有效管理内存以处理变长文本数据的方法。该类包括动态内存调整大小、处理多字节字符以及将标记化序列转换回可读文本的机制</p>
-<p><code>python/frontend.py</code> ⭐⭐</p>
-<p>实现了一个 DynamoCompiler class，作为Buddy-compiler的前端，可以将Pytorch的FX Graph 转换为等价的Buddy Graph和MLIR module，用于在MLIR中运行</p>
-<ol>
-<li>
-<p>初始化编译器，导pytorch模型</p>
-</li>
-<li>
-<p>数据类型转换，将pytorch数据类型转换为buddy中的 <code>TensorDType</code> 枚举类型</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python">  <span class="k">def</span> <span class="nf">_torch_dtype_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-        <span class="n">match</span> <span class="n">dtype</span><span class="p">:</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.int64&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Int64</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.int32&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Int32</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.float16&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Float16</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.float32&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Float32</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.float64&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Float64</span>
-            <span class="n">case</span> <span class="s2">&#34;torch.bool&#34;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TensorDType</span><span class="o">.</span><span class="n">Bool</span>
-            <span class="n">case</span> <span class="n">_</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Unsupported dtype: </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>创建节点node并根据<code>_ops_map</code>字典进行Pytorch到Buddy的操作映射</p>
-</li>
-<li>
-<p>编译FX Graph，遍历FX Graph的所有节点，将FX Graph模块<code>torch.fx.GraphModule</code> 转换并构建（也就是编译）为Buddy的Graph.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_compile_fx</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">gm</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">fx</span><span class="o">.</span><span class="n">GraphModule</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="s2">&#34;&#34;&#34;
-</span><span class="s2">        Compiles the provided FX Graph to Buddy Graph.
-</span><span class="s2">
-</span><span class="s2">        Args:
-</span><span class="s2">            gm (torch.fx.GraphModule): The GraphModule to be compiled.
-</span><span class="s2">            inputs (List[torch.Tensor]): The input tensors.
-</span><span class="s2">
-</span><span class="s2">        Returns:
-</span><span class="s2">            dynamo_run: The function of the ahead-of-time compiled module,
-</span><span class="s2">            return for torchdynamo&#39;s call.
-</span><span class="s2">	        &#34;&#34;&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>运行dynamo_run 方法 其设置了MLIR ExecutionEngine,并且输入张量传递给编译后的图来计算 最后调用引擎计算  <code>return exec_buddy_graph</code></p>
-</li>
-</ol>
-<blockquote>
-<p>从MLIR的角度来看，前端应该可以完成从高级语言到高级IR的转换，并完成一系列算子优化操作。从上述python可以看到，Buddy MLIR可以将pytorch的FX图转换为 Buddy图，并调用相关引擎进行处理
-值得注意的是，每个子文件夹下都有CMakeLists.txt。</p>
-</blockquote>
-<h2 id="midend">Midend</h2>
-<h3 id="includedialect-and-libdialect"><code>include/Dialect</code> and <code>lib/Dialect</code>：</h3>
-<p>定义不同的Dialect，如Bud, DAP, DIP， RVV, Gemmini 等 每一个都有自己的方言转换规则，包含相关的<code>(*.h)</code>文件和tablegen <code>(*.td)</code>文件</p>
-<h3 id="libconversion-"><code>lib/Conversion</code> ：</h3>
-<p>有各种各样的optimization pass和transformation pass，在不同Dialect之间进行转化，如 <code>ConvOptimization</code>, <code>ConvVectorization</code>, <code>DAPVectorization</code>, <code>ExtendDAP</code>  <code>LowerBud</code>  <code>LowerGemmini</code> <code>LowerRVV</code> <code>MatMulOptimization</code> (*.cpp)文件</p>
-<p>这里分为三种：<code>XxxOptimization</code> <code>LowerXxx</code> <code>XxxVectorization</code></p>
-<h3 id="includetarget-and-libtarget-"><code>include/Target</code> and <code>lib/Target</code> ：</h3>
-<p>为目标IR进行特定代码生成，这里的目标是LLVM IR ，如 <code>ConvertBuddyToLLVMIR.cpp</code></p>
-<h3 id="utils-功能函数"><code>Utils 功能函数</code></h3>
-<p>提供项目之外的一些工具</p>
-<h2 id="backend">Backend</h2>
-<p>Buddy-Compiler的后端主要是对LLVM的后端进行了扩展和定制。增添了RISC-V的一</p>
-<h3 id="incluedllvmir"><code>inclued/llvm/IR</code></h3>
-<p>文件夹下中包含了Buddy的拓展和RISCV的拓展 (*.td 文件)</p>
-<h3 id="llvmlib"><code>llvm/lib</code></h3>
-<p>文件夹下，模仿了LLVM的源代码树结构 包含： Analysis, AsmParser, Bitcode, CodeGen, IR, IRReader, Object, ProfileData, Remarks, Taeget, Transforms</p>
-<p>Analysis： 使用LLVM optimizer对passes及你想那个分析</p>
-<p>AsmParser： 将汇编语言解析为LLVM IR 或者机器指令</p>
-<p>Bitcode：包含 Reader和Writer，负责读写LLVM的bitcode</p>
-<p>CodeGen：包含与代码生成的部分，输出assembly的AsmPrinter, Machine IR解析器：MIRParser, 和指令选择的SelectionDAG</p>
-<p>IR：LLVM的IR部分</p>
-<p>IRReader：处理各种形式的LLVM IR reading和interpreting</p>
-<p>Object：对目标文件进行操作和读取，是CodeGen Pipeline的一部分</p>
-<p>ProfileData？</p>
-<p>Remarks：输出一个含有注释的优化，有助于debugging和理解编译器的优化行为</p>
-<p>Target：包含对应目标机器语言的RISCV后端，使用Buddy进行定制</p>
-<p>Transforms：包含各种用于优化LLVM IR的 transformation passes 比如： IPO,Scalar Utils,Vectorize等</p>
-<h2 id="examples-解读">Examples 解读</h2>
-<p>首先解读关于：</p>
-<p>BudDialect, GemminiDialect, MLIRMemRef, MLIRTensor, RVVDialect, ToyDSL</p>
-<h3 id="buddialect"><code>BudDialect</code></h3>
-<p>首先打开makefile 看能执行那些make操作。</p>
-<p><code>bud-constant.mlir</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-<span class="err">//</span> <span class="nl">CHECK:</span> <span class="err">%</span><span class="p">{{.*}}</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="k">i32</span>
-<span class="nv">%i0</span> <span class="p">=</span> <span class="nl">bud.test_constant :</span> <span class="k">i32</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>执行make bud-constant-lower后得到log.mlir,</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-<span class="nv">%c0_i32</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="k">i32</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>比较二者区别 发现数据名称变得更加规范， dialect从bud变为了arith</p>
-<p>我们看看这里是如何发生的？ <strong>？未能解决</strong></p>
-<p>阅读makefile文件发现，这里其实是运行了buddy-opt ./bud-constant.mlir &ndash;lower-bud -o ./log.mlir</p>
-<p>官方文档的解释里 被Lower的 Target格式为：<!-- raw HTML omitted -->-<!-- raw HTML omitted --></p>
-<p><code>bud-array-attr.mlir</code></p>
-<p>Dialect：bud</p>
-<p>operation name：array</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-<span class="err">//声明一个名为</span><span class="vg">@gv的全局memory</span> <span class="err">refere</span><span class="k">ne</span>
-  <span class="err">memref</span><span class="p">.</span><span class="k">global</span> <span class="s">&#34;private&#34;</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="p">=</span> <span class="err">dense</span><span class="p">&lt;[[</span><span class="m">0</span><span class="p">.</span> <span class="p">,</span> <span class="m">1</span><span class="p">.</span> <span class="p">,</span> <span class="m">2</span><span class="p">.</span> <span class="p">,</span> <span class="m">3</span><span class="p">.</span> <span class="p">],</span>
-                                                         <span class="p">[</span><span class="m">10</span><span class="p">.,</span> <span class="m">11</span><span class="p">.,</span> <span class="m">12</span><span class="p">.,</span> <span class="m">13</span><span class="p">.],</span>
-                                                         <span class="p">[</span><span class="m">20</span><span class="p">.,</span> <span class="m">21</span><span class="p">.,</span> <span class="m">22</span><span class="p">.,</span> <span class="m">23</span><span class="p">.],</span>
-                                                         <span class="p">[</span><span class="m">30</span><span class="p">.,</span> <span class="m">31</span><span class="p">.,</span> <span class="m">32</span><span class="p">.,</span> <span class="m">33</span><span class="p">.]]&gt;</span>
-  <span class="err">//获取全局mem</span> <span class="err">ref</span> <span class="err">并存放在本地SSA变量</span><span class="nv">%mem中</span><span class="err">，同时规定其类型和tensor一致</span>
-  <span class="nv">%mem</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">get_</span><span class="k">global</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-  <span class="err">//调用bud</span><span class="p">.</span><span class="err">test_arrat_attr</span> <span class="err">操作，输入是</span><span class="nv">%mem</span><span class="p">,</span> <span class="err">属性</span> <span class="err">attribute是</span> <span class="err">coordinate</span><span class="p">[</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">]</span>
-  <span class="err">//期望的输入type为</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span><span class="err">，</span> <span class="err">产生一个f</span><span class="m">32</span><span class="err">的标量结果</span>
-  <span class="nv">%res</span> <span class="p">=</span> <span class="err">bud</span><span class="p">.</span><span class="err">test_array_attr</span> <span class="nv">%mem</span> <span class="p">{</span><span class="err">coordinate</span> <span class="p">=</span> <span class="p">[</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">]}</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">f</span><span class="m">32</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Lower: bud → memref  并且多了两个arith.constant 常量0, 1代替原始的coordinate</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-  <span class="err">memref</span><span class="p">.</span><span class="k">global</span> <span class="s">&#34;private&#34;</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="p">=</span> <span class="err">dense</span><span class="p">&lt;[[</span><span class="m">0.000000e+00</span><span class="p">,</span> <span class="m">1.000000e+00</span><span class="p">,</span> <span class="m">2.000000e+00</span><span class="p">,</span> <span class="m">3.000000e+00</span><span class="p">],</span> <span class="p">[</span><span class="m">1.000000e+01</span><span class="p">,</span> <span class="m">1.100000e+01</span><span class="p">,</span> <span class="m">1.200000e+01</span><span class="p">,</span> <span class="m">1.300000e+01</span><span class="p">],</span> <span class="p">[</span><span class="m">2.000000e+01</span><span class="p">,</span> <span class="m">2.100000e+01</span><span class="p">,</span> <span class="m">2.200000e+01</span><span class="p">,</span> <span class="m">2.300000e+01</span><span class="p">],</span> <span class="p">[</span><span class="m">3.000000e+01</span><span class="p">,</span> <span class="m">3.100000e+01</span><span class="p">,</span> <span class="m">3.200000e+01</span><span class="p">,</span> <span class="m">3.300000e+01</span><span class="p">]]&gt;</span>
-  <span class="n">%0</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">get_</span><span class="k">global</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-  <span class="nv">%c0</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-  <span class="nv">%c1</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">1</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-  <span class="n">%1</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="k">load</span> <span class="n">%0</span><span class="p">[</span><span class="nv">%c0</span><span class="p">,</span> <span class="nv">%c1</span><span class="p">]</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>bud-print.mlir</code></p>
-<p>Dialect：bud</p>
-<p>Op name：print</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="p">**</span><span class="k">module</span> <span class="p">{</span>
-  <span class="nv">%i0</span> <span class="p">=</span> <span class="nl">bud.test_print :</span> <span class="k">i32</span>
-<span class="p">}**</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Lower：首先生成一个arith.constant 接着vector输出，<strong>和广播输出？？为什么这样做</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-  <span class="nv">%c0_i32</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="k">i32</span>
-  <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="nv">%c0_i32</span> <span class="err">:</span> <span class="k">i32</span>
-  <span class="n">%0</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">broadcast</span> <span class="nv">%c0_i32</span> <span class="err">:</span> <span class="k">i32</span> <span class="k">to</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="k">i32</span><span class="p">&gt;</span>
-  <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="n">%0</span> <span class="err">:</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="k">i32</span><span class="p">&gt;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>bud-inline-interface.mlir</code></p>
-<p>Opname 内联接口</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="err">memref</span><span class="p">.</span><span class="k">global</span> <span class="s">&#34;private&#34;</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="p">=</span> <span class="err">dense</span><span class="p">&lt;[[</span><span class="m">0</span><span class="p">.</span> <span class="p">,</span> <span class="m">1</span><span class="p">.</span> <span class="p">,</span> <span class="m">2</span><span class="p">.</span> <span class="p">,</span> <span class="m">3</span><span class="p">.</span> <span class="p">],</span>
-                                                       <span class="p">[</span><span class="m">10</span><span class="p">.,</span> <span class="m">11</span><span class="p">.,</span> <span class="m">12</span><span class="p">.,</span> <span class="m">13</span><span class="p">.],</span>
-                                                       <span class="p">[</span><span class="m">20</span><span class="p">.,</span> <span class="m">21</span><span class="p">.,</span> <span class="m">22</span><span class="p">.,</span> <span class="m">23</span><span class="p">.],</span>
-                                                       <span class="p">[</span><span class="m">30</span><span class="p">.,</span> <span class="m">31</span><span class="p">.,</span> <span class="m">32</span><span class="p">.,</span> <span class="m">33</span><span class="p">.]]&gt;</span>
-
-<span class="err">//定义一个操作，名为</span> <span class="vg">@example</span><span class="p">()</span><span class="err">接受一个参数，且类型为memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span><span class="err">，</span>
-<span class="err">//并返回一个f</span><span class="m">32</span><span class="err">的标量结果</span>
-<span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="k">private</span> <span class="vg">@example</span><span class="p">(</span><span class="nv">%arg0</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">(</span><span class="err">f</span><span class="m">32</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nv">%res</span> <span class="p">=</span> <span class="err">bud</span><span class="p">.</span><span class="err">test_array_attr</span> <span class="nv">%arg0</span> <span class="p">{</span><span class="err">coordinate</span> <span class="p">=</span> <span class="p">[</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">]}</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">f</span><span class="m">32</span>
-  <span class="err">return</span> <span class="nv">%res</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span>
-<span class="p">}</span>
-
-<span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nv">%mem</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">get_</span><span class="k">global</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-  <span class="err">//</span> <span class="nl">CHECK:</span> <span class="err">%</span><span class="p">{{.*}}</span> <span class="p">=</span> <span class="err">bud</span><span class="p">.</span><span class="err">test_array_attr</span> <span class="p">{{.*}}</span>
-  <span class="n">%1</span> <span class="p">=</span> <span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="k">call</span> <span class="vg">@example</span><span class="p">(</span><span class="nv">%mem</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">(</span><span class="err">f</span><span class="m">32</span><span class="p">)</span>
-  <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="n">%1</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span> 
-  <span class="err">return</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Lower：这里省去了操作定义的部分，直接将func.call @example 进行了替换，对操作进行了优化</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-  <span class="err">memref</span><span class="p">.</span><span class="k">global</span> <span class="s">&#34;private&#34;</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="p">=</span> <span class="err">dense</span><span class="p">&lt;[[</span><span class="m">0.000000e+00</span><span class="p">,</span> <span class="m">1.000000e+00</span><span class="p">,</span> <span class="m">2.000000e+00</span><span class="p">,</span> <span class="m">3.000000e+00</span><span class="p">],</span> <span class="p">[</span><span class="m">1.000000e+01</span><span class="p">,</span> <span class="m">1.100000e+01</span><span class="p">,</span> <span class="m">1.200000e+01</span><span class="p">,</span> <span class="m">1.300000e+01</span><span class="p">],</span> <span class="p">[</span><span class="m">2.000000e+01</span><span class="p">,</span> <span class="m">2.100000e+01</span><span class="p">,</span> <span class="m">2.200000e+01</span><span class="p">,</span> <span class="m">2.300000e+01</span><span class="p">],</span> <span class="p">[</span><span class="m">3.000000e+01</span><span class="p">,</span> <span class="m">3.100000e+01</span><span class="p">,</span> <span class="m">3.200000e+01</span><span class="p">,</span> <span class="m">3.300000e+01</span><span class="p">]]&gt;</span>
-  <span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">%0</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">get_</span><span class="k">global</span> <span class="vg">@gv</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="n">%1</span> <span class="p">=</span> <span class="err">bud</span><span class="p">.</span><span class="err">test_array_attr</span> <span class="n">%0</span> <span class="p">{</span><span class="err">coordinate</span> <span class="p">=</span> <span class="p">[</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">]}</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">4</span><span class="err">x</span><span class="m">4</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">f</span><span class="m">32</span>
-    <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="n">%1</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span>
-    <span class="err">return</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="ir级别的解读">IR级别的解读</h3>
-<h3 id="mlirmemref"><code>MLIRMemRef</code></h3>
-<p><code>memref-dim.mlir</code></p>
-<p>关于memref Dialect,可以查看MLIR官方介绍</p>
-<p><code>memref.alloc</code> (memref::AllocOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefalloc-memrefallocop">¶</a>   分配memref类型的空间</p>
-<p><code>memref.dim</code> (memref::DimOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefdim-memrefdimop">¶</a>   返回矩阵的某个维度</p>
-<p><code>memref.cast</code> (memref::CastOp) <a href="https://mlir.llvm.org/docs/Dialects/MemRef/#memrefcast-memrefcastop">¶</a>  1. 目的元素类型位置，则是为了擦除静态shape信息，使用动态信息表示2. 源元素未知，则是用来进行“断言”，查看输入结果和预期是否相符 同时支持跨步访存</p>
-<p><code>func.func @example(){…}</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="err">//</span><span class="nv">%c0</span> <span class="k">define</span> <span class="err">the</span> <span class="k">constant</span> <span class="err">value</span> <span class="err">c</span><span class="m">0</span>
-	<span class="p">[</span><span class="err">//arith</span><span class="p">.</span><span class="k">constant</span><span class="p">](</span><span class="nl">https:</span><span class="err">//arith</span><span class="p">.</span><span class="k">constant</span><span class="err">/</span><span class="p">)</span> <span class="err">is</span> <span class="err">an</span> <span class="err">operation</span> <span class="err">in</span> <span class="err">arith</span> <span class="err">Dialect</span>
-	<span class="nv">%c0</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="nv">%c1</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">1</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="p">[</span><span class="err">//memref</span><span class="p">.</span><span class="err">allo</span><span class="k">c</span><span class="p">](</span><span class="nl">https:</span><span class="err">//memref</span><span class="p">.</span><span class="err">allo</span><span class="k">c</span><span class="err">/</span><span class="p">)</span> <span class="err">memory</span> <span class="err">allocatio</span> <span class="err">operation</span>
-	<span class="err">//</span>
-	<span class="nv">%mem0</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">allo</span><span class="k">c</span><span class="p">()</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">2</span><span class="err">x</span><span class="m">3</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="nv">%mem1</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">cast</span> <span class="nv">%mem0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">2</span><span class="err">x</span><span class="m">3</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="k">to</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="nv">%dim0</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%mem0</span><span class="p">,</span> <span class="nv">%c0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">2</span><span class="err">x</span><span class="m">3</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="nv">%dim1</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%mem0</span><span class="p">,</span> <span class="nv">%c1</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">2</span><span class="err">x</span><span class="m">3</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="nv">%dim2</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%mem1</span><span class="p">,</span> <span class="nv">%c0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="nv">%dim3</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%mem1</span><span class="p">,</span> <span class="nv">%c1</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-	<span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="nv">%dim0</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="nv">%dim1</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="nv">%dim2</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">print</span> <span class="nv">%dim3</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-	<span class="err">memref</span><span class="p">.</span><span class="err">deallo</span><span class="k">c</span> <span class="nv">%mem0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="m">2</span><span class="err">x</span><span class="m">3</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-<span class="err">return</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Lower：memref, vector, arith → llvm</p>
-<p>与BudDialect不同 这里又增添了许多其他选项</p>
-<p><code>${MLIR_OPT} ./memref-dim.mlir \ -finalize-memref-to-llvm -convert-arith-to-llvm -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts \ -o ./log.mlir</code></p>
-<p>新增的指令可以在官方查阅</p>
-<p><code>llvm.func</code> (LLVM::LLVMFuncOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmfunc-llvmllvmfuncop">¶</a>  这是MLIR中的LLVM Dialect, 其操作与LLVM IR兼容，但是内部使用MLIR的语法来表示。其作用是方便MLIR与LLVM IR 之间的交互和转换，允许MLIR无缝Lowering到LLVM IR中。</p>
-<p><code>*llvm.mlir.constant</code> (LLVM::ConstantOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmmlirconstant-llvmconstantop">¶</a>*   定义一个llvm类型的常量</p>
-<p><code>llvm.mlir.zero</code> (LLVM::ZeroOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmmlirzero-llvmzeroop">¶</a>  创建一个0初始值，没有任何操作数或者属性</p>
-<p><code>llvm.getelementptr</code> (LLVM::GEPOp) <a href="https://mlir.llvm.org/docs/Dialects/LLVM/#llvmgetelementptr-llvmgepop">¶</a> 是LLVM IR取指针值元素的镜像操作</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="k">module</span> <span class="p">{</span>
-  <span class="err">llvm</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@printNewline</span><span class="p">()</span>
-  <span class="err">llvm</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span><span class="p">)</span>
-  <span class="err">llvm</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@free</span><span class="p">(</span><span class="nv">!llvm.ptr</span><span class="p">)</span>
-  <span class="err">llvm</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@malloc</span><span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="nv">!llvm.ptr</span>
-  <span class="err">llvm</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">%0</span> <span class="p">=</span> <span class="err">llvm</span><span class="p">.</span><span class="err">mlir</span><span class="p">.</span><span class="k">constant</span><span class="p">(</span><span class="m">2</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span><span class="p">)</span> <span class="err">:</span> <span class="k">i64</span>
-    <span class="n">%1</span> <span class="p">=</span> <span class="err">llvm</span><span class="p">.</span><span class="err">mlir</span><span class="p">.</span><span class="k">constant</span><span class="p">(</span><span class="m">3</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span><span class="p">)</span> <span class="err">:</span> <span class="k">i64</span>
-    <span class="n">%2</span> <span class="p">=</span> <span class="nl">llvm.mlir.zero :</span> <span class="nv">!llvm.ptr</span>
-    <span class="n">%3</span> <span class="p">=</span> <span class="err">llvm</span><span class="p">.</span><span class="k">getelementptr</span> <span class="n">%2</span><span class="p">[</span><span class="m">6</span><span class="p">]</span> <span class="err">:</span> <span class="p">(</span><span class="nv">!llvm.ptr</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="nv">!llvm.ptr</span><span class="p">,</span> <span class="err">f</span><span class="m">32</span>
-    <span class="n">%4</span> <span class="p">=</span> <span class="err">llvm</span><span class="p">.</span><span class="k">ptrtoint</span> <span class="n">%3</span> <span class="err">:</span> <span class="nv">!llvm.ptr</span> <span class="k">to</span> <span class="k">i64</span>
-    <span class="n">%5</span> <span class="p">=</span> <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@malloc</span><span class="p">(</span><span class="n">%4</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="nv">!llvm.ptr</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printU64</span><span class="p">(</span><span class="n">%0</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printNewline</span><span class="p">()</span> <span class="err">:</span> <span class="p">()</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printU64</span><span class="p">(</span><span class="n">%1</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printNewline</span><span class="p">()</span> <span class="err">:</span> <span class="p">()</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printU64</span><span class="p">(</span><span class="n">%0</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printNewline</span><span class="p">()</span> <span class="err">:</span> <span class="p">()</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printU64</span><span class="p">(</span><span class="n">%1</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="k">i64</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@printNewline</span><span class="p">()</span> <span class="err">:</span> <span class="p">()</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="k">call</span> <span class="vg">@free</span><span class="p">(</span><span class="n">%5</span><span class="p">)</span> <span class="err">:</span> <span class="p">(</span><span class="nv">!llvm.ptr</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">()</span>
-    <span class="err">llvm</span><span class="p">.</span><span class="err">return</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>进行 make meref-dim-translate, 实际上的行为：</p>
-<p><code>${MLIR_OPT} ./memref-dim.mlir \ -finalize-memref-to-llvm -convert-arith-to-llvm -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts | \ ${MLIR_TRANSLATE} --mlir-to-llvmir -o log.ll</code></p>
-<p>Translate：将LLVM Dialect translate为真正的了LLVM IR</p>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="bud-dialect">Bud Dialect</h1>
+<p>有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversation等操作的。</p>
+<h2 id="dialect的tablegen">Dialect的TableGen</h2>
+<p>关于Dialect的部分，我们可以在midend中找到，这也符合其在编译器中的位置。</p>
+<p>/midend/include/Dialect/Bud 下有四个关于Bud Dialect的文件，分别是BudDialect.h, BudDialect.td, BudOps.h, BudOps.td。</p>
+<!-- raw HTML omitted -->
+<p>这里.h文件中incluce了一些.td文件需要的库，<strong>许多人第一次接触(.td)文件,这是什么？</strong>
+(.td)全称为TableGen文件，是LLVM的一个工具，功能就是读取一个文件（td文件），解析这个文件，输出成不同的结果文件。</p>
+<p>MLIR使用此文件作为为操作表述(ODS)，可以理解为TableGen语言中的DSL。这些代码最终会转换为C++代码</p>
+<p>[1] <a href="https://llvm.org/docs/TableGen/#tablegen-overview"><strong>TableGen Overview</strong></a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/141265959"><strong>有关于TableGen的简单介绍</strong></a></p>
+<!-- raw HTML omitted -->
+<p>在MLIR中，TableGen的格式如下所示：</p>
+<p><img src="Buddy%20%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%EF%BC%881%EF%BC%89%20b9838b3a7eb049078f08d867d03f8c08/image.png" alt="image.png"></p>
+<p>从上往下依次是：Op名称，Op特征列表，Op的summary doc, Op的description doc, Op的参数列表， Op的结果及其类型约束。</p>
+<p>上面标红的项是定义一个Op的必要信息</p>
+<p>这里，在BudOps.td文件中主要定义了四种操作：</p>
+<p>Bud_TestConstantOp, Bud_TestPrintOp, Bud_TestEnumAttrOperation, Bud_TestArrayAttrOp</p>
+<h2 id="dialect-lowering">Dialect Lowering</h2>
+<p>有了上述的基础操作，我们就需要为Bud Dialect注册一个Lowering, 这个已经在 <code>lib/Conversion/LowerBud/LowerBudPass.cpp</code> 中实现的LowerBudPass 如下所示</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -621,77 +188,34 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="c">; ModuleID = &#39;LLVMDialectModule&#39;
-</span><span class="c"></span><span class="k">source_filename</span> <span class="p">=</span> <span class="s">&#34;LLVMDialectModule&#34;</span>
-<span class="k">declare</span> <span class="err">ptr</span> <span class="vg">@malloc</span><span class="p">(</span><span class="k">i64</span><span class="p">)</span>
-<span class="k">declare</span> <span class="kt">void</span> <span class="vg">@free</span><span class="p">(</span><span class="err">ptr</span><span class="p">)</span>
-<span class="k">declare</span> <span class="kt">void</span> <span class="vg">@printNewline</span><span class="p">()</span>
-<span class="k">declare</span> <span class="kt">void</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span><span class="p">)</span>
-<span class="k">define</span> <span class="kt">void</span> <span class="vg">@main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="n">%1</span> <span class="p">=</span> <span class="k">call</span> <span class="err">ptr</span> <span class="vg">@malloc</span><span class="p">(</span><span class="k">i64</span> <span class="k">ptrtoint</span> <span class="p">(</span><span class="err">ptr</span> <span class="k">getelementptr</span> <span class="p">(</span><span class="kt">float</span><span class="p">,</span> <span class="err">ptr</span> <span class="k">null</span><span class="p">,</span> <span class="k">i32</span> <span class="m">6</span><span class="p">)</span> <span class="k">to</span> <span class="k">i64</span><span class="p">))</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span> <span class="m">2</span><span class="p">)</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printNewline</span><span class="p">()</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span> <span class="m">3</span><span class="p">)</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printNewline</span><span class="p">()</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span> <span class="m">2</span><span class="p">)</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printNewline</span><span class="p">()</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printU64</span><span class="p">(</span><span class="k">i64</span> <span class="m">3</span><span class="p">)</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@printNewline</span><span class="p">()</span>
-  <span class="k">call</span> <span class="kt">void</span> <span class="vg">@free</span><span class="p">(</span><span class="err">ptr</span> <span class="n">%1</span><span class="p">)</span>
-  <span class="k">ret</span> <span class="kt">void</span>
-<span class="p">}</span>
-<span class="nv">!llvm.module.flags</span> <span class="p">=</span> <span class="p">!{</span><span class="n">!0</span><span class="p">}</span>
-<span class="n">!0</span> <span class="p">=</span> <span class="p">!{</span><span class="k">i32</span> <span class="m">2</span><span class="p">,</span> <span class="nv">!&#34;Debug Info Version&#34;</span><span class="p">,</span> <span class="k">i32</span> <span class="m">3</span><span class="p">}</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//类声明，BudTestConstantLowering类继承自OpRewritePAttern
+</span><span class="c1">//OpRewritePattern是模板类，专门用于定义重写MLIR的模板
+</span><span class="c1">//&lt;xx&gt;内是被重写的操作类型
+</span><span class="c1"></span><span class="k">class</span> <span class="nc">BudTestConstantLowering</span> <span class="o">:</span> <span class="k">public</span> <span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+	<span class="c1">//using可以从基类OpRewritePattern中继承构造函数，这里使用基类中的构造函数对类进行初始化
+</span><span class="c1"></span>  <span class="k">using</span> <span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span><span class="o">&gt;::</span><span class="n">OpRewritePattern</span><span class="p">;</span>
+	<span class="c1">//matchAndRewrite是OpRewritePattern&lt;..&gt;类中的一个虚函数，将会被进行重写
+</span><span class="c1"></span>  <span class="n">LogicalResult</span> <span class="nf">matchAndRewrite</span><span class="p">(</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span> <span class="n">op</span><span class="p">,</span>
+                                <span class="n">PatternRewriter</span> <span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">loc</span> <span class="o">=</span> <span class="n">op</span><span class="p">.</span><span class="n">getLoc</span><span class="p">();</span>
+    <span class="c1">// Get type from the origin operation.
+</span><span class="c1"></span>    <span class="n">Type</span> <span class="n">resultType</span> <span class="o">=</span> <span class="n">op</span><span class="p">.</span><span class="n">getResult</span><span class="p">().</span><span class="n">getType</span><span class="p">();</span>
+    <span class="c1">// Create constant operation.
+</span><span class="c1"></span>    <span class="n">Value</span> <span class="n">c0</span> <span class="o">=</span> <span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">arith</span><span class="o">::</span><span class="n">ConstantOp</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="n">loc</span><span class="p">,</span> <span class="n">resultType</span><span class="p">,</span> <span class="n">rewriter</span><span class="p">.</span><span class="n">getZeroAttr</span><span class="p">(</span><span class="n">resultType</span><span class="p">));</span>
+
+    <span class="n">rewriter</span><span class="p">.</span><span class="n">replaceOp</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">c0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">success</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>RUN 得到结果</p>
-<p>make meref-dim-run</p>
-<p><code>${MLIR_OPT} ./memref-dim.mlir --lower-affine  \ -finalize-memref-to-llvm -convert-arith-to-llvm  -convert-vector-to-llvm \ -convert-func-to-llvm -reconcile-unrealized-casts | \ ${MLIR_CPU_RUNNER} ${OPT_FLAG} -e main -entry-point-result=void \ -shared-libs=${MLIR_RUNNER_UTILS} -shared-libs=${MLIR_C_RUNNER_UTILS}</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="m">3</span>
-<span class="m">2</span>
-<span class="m">2</span>
-<span class="m">3</span>
-</code></pre></td></tr></table>
-</div>
-</div><blockquote>
-<p>总结整个流程 ：MLIR通过递降 Lowering 到 具有LLVM方言的MLIR表达，再进一步转换为LLVM IR 最后生成并在JIT执行机器代码。  这样通过多个层次的转换可以让编译器针对不同的抽象层次进行优化和调试。</p>
-</blockquote>
-<h2 id="dsapp-level-examples"><strong>DSApp Level Examples</strong></h2>
-<h3 id="conversion-example">Conversion example</h3>
-<p><strong>卷积向量化算法</strong> <code>ConvOpt/conv_2d</code></p>
-<p>这里使用一个Pass <code>conv-vectorization</code> 这个Pass实现了具备strip Mining策略的系数传播算法，而且其尺寸是可控制的。</p>
-<p>我们可以对linalg.conv_2d.mlir 操作进行Conversion.</p>
-<p><strong><code>linalg.conv_2d</code> (linalg::Conv2DOp)</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@conv_2d</span><span class="p">(</span><span class="nv">%arg0</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="nv">%arg1</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="nv">%arg2</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;)</span> <span class="p">{</span>
-  <span class="err">linalg</span><span class="p">.</span><span class="err">conv_</span><span class="m">2</span><span class="err">d</span> <span class="err">ins</span> <span class="p">(</span><span class="nv">%arg0</span><span class="p">,</span> <span class="nv">%arg1</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;)</span>
-                 <span class="err">outs</span> <span class="p">(</span><span class="nv">%arg2</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;)</span>
-  <span class="err">return</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>./buddy-opt ../../examples/ConvOpt/conv2d.mlir -conv-vectorization=&quot;strip-mining=256&quot;</code></p>
-<p><code>affine.for</code> ：执行指定次数循环体的操作。</p>
-<p><code>affine.vector_load</code>：从缓冲区切片中返回一个向量 （MLIR MemRef格式）。</p>
-<p><code>affine.vector_store</code>：将一个向量写到缓存区切片中（MLIR MemRef格式）。</p>
-<p><code>vector.broadcast</code>：将标量或向量值广播为 N-维 结果向量。</p>
-<p><code>vector.fma</code>：向量化类型的乘加混合指令。</p>
+</div><p>如过你是一位C++新手，你需要补充类(class)，构造函数(construct function)，类的继承(derived class)，派生类的构造函数，虚函数(virtual function)相关知识点才能看懂上面的代码。</p>
+<p>可以看到该类的作用是在匹配到bud::TestConstantOp 后会将其重写为mlir::arith::ConstantOp</p>
+<p>其执行的过程在[Buddy 源码解读(0)]中可以看到。</p>
+<h3 id="阐述-td文件和lowering的关系">阐述 .td文件和Lowering的关系</h3>
+<p><code>.td</code> 文件中的定义描述了 <code>Bud_TestConstantOp</code> 是如何在 MLIR 中表示的，在MLIR的编译Pipeline中，他可能在前期作为IR被使用，但最终需要将他转化为某个已经定义的<code>低级别操作</code> 。而<code>BudTestConstantLowering</code> 类负责在编译过程中，将这个自定义的操作转换为标准的低级操作 <code>arith::ConstantOp</code>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -725,105 +249,98 @@
 </span><span class="lnt">29
 </span><span class="lnt">30
 </span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-llvm" data-lang="llvm"><span class="err">#map</span> <span class="p">=</span> <span class="err">affine_map</span><span class="p">&lt;(</span><span class="err">d</span><span class="m">0</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">(</span><span class="err">d</span><span class="m">0</span><span class="p">)&gt;</span>
-<span class="err">#map</span><span class="m">1</span> <span class="p">=</span> <span class="err">affine_map</span><span class="p">&lt;(</span><span class="err">d</span><span class="m">0</span><span class="p">)</span> <span class="err">-</span><span class="p">&gt;</span> <span class="p">(</span><span class="err">d</span><span class="m">0</span> <span class="err">ceildiv</span> <span class="m">256</span><span class="p">)&gt;</span>
-<span class="k">module</span> <span class="p">{</span>
-  <span class="err">fun</span><span class="k">c</span><span class="p">.</span><span class="err">fun</span><span class="k">c</span> <span class="vg">@conv_2d</span><span class="p">(</span><span class="nv">%arg0</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="nv">%arg1</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="nv">%arg2</span><span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;)</span> <span class="p">{</span>
-    <span class="nv">%c0</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-    <span class="nv">%c1</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">1</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-    <span class="nv">%c256</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">256</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-    <span class="nv">%cst</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">constant</span> <span class="m">0.000000e+00</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span>
-    <span class="n">%0</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">splat</span> <span class="nv">%cst</span> <span class="err">:</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="c">;这里%arg1是变量，memref&lt;?x?xf32&gt;是其类型。这里记录arg1，arg2的4个维度
-</span><span class="c"></span>    <span class="nv">%dim</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%arg1</span><span class="p">,</span> <span class="nv">%c0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="nv">%dim_0</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%arg1</span><span class="p">,</span> <span class="nv">%c1</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="nv">%dim_1</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%arg2</span><span class="p">,</span> <span class="nv">%c0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="nv">%dim_2</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="err">dim</span> <span class="nv">%arg2</span><span class="p">,</span> <span class="nv">%c1</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-    <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">f</span><span class="k">or</span> <span class="nv">%arg3</span> <span class="p">=</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%c0</span><span class="p">)</span> <span class="k">to</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%dim_1</span><span class="p">)</span> <span class="p">{</span>
-      <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">f</span><span class="k">or</span> <span class="nv">%arg4</span> <span class="p">=</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%c0</span><span class="p">)</span> <span class="k">to</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%dim</span><span class="p">)</span> <span class="p">{</span>
-        <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">f</span><span class="k">or</span> <span class="nv">%arg5</span> <span class="p">=</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%c0</span><span class="p">)</span> <span class="k">to</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%dim_0</span><span class="p">)</span> <span class="p">{</span>
-          <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">f</span><span class="k">or</span> <span class="nv">%arg6</span> <span class="p">=</span> <span class="err">#map</span><span class="p">(</span><span class="nv">%c0</span><span class="p">)</span> <span class="k">to</span> <span class="err">#map</span><span class="m">1</span><span class="p">(</span><span class="nv">%dim_2</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">%1</span> <span class="p">=</span> <span class="err">memref</span><span class="p">.</span><span class="k">load</span> <span class="nv">%arg1</span><span class="p">[</span><span class="nv">%arg4</span><span class="p">,</span> <span class="nv">%arg5</span><span class="p">]</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;</span>
-            <span class="n">%2</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">index_cast</span> <span class="nv">%c0</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span> <span class="k">to</span> <span class="k">i32</span>
-            <span class="n">%3</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="k">sitofp</span> <span class="n">%2</span> <span class="err">:</span> <span class="k">i32</span> <span class="k">to</span> <span class="err">f</span><span class="m">32</span>
-            <span class="n">%4</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">cmpf</span> <span class="k">one</span><span class="p">,</span> <span class="n">%1</span><span class="p">,</span> <span class="n">%3</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span>
-            <span class="err">scf</span><span class="p">.</span><span class="err">if</span> <span class="n">%4</span> <span class="p">{</span>
-              <span class="n">%5</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">broadcast</span> <span class="n">%1</span> <span class="err">:</span> <span class="err">f</span><span class="m">32</span> <span class="k">to</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-              <span class="n">%6</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">muli</span> <span class="nv">%arg6</span><span class="p">,</span> <span class="nv">%c256</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-              <span class="n">%7</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">subi</span> <span class="nv">%dim_2</span><span class="p">,</span> <span class="n">%6</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-              <span class="n">%8</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">cmpi</span> <span class="k">sge</span><span class="p">,</span> <span class="n">%7</span><span class="p">,</span> <span class="nv">%c256</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-              <span class="err">scf</span><span class="p">.</span><span class="err">if</span> <span class="n">%8</span> <span class="p">{</span>
-                <span class="n">%9</span> <span class="p">=</span> <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">vector_</span><span class="k">load</span> <span class="nv">%arg0</span><span class="p">[</span><span class="nv">%arg3</span> <span class="err">+</span> <span class="nv">%arg4</span><span class="p">,</span> <span class="nv">%arg5</span> <span class="err">+</span> <span class="nv">%arg6</span> <span class="p">*</span> <span class="m">256</span><span class="p">]</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="n">%10</span> <span class="p">=</span> <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">vector_</span><span class="k">load</span> <span class="nv">%arg2</span><span class="p">[</span><span class="nv">%arg3</span><span class="p">,</span> <span class="nv">%arg6</span> <span class="p">*</span> <span class="m">256</span><span class="p">]</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="n">%11</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">fma</span> <span class="n">%9</span><span class="p">,</span> <span class="n">%5</span><span class="p">,</span> <span class="n">%10</span> <span class="err">:</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="err">affi</span><span class="k">ne</span><span class="p">.</span><span class="err">vector_</span><span class="k">store</span> <span class="n">%11</span><span class="p">,</span> <span class="nv">%arg2</span><span class="p">[</span><span class="nv">%arg3</span><span class="p">,</span> <span class="nv">%arg6</span> <span class="p">*</span> <span class="m">256</span><span class="p">]</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-              <span class="p">}</span> <span class="err">else</span> <span class="p">{</span>
-                <span class="n">%9</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">create_mask</span> <span class="n">%7</span> <span class="err">:</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">x</span><span class="k">i1</span><span class="p">&gt;</span>
-                <span class="n">%10</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">addi</span> <span class="nv">%arg3</span><span class="p">,</span> <span class="nv">%arg4</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-                <span class="n">%11</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">muli</span> <span class="nv">%arg6</span><span class="p">,</span> <span class="nv">%c256</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-                <span class="n">%12</span> <span class="p">=</span> <span class="err">arith</span><span class="p">.</span><span class="err">addi</span> <span class="nv">%arg5</span><span class="p">,</span> <span class="n">%11</span> <span class="err">:</span> <span class="err">inde</span><span class="k">x</span>
-                <span class="n">%13</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">masked</span><span class="k">load</span> <span class="nv">%arg0</span><span class="p">[</span><span class="n">%10</span><span class="p">,</span> <span class="n">%12</span><span class="p">],</span> <span class="n">%9</span><span class="p">,</span> <span class="n">%0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">x</span><span class="k">i1</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="err">in</span><span class="k">to</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="n">%14</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">masked</span><span class="k">load</span> <span class="nv">%arg2</span><span class="p">[</span><span class="nv">%arg3</span><span class="p">,</span> <span class="n">%11</span><span class="p">],</span> <span class="n">%9</span><span class="p">,</span> <span class="n">%0</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">x</span><span class="k">i1</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span> <span class="err">in</span><span class="k">to</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="n">%15</span> <span class="p">=</span> <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">fma</span> <span class="n">%13</span><span class="p">,</span> <span class="n">%5</span><span class="p">,</span> <span class="n">%14</span> <span class="err">:</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-                <span class="err">vect</span><span class="k">or</span><span class="p">.</span><span class="err">masked</span><span class="k">store</span> <span class="nv">%arg2</span><span class="p">[</span><span class="nv">%arg3</span><span class="p">,</span> <span class="n">%11</span><span class="p">],</span> <span class="n">%9</span><span class="p">,</span> <span class="n">%15</span> <span class="err">:</span> <span class="err">memref</span><span class="p">&lt;</span><span class="err">?</span><span class="k">x</span><span class="err">?xf</span><span class="m">32</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">x</span><span class="k">i1</span><span class="p">&gt;,</span> <span class="err">vect</span><span class="k">or</span><span class="p">&lt;</span><span class="m">256</span><span class="err">xf</span><span class="m">32</span><span class="p">&gt;</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="err">return</span>
-  <span class="p">}</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="p">{</span>
+<span class="k">class</span> <span class="nc">LowerBudPass</span> <span class="o">:</span> <span class="k">public</span> <span class="n">PassWrapper</span><span class="o">&lt;</span><span class="n">LowerBudPass</span><span class="p">,</span> <span class="n">OperationPass</span><span class="o">&lt;</span><span class="n">ModuleOp</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="n">MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID</span><span class="p">(</span><span class="n">LowerBudPass</span><span class="p">)</span>
+  <span class="n">LowerBudPass</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+  <span class="n">LowerBudPass</span><span class="p">(</span><span class="k">const</span> <span class="n">LowerBudPass</span> <span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span>
+	<span class="c1">//两个虚函数
+</span><span class="c1"></span>	<span class="c1">//返回该 Pass 的命令行参数名称，在命令行中使用时，通过 --lower-bud 来调用这个 pass
+</span><span class="c1"></span>	<span class="c1">//命令行调用
+</span><span class="c1"></span>  <span class="n">StringRef</span> <span class="nf">getArgument</span><span class="p">()</span> <span class="k">const</span> <span class="k">final</span> <span class="p">{</span> <span class="k">return</span> <span class="s">&#34;lower-bud&#34;</span><span class="p">;</span> <span class="p">}</span>
+  <span class="c1">//getDescription() 返回该 Pass 的描述信息，用于提供用户可读的说明
+</span><span class="c1"></span>  <span class="n">StringRef</span> <span class="nf">getDescription</span><span class="p">()</span> <span class="k">const</span> <span class="k">final</span> <span class="p">{</span> <span class="k">return</span> <span class="s">&#34;Lower Bud Dialect.&#34;</span><span class="p">;</span> <span class="p">}</span>
+   <span class="c1">//纯虚函数，在派生类中必须被实现。
+</span><span class="c1"></span>   <span class="c1">//函数将在 ModuleOp 上执行 lower 过程。
+</span><span class="c1"></span>   <span class="c1">//在这里，ModuleOp 可能包含一系列高层次的 Bud 方言操作，
+</span><span class="c1"></span>   <span class="c1">//runOnOperation() 会将这些操作逐步转换为底层的 MLIR 操作，
+</span><span class="c1"></span>   <span class="c1">//如 FuncDialect、MemRefDialect、VectorDialect 等操作。这是 pass 的核心逻辑。
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="nf">runOnOperation</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
+	<span class="c1">//确指出了该 pass 在运行时依赖的方言
+</span><span class="c1"></span>	<span class="c1">//依赖方言注册
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="nf">getDependentDialects</span><span class="p">(</span><span class="n">DialectRegistry</span> <span class="o">&amp;</span><span class="n">registry</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span>
+    <span class="c1">// clang-format off
+</span><span class="c1"></span>    <span class="n">registry</span><span class="p">.</span><span class="n">insert</span><span class="o">&lt;</span>
+        <span class="n">buddy</span><span class="o">::</span><span class="n">bud</span><span class="o">::</span><span class="n">BudDialect</span><span class="p">,</span>
+        <span class="n">func</span><span class="o">::</span><span class="n">FuncDialect</span><span class="p">,</span>
+        <span class="n">vector</span><span class="o">::</span><span class="n">VectorDialect</span><span class="p">,</span>
+        <span class="n">memref</span><span class="o">::</span><span class="n">MemRefDialect</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="c1">// clang-format on
+</span><span class="c1"></span>  <span class="p">}</span>
+<span class="p">};</span>
+<span class="p">}</span> <span class="c1">// end anonymous namespace.
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//这里是对继承类 LowerBudPass中 runOnOperation()方法的具体实现
+</span><span class="c1"></span><span class="kt">void</span> <span class="n">LowerBudPass</span><span class="o">::</span><span class="n">runOnOperation</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">MLIRContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">getContext</span><span class="p">();</span>
+  <span class="n">ModuleOp</span> <span class="n">module</span> <span class="o">=</span> <span class="n">getOperation</span><span class="p">();</span>
+	<span class="c1">//转换目标，定义了那些操作是合法的
+</span><span class="c1"></span>  <span class="n">ConversionTarget</span> <span class="nf">target</span><span class="p">(</span><span class="o">*</span><span class="n">context</span><span class="p">);</span>
+  <span class="n">target</span><span class="p">.</span><span class="n">addLegalDialect</span><span class="o">&lt;</span>
+      <span class="n">arith</span><span class="o">::</span><span class="n">ArithmeticDialect</span><span class="p">,</span>
+      <span class="n">func</span><span class="o">::</span><span class="n">FuncDialect</span><span class="p">,</span>
+      <span class="n">vector</span><span class="o">::</span><span class="n">VectorDialect</span><span class="p">,</span>
+      <span class="n">memref</span><span class="o">::</span><span class="n">MemRefDialect</span><span class="o">&gt;</span><span class="p">();</span>
+  <span class="n">target</span><span class="p">.</span><span class="n">addLegalOp</span><span class="o">&lt;</span><span class="n">ModuleOp</span><span class="p">,</span> <span class="n">func</span><span class="o">::</span><span class="n">FuncOp</span><span class="p">,</span> <span class="n">func</span><span class="o">::</span><span class="n">ReturnOp</span><span class="o">&gt;</span><span class="p">();</span>
+
+  <span class="n">RewritePatternSet</span> <span class="nf">patterns</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+  <span class="c1">//调用下面的函数手机与Bud相关的Lowering规则，如之前的BudTestConstantLowering 就是重写的模式之一
+</span><span class="c1"></span>  <span class="n">populateLowerBudConversionPatterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">);</span>
+	<span class="c1">//执行重写操作
+</span><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">failed</span><span class="p">(</span><span class="n">applyPartialConversion</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">patterns</span><span class="p">))))</span>
+    <span class="n">signalPassFailure</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="edge-detection-example">Edge detection example</h3>
-<!-- raw HTML omitted -->
-<p>这里记录一个难点。在安装好opencv环境后，如果直接运行 <code>AutoConfig</code> 会产生报错：提示 can not find OpenCVConfig.cmake .</p>
-<p><code>解决方法</code> 需要在/path/to/opencv下使用 <code>find ./  -name &quot;OpenCVConfig.cmake&quot;</code> 并将该文件所在路径放到环境变量OpenCV_XXX_DIR中 此变量名在makefile中查找即可。</p>
-<!-- raw HTML omitted -->
-<p>具体ninjia的执行方式可以在build.ninja中查明。但是目前不熟悉ninjia的构成方式，暂时不作分析。</p>
-<p>这里可以开启副本，关注buddy-opt的benchmark</p>
-<h3 id="digital-image-processing-examples"><strong>Digital Image Processing Examples</strong></h3>
-<p><strong>Conversion example:</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"> <span class="nb">cd</span> buddy-mlir/build/bin
-./buddy-opt ../../frontend/Interfaces/DIP.mlir --lower-dip<span class="o">=</span><span class="s2">&#34;DIP-strip-mining=</span><span class="si">${</span><span class="nv">BUDDY_DIP_OPT_STRIP_MINING</span><span class="si">}</span><span class="s2">&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>这里DIP.mlir在前端的接口中 这里DIP.mlir是一个相当大的文件，用于处理图像数据，在进行conversion后可以观察到Dialect由dip → vector和arith等MLIR内部的Dialect 完成了一次Conversion</p>
-<p>其余步骤和之前的Edge detection相似，不再赘述。</p>
-<p>经过实际测试，目前Rotation example, Resize example， Morphological Operations example均无法运行。<strong>Digital Audio Processing Examples视频处理也无法运行。</strong></p>
-<p>原因是可以正常cmake,但是无法进行ninja的构建，换句话说，build.ninja中没有相关target.</p>
-<h2 id="testing-and-demonstrating-examples"><strong>Testing and Demonstrating Examples</strong></h2>
-<p><strong>此部分在之前的章节已经进行测试。</strong></p>
+</div><p>总结一下 LowerBudPass.cpp的作用：</p>
+<ul>
+<li><strong>转换自定义方言</strong>：它将高层次的 Bud 方言操作逐步降低为低层次的标准 MLIR 操作，使得这些操作可以更接近硬件执行，或者与标准编译基础设施（如 LLVM IR）兼容。</li>
+<li><strong>优化流程的一部分</strong>：MLIR Pipeline 中通常包含多个 pass，<code>LowerBudPass</code> 是其中的 <strong>Lowering pass</strong>，用于在编译的早期阶段将用户自定义的高级语言或领域特定语言（DSL）的操作转换为中间表示，准备进入后续优化阶段。</li>
+</ul>
+<p>通过 <code>LowerBudPass</code>，整个 MLIR 编译流程可以从高层次自定义语言层面逐渐转化为低层次、可执行的硬件友好代码</p>
 <ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/mlir/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">MLIR</a>
+   </li>
   
 </ul>
 <div class="mt6 instapaper_ignoref">
@@ -836,6 +353,17 @@
 
 
 
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/2024/09/06/buddy_src_0/">Buddy Compiler 源码解读(0)</a>
+        </li>
+	    
+    </ul>
+</div>
 
 </aside>
 

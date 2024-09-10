@@ -38,6 +38,15 @@ Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </descri
     </item>
     
     <item>
+      <title>Buddy Compiler 源码解读(1)</title>
+      <link>https://zhighway777.github.io/2024/09/06/buddy_src_1/</link>
+      <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/06/buddy_src_1/</guid>
+      <description>Bud Dialect 有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversati</description>
+    </item>
+    
+    <item>
       <title>How to build personal website</title>
       <link>https://zhighway777.github.io/2024/09/05/my-first-post/</link>
       <pubDate>Thu, 05 Sep 2024 10:52:39 +0800</pubDate>
