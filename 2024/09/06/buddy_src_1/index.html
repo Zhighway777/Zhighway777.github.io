@@ -47,8 +47,8 @@
 <meta itemprop="name" content="Buddy Compiler 源码解读(1)">
 <meta itemprop="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."><meta itemprop="datePublished" content="2024-09-06T23:23:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-06T23:23:03+08:00" />
-<meta itemprop="wordCount" content="2004">
-<meta itemprop="keywords" content="MLIR," /><meta name="twitter:card" content="summary"/>
+<meta itemprop="wordCount" content="1932">
+<meta itemprop="keywords" content="MLIR,AI Compiler," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Buddy Compiler 源码解读(1)"/>
 <meta name="twitter:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."/>
 
@@ -61,9 +61,8 @@
    
   
 
-  
-  <header class="cover bg-top" style="background-image: url('https://zhighway777.github.io/img/3drops_background.png');">
-    <div class="bg-black-60">
+  <header>
+    <div class="bg-black">
       <nav class="pv3 ph3 ph4-ns" role="navigation">
   <div class="flex-l justify-between items-center center">
     <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
@@ -113,16 +112,6 @@
   </div>
 </nav>
 
-      <div class="tc-l pv6 ph3 ph4-ns">
-        
-          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Buddy Compiler 源码解读(1)</div>
-          
-            <div class="fw1 f5 f3-l white-80 measure-wide-l center lh-copy mt3 mb4">
-              A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered.
-            </div>
-          
-        
-      </div>
     </div>
   </header>
 
@@ -135,7 +124,7 @@
     <header class="mt4 w-100">
       <aside class="instapaper_ignoref b helvetica tracked ttu">
           
-        Articles
+        Posts
       </aside>
       
 
@@ -187,32 +176,7 @@
 <p>Bud_TestConstantOp, Bud_TestPrintOp, Bud_TestEnumAttrOperation, Bud_TestArrayAttrOp</p>
 <h2 id="dialect-lowering">Dialect Lowering</h2>
 <p>有了上述的基础操作，我们就需要为Bud Dialect注册一个Lowering, 这个已经在 <code>lib/Conversion/LowerBud/LowerBudPass.cpp</code> 中实现的LowerBudPass 如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//类声明，BudTestConstantLowering类继承自OpRewritePAttern
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//类声明，BudTestConstantLowering类继承自OpRewritePAttern
 </span><span class="c1">//OpRewritePattern是模板类，专门用于定义重写MLIR的模板
 </span><span class="c1">//&lt;xx&gt;内是被重写的操作类型
 </span><span class="c1"></span><span class="k">class</span> <span class="nc">BudTestConstantLowering</span> <span class="o">:</span> <span class="k">public</span> <span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span><span class="o">&gt;</span> <span class="p">{</span>
@@ -233,49 +197,12 @@
     <span class="k">return</span> <span class="n">success</span><span class="p">();</span>
   <span class="p">}</span>
 <span class="p">};</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如过你是一位C++新手，你需要补充类(class)，构造函数(construct function)，类的继承(derived class)，派生类的构造函数，虚函数(virtual function)相关知识点才能看懂上面的代码。</p>
+</code></pre></div><p>如过你是一位C++新手，你需要补充类(class)，构造函数(construct function)，类的继承(derived class)，派生类的构造函数，虚函数(virtual function)相关知识点才能看懂上面的代码。</p>
 <p>可以看到该类的作用是在匹配到bud::TestConstantOp 后会将其重写为mlir::arith::ConstantOp</p>
 <p>其执行的过程在[Buddy 源码解读(0)]中可以看到。</p>
 <h3 id="阐述-td文件和lowering的关系">阐述 .td文件和Lowering的关系</h3>
 <p><code>.td</code> 文件中的定义描述了 <code>Bud_TestConstantOp</code> 是如何在 MLIR 中表示的，在MLIR的编译Pipeline中，他可能在前期作为IR被使用，但最终需要将他转化为某个已经定义的<code>低级别操作</code> 。而<code>BudTestConstantLowering</code> 类负责在编译过程中，将这个自定义的操作转换为标准的低级操作 <code>arith::ConstantOp</code>。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="p">{</span>
 <span class="k">class</span> <span class="nc">LowerBudPass</span> <span class="o">:</span> <span class="k">public</span> <span class="n">PassWrapper</span><span class="o">&lt;</span><span class="n">LowerBudPass</span><span class="p">,</span> <span class="n">OperationPass</span><span class="o">&lt;</span><span class="n">ModuleOp</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
   <span class="n">MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID</span><span class="p">(</span><span class="n">LowerBudPass</span><span class="p">)</span>
@@ -306,33 +233,7 @@
 </span><span class="c1"></span>  <span class="p">}</span>
 <span class="p">};</span>
 <span class="p">}</span> <span class="c1">// end anonymous namespace.
-</span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//这里是对继承类 LowerBudPass中 runOnOperation()方法的具体实现
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//这里是对继承类 LowerBudPass中 runOnOperation()方法的具体实现
 </span><span class="c1"></span><span class="kt">void</span> <span class="n">LowerBudPass</span><span class="o">::</span><span class="n">runOnOperation</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">MLIRContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">getContext</span><span class="p">();</span>
   <span class="n">ModuleOp</span> <span class="n">module</span> <span class="o">=</span> <span class="n">getOperation</span><span class="p">();</span>
@@ -352,9 +253,7 @@
 </span><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">failed</span><span class="p">(</span><span class="n">applyPartialConversion</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">patterns</span><span class="p">))))</span>
     <span class="n">signalPassFailure</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>总结一下 LowerBudPass.cpp的作用：</p>
+</code></pre></div><p>总结一下 LowerBudPass.cpp的作用：</p>
 <ul>
 <li><strong>转换自定义方言</strong>：它将高层次的 Bud 方言操作逐步降低为低层次的标准 MLIR 操作，使得这些操作可以更接近硬件执行，或者与标准编译基础设施（如 LLVM IR）兼容。</li>
 <li><strong>优化流程的一部分</strong>：MLIR Pipeline 中通常包含多个 pass，<code>LowerBudPass</code> 是其中的 <strong>Lowering pass</strong>，用于在编译的早期阶段将用户自定义的高级语言或领域特定语言（DSL）的操作转换为中间表示，准备进入后续优化阶段。</li>
@@ -364,6 +263,10 @@
   
    <li class="list di">
      <a href="/tags/mlir/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">MLIR</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/ai-compiler/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">AI Compiler</a>
    </li>
   
 </ul>

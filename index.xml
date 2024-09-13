@@ -5,7 +5,18 @@
     <link>https://zhighway777.github.io/</link>
     <description>Recent content in 3drops on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://zhighway777.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 09 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://zhighway777.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Top Architecture Labs</title>
+      <link>https://zhighway777.github.io/2024/09/09/top_lab/</link>
+      <pubDate>Mon, 09 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/09/top_lab/</guid>
+      <description>You can download the CSV file here: Download CSV
+体系结构 TOP实验室 国外 /* cspell:disable-file */ /* webkit printing magic: print all background colors */ html { -webkit-print-color-adjust: exact; } * { box-sizing: border-box; -webkit-print-color-adjust: exact; } html, body { margin: 0; padding: 0; } @media only screen { body { margin: 2em auto; max-width: 900px; color: rgb(55, 53, 47); } } body { line-height: 1.5; white-space: pre-wrap; } a, a.visited { color: inherit; text-decoration: underline; } .</description>
+    </item>
+    
     <item>
       <title>About</title>
       <link>https://zhighway777.github.io/about/</link>
@@ -15,6 +26,33 @@
       <description>Welcome to Zeng&amp;rsquo;blog Hello! I am a developer passionate about computer architecture and AI compilers. Here, I will share experiences and research on programming, AI, machine learning, and compiler development.
  📅 Blog Established: 2024 🎯 Areas of Interest: AI compilers, MLIR, dynamic model compilation, and more  Hope my articles will help you!
 Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </description>
+    </item>
+    
+    <item>
+      <title>Buddy Compiler 源码解读(0)</title>
+      <link>https://zhighway777.github.io/2024/09/06/buddy_src_0/</link>
+      <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/06/buddy_src_0/</guid>
+      <description>Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro</description>
+    </item>
+    
+    <item>
+      <title>Buddy Compiler 源码解读(1)</title>
+      <link>https://zhighway777.github.io/2024/09/06/buddy_src_1/</link>
+      <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/06/buddy_src_1/</guid>
+      <description>Bud Dialect 有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversati</description>
+    </item>
+    
+    <item>
+      <title>How to build personal website</title>
+      <link>https://zhighway777.github.io/2024/09/05/my-first-post/</link>
+      <pubDate>Thu, 05 Sep 2024 10:52:39 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/05/my-first-post/</guid>
+      <description>Introduction 第一篇博客用于记录博客的搭建过程 模板 博客使用hugo工具进行搭建与管理，hugo提供了丰富的tamplates,同时，其draft功能使得</description>
     </item>
     
   </channel>
