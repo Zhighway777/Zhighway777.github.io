@@ -47,7 +47,7 @@
 <meta itemprop="name" content="How to build personal website">
 <meta itemprop="description" content="Recording the process of building my first blog."><meta itemprop="datePublished" content="2024-09-05T10:52:39+08:00" />
 <meta itemprop="dateModified" content="2024-09-05T10:52:39+08:00" />
-<meta itemprop="wordCount" content="603">
+<meta itemprop="wordCount" content="654">
 <meta itemprop="keywords" content="Hugo,blog,Tutorial,tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to build personal website"/>
 <meta name="twitter:description" content="Recording the process of building my first blog."/>
@@ -168,8 +168,15 @@ drift默认被设置为ture,说明此时是草稿状态。</p>
 <p>保存draft后，在命令行使用 <code>hugo server -D</code>可以打开draft,进行实时修改。</p>
 <p>当修改后的内容符合要求，可以将draft调整为false，即可保存修改并对修改后的内容进行publish。
 最后使用<code>hugo</code>命令发布网站。这会在本地publsh中更新相应的内容，但不会上传到真正的网站上。</p>
-<p>由于我通过将hugo接入github.io 因此需要再将内容使用git推送后，可以将更新内容发布。</p>
-<h2 id="关于博客内容">关于博客内容</h2>
+<p>由于我通过将hugo接入github.io 因此需要再将内容使用git推送后，可以将更新内容发布。
+这里我将指令封装到./publish_web.sh中,进行自动化发布。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">hugo
+<span class="nb">cd</span> public
+git add .                         
+git commit -m <span class="s2">&#34;Deploying Hugo site&#34;</span>
+git push origin main
+
+</code></pre></div><h2 id="关于博客内容">关于博客内容</h2>
 <p>I will try my best to use English convert something clearly
 我尽量使用英文来进行文章书写，并且保证语句的简单和格式的清晰。</p>
 <p>只输出有价值/经过思考/有趣的观点或见解。</p>
