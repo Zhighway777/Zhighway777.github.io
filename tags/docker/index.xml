@@ -13,8 +13,8 @@
       <pubDate>Thu, 26 Sep 2024 20:08:03 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/09/26/docker_tutorial/</guid>
-      <description>#Introduction ##Background The most troublesome thing is environment configuration when we are doing software development. The user must ensure two things:The correct setting of OS and the installation of various libraries and components(dependences).However, the process of installing is painful. Docker may slove the problem fundamentally.Its core idea is : &amp;ldquo;Package the application and its dependencies into one file&amp;rdquo; #What Docker is for?
- Providing a disposable environment. Providing a dynmaic capacity service.</description>
+      <description>Introduction Background The most troublesome thing is environment configuration when we are doing software development. The user must ensure two things:The correct setting of OS and the installation of various libraries and components(dependences).However, the process of installing is painful. Docker may slove the problem fundamentally.Its core idea is : &amp;ldquo;Package the application and its dependencies into one file&amp;rdquo;
+What Docker is for?  Providing a disposable environment. Providing a dynmaic capacity service.</description>
     </item>
     
   </channel>

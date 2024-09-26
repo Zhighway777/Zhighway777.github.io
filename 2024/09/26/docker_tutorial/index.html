@@ -47,7 +47,7 @@
 <meta itemprop="name" content="Docker tutorial">
 <meta itemprop="description" content="Recording the usage of docker."><meta itemprop="datePublished" content="2024-09-26T20:08:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-26T20:08:03+08:00" />
-<meta itemprop="wordCount" content="291">
+<meta itemprop="wordCount" content="292">
 <meta itemprop="keywords" content="docker,Tutorial,tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker tutorial"/>
 <meta name="twitter:description" content="Recording the usage of docker."/>
@@ -156,20 +156,20 @@
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>#Introduction
-##Background
-The most troublesome thing is environment configuration when we are doing software development.
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="introduction">Introduction</h1>
+<h2 id="background">Background</h2>
+<p>The most troublesome thing is environment configuration when we are doing software development.
 The user must ensure two things:The correct setting of OS and the installation of various libraries and components(dependences).However, the process of installing is painful.
 Docker may slove the problem fundamentally.Its core idea is :
-&ldquo;Package the application and its dependencies into one file&rdquo;
-#What Docker is for?</p>
+&ldquo;Package the application and its dependencies into one file&rdquo;</p>
+<h2 id="what-docker-is-for">What Docker is for?</h2>
 <ol>
 <li>Providing a disposable environment.</li>
 <li>Providing a dynmaic capacity service.</li>
 <li>One machine can run many docker, simulating a microservice architecture.</li>
 </ol>
-<p>#Installation
-<a href="https://docs.docker.com/engine/install/ubuntu/">docker-ubuntu</a></p>
+<h1 id="installation">Installation</h1>
+<p><a href="https://docs.docker.com/engine/install/ubuntu/">docker-ubuntu</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ docker version <span class="c1"># verify the installation</span>
 
 <span class="c1">#Docker needs sudo previlege, so run the command to avoid put sudo everytime.</span>
@@ -182,9 +182,9 @@ $ sudo service docker start
 
 <span class="c1"># systemctl command</span>
 $ sudo systemctl start docker
-</code></pre></div><p>#Image files
-Docker packages the app and its dependencies into the image file.Image file has the property of nested inheritance. You can add some personal settings to generate your image files.</p>
-<p>#Commands</p>
+</code></pre></div><h1 id="image-files">Image files</h1>
+<p>Docker packages the app and its dependencies into the image file.Image file has the property of nested inheritance. You can add some personal settings to generate your image files.</p>
+<p>#useful commands</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#1. catch the image files</span>
 $ docker image pull path/to/image_file
 
