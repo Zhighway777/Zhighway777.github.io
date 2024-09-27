@@ -20,3 +20,9 @@
   max-width: 100%;  /* 限制 iframe 的宽度，防止超出页面 */
   height: auto;
 }
+
+/* 不带行号的代码块样式 */
+.highlight pre {
+  padding: 10px;  /* 适当留出边距 */
+  overflow: auto; /* 代码行太长向右滚动 */
+}
