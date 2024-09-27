@@ -1,0 +1,115 @@
+---
+title: "Docker tutorial"
+date: 2024-09-26T20:08:03+08:00
+draft: false
+tags: [
+		"docker",
+		"Tutorial",
+		"tools"
+]
+description: "Recording the usage of docker."
+featured_image: ""
+
+---
+# Introduction
+## Background
+To compulate TPU-MLIR project, I have to learn docker for env isolation.
+The most troublesome thing is environment configuration when we are doing software development.
+The user must ensure two things:The correct setting of OS and the installation of various libraries and components(dependences).However, the process of installing is painful.
+Docker may slove the problem fundamentally.Its core idea is :
+"Package the application and its dependencies into one file"
+## What Docker is for?
+1. Providing a disposable environment.
+2. Providing a dynmaic capacity service.
+3. One machine can run many docker, simulating a microservice architecture.
+
+There are 3 conpects in docker:
+1. Image
+2. Container
+3. Repository 
+
+The relationship among them are follows:
+![docker_concepts.png](/img/docker_tutorial.png)
+
+
+# Installation
+[docker-ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+```bash
+$ docker version # verify the installation
+
+#Docker needs sudo previlege, so run the command to avoid put sudo everytime.
+$ sudo usermod -aG docker $USER
+
+#You need run the Docker service when command line runs the docker command.(optional)
+
+# service command
+$ sudo service docker start
+
+# systemctl command
+$ sudo systemctl start docker
+```
+
+# Image files
+Docker packages the app and its dependencies into the image file.Image file has the property of nested inheritance. You can add some personal settings to generate your image files.
+
+# Useful commands
+
+```bash
+#0. most useful commands
+$docker ps -a 
+#show all containers
+
+$docker run -d --name [my_container] host/dir:/client/dir -it [container_name]
+#-d:'show the container id' | --name: 'modify the name' | 
+#-v host:client: 'Mount the local volume directory to docker as client' |
+#-it: Run interactively and assign a terminal
+# [container_name]: the container name you want to run
+
+$docker start [my_container]
+$docker stop [my_container]
+
+#1. catch the image files
+$ docker image pull path/to/image_file
+
+#2. check the image files
+$ docker images ls
+
+#3. run the image file, this command will generate a running container instance.
+$ docker container run your_image_file
+# if successed, there will be some infomation.
+
+#4. list the running containers on this computer.
+$ docker container ls
+
+#5. terminte manually for the containers that do not kill automatically,
+$ docker container kill [containID]
+
+#6. remove the container still on the disk.
+$ docker container rm [containerID]
+
+#7. Start an existing container
+$ docker container start [containerID]
+
+#8. check the output of docker containter
+$ docker container logs [containerID]
+
+#9. copy the file from docker to local. 
+$ docker container cp [containID]:[/path/to/file]
+
+```
+
+You can find more docker command here: [Docker 命令大全](https://www.runoob.com/docker/docker-command-manual.html)
+
+# Reference
+[1] ['Docker 入门教程' by ruanyifeng](https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html)
+
+
+
+
+
+
+
+
+
+
