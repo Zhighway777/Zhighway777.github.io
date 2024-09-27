@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Docker tutorial">
 <meta itemprop="description" content="Recording the usage of docker."><meta itemprop="datePublished" content="2024-09-26T20:08:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-26T20:08:03+08:00" />
-<meta itemprop="wordCount" content="347">
+<meta itemprop="wordCount" content="410">
 <meta itemprop="keywords" content="docker,Tutorial,tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker tutorial"/>
 <meta name="twitter:description" content="Recording the usage of docker."/>
@@ -202,7 +202,20 @@ $ sudo systemctl start docker
 </code></pre></div><h1 id="image-files">Image files</h1>
 <p>Docker packages the app and its dependencies into the image file.Image file has the property of nested inheritance. You can add some personal settings to generate your image files.</p>
 <h1 id="useful-commands">Useful commands</h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#1. catch the image files</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#0. most useful commands</span>
+<span class="nv">$docker</span> ps -a 
+<span class="c1">#show all containers</span>
+
+<span class="nv">$docker</span> run -d --name <span class="o">[</span>my_container<span class="o">]</span> host/dir:/client/dir -it <span class="o">[</span>container_name<span class="o">]</span>
+<span class="c1">#-d:&#39;show the container id&#39; | --name: &#39;modify the name&#39; | </span>
+<span class="c1"># host:client: &#39;Mount the local volume directory to docker as client&#39; |</span>
+<span class="c1"># -it: Run interactively and assign a terminal</span>
+<span class="c1"># [container_name]: the container name you want to run</span>
+
+<span class="nv">$docker</span> start <span class="o">[</span>my_container<span class="o">]</span>
+<span class="nv">$docker</span> stop <span class="o">[</span>my_container<span class="o">]</span>
+
+<span class="c1">#1. catch the image files</span>
 $ docker image pull path/to/image_file
 
 <span class="c1">#2. check the image files</span>
