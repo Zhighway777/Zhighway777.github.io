@@ -6,7 +6,16 @@
     <description>Recent content in AI Compiler on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Sep 2024 23:23:03 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/ai-compiler/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 Sep 2024 13:19:05 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/ai-compiler/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Buddy Compiler 源码解读(2)</title>
+      <link>https://zhighway777.github.io/2024/09/27/buddy_src_2/</link>
+      <pubDate>Fri, 27 Sep 2024 13:19:05 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/27/buddy_src_2/</guid>
+      <description>Continue&amp;hellip;</description>
+    </item>
+    
     <item>
       <title>Buddy Compiler 源码解读(0)</title>
       <link>https://zhighway777.github.io/2024/09/06/buddy_src_0/</link>
