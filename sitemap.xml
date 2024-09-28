@@ -3,7 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://zhighway777.github.io/</loc>
-    <lastmod>2024-09-28T19:46:46+08:00</lastmod>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/blog/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/hugo/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/2024/09/28/hugo_custom/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/posts/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/tools/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
+  </url><url>
+    <loc>https://zhighway777.github.io/tags/tutorial/</loc>
+    <lastmod>2024-09-28T20:24:41+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/tags/infra/</loc>
     <lastmod>2024-09-28T19:46:46+08:00</lastmod>
@@ -12,12 +33,6 @@
     <lastmod>2024-09-28T19:46:46+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/tags/perf/</loc>
-    <lastmod>2024-09-28T19:46:46+08:00</lastmod>
-  </url><url>
-    <loc>https://zhighway777.github.io/posts/</loc>
-    <lastmod>2024-09-28T19:46:46+08:00</lastmod>
-  </url><url>
-    <loc>https://zhighway777.github.io/tags/</loc>
     <lastmod>2024-09-28T19:46:46+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/2024/09/28/tpu-mlir-recording/</loc>
@@ -33,12 +48,6 @@
     <lastmod>2024-09-26T20:08:03+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/2024/09/26/docker_tutorial/</loc>
-    <lastmod>2024-09-26T20:08:03+08:00</lastmod>
-  </url><url>
-    <loc>https://zhighway777.github.io/tags/tools/</loc>
-    <lastmod>2024-09-26T20:08:03+08:00</lastmod>
-  </url><url>
-    <loc>https://zhighway777.github.io/tags/tutorial/</loc>
     <lastmod>2024-09-26T20:08:03+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/tags/computer-architecture/</loc>
@@ -62,13 +71,7 @@
     <loc>https://zhighway777.github.io/2024/09/06/buddy_src_1/</loc>
     <lastmod>2024-09-06T23:23:03+08:00</lastmod>
   </url><url>
-    <loc>https://zhighway777.github.io/tags/blog/</loc>
-    <lastmod>2024-09-05T10:52:39+08:00</lastmod>
-  </url><url>
     <loc>https://zhighway777.github.io/2024/09/05/my-first-post/</loc>
-    <lastmod>2024-09-05T10:52:39+08:00</lastmod>
-  </url><url>
-    <loc>https://zhighway777.github.io/tags/hugo/</loc>
     <lastmod>2024-09-05T10:52:39+08:00</lastmod>
   </url><url>
     <loc>https://zhighway777.github.io/categories/</loc>

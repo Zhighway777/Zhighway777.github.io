@@ -6,7 +6,16 @@
     <description>Recent content in tools on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 26 Sep 2024 20:08:03 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Sep 2024 20:24:41 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo_custom</title>
+      <link>https://zhighway777.github.io/2024/09/28/hugo_custom/</link>
+      <pubDate>Sat, 28 Sep 2024 20:24:41 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/28/hugo_custom/</guid>
+      <description>在Hugo的Markdown中直接插入HTML 方法：使用hugo shortcode实现 hugo处理短代码时，首先搜索layouts/shor</description>
+    </item>
+    
     <item>
       <title>Docker tutorial</title>
       <link>https://zhighway777.github.io/2024/09/26/docker_tutorial/</link>

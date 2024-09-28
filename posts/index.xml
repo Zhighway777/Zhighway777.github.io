@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 28 Sep 2024 19:46:46 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Sep 2024 20:24:41 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo_custom</title>
+      <link>https://zhighway777.github.io/2024/09/28/hugo_custom/</link>
+      <pubDate>Sat, 28 Sep 2024 20:24:41 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/09/28/hugo_custom/</guid>
+      <description>在Hugo的Markdown中直接插入HTML 方法：使用hugo shortcode实现 hugo处理短代码时，首先搜索layouts/shor</description>
+    </item>
+    
     <item>
       <title>TPU MLIR Recording(0)</title>
       <link>https://zhighway777.github.io/2024/09/28/tpu-mlir-recording/</link>
