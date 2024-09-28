@@ -53,11 +53,11 @@
     </item>
     
     <item>
-      <title>About</title>
-      <link>https://zhighway777.github.io/about/</link>
+      <title>About me</title>
+      <link>https://zhighway777.github.io/about_me/</link>
       <pubDate>Sun, 08 Sep 2024 12:00:00 +0800</pubDate>
       
-      <guid>https://zhighway777.github.io/about/</guid>
+      <guid>https://zhighway777.github.io/about_me/</guid>
       <description>Welcome to Zeng&amp;rsquo;blog Hello! I am a developer passionate about computer architecture and AI compilers. Here, I will share experiences and research on programming, AI, machine learning, and compiler development.
  📅 Blog Established: 2024 🎯 Areas of Interest: AI compilers, MLIR, dynamic model compilation, and more  Hope my articles will help you!
 Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </description>
