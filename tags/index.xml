@@ -8,20 +8,20 @@
     <language>zh-cn</language>
     <lastBuildDate>Sun, 29 Sep 2024 19:39:48 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>AI Compiler</title>
-      <link>https://zhighway777.github.io/tags/ai-compiler/</link>
+      <title>Cpp</title>
+      <link>https://zhighway777.github.io/tags/cpp/</link>
       <pubDate>Sun, 29 Sep 2024 19:39:48 +0800</pubDate>
       
-      <guid>https://zhighway777.github.io/tags/ai-compiler/</guid>
+      <guid>https://zhighway777.github.io/tags/cpp/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>MLIR</title>
-      <link>https://zhighway777.github.io/tags/mlir/</link>
+      <title>Tutorial</title>
+      <link>https://zhighway777.github.io/tags/tutorial/</link>
       <pubDate>Sun, 29 Sep 2024 19:39:48 +0800</pubDate>
       
-      <guid>https://zhighway777.github.io/tags/mlir/</guid>
+      <guid>https://zhighway777.github.io/tags/tutorial/</guid>
       <description></description>
     </item>
     
@@ -53,15 +53,6 @@
     </item>
     
     <item>
-      <title>Tutorial</title>
-      <link>https://zhighway777.github.io/tags/tutorial/</link>
-      <pubDate>Sat, 28 Sep 2024 20:24:41 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/tags/tutorial/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Infra</title>
       <link>https://zhighway777.github.io/tags/infra/</link>
       <pubDate>Sat, 28 Sep 2024 19:46:46 +0800</pubDate>
@@ -71,11 +62,29 @@
     </item>
     
     <item>
+      <title>MLIR</title>
+      <link>https://zhighway777.github.io/tags/mlir/</link>
+      <pubDate>Sat, 28 Sep 2024 19:46:46 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/tags/mlir/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Perf</title>
       <link>https://zhighway777.github.io/tags/perf/</link>
       <pubDate>Sat, 28 Sep 2024 19:46:46 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/tags/perf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AI Compiler</title>
+      <link>https://zhighway777.github.io/tags/ai-compiler/</link>
+      <pubDate>Fri, 27 Sep 2024 13:19:05 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/tags/ai-compiler/</guid>
       <description></description>
     </item>
     
