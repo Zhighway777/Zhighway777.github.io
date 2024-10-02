@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Docker tutorial">
 <meta itemprop="description" content="Recording the usage of docker."><meta itemprop="datePublished" content="2024-09-26T20:08:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-26T20:08:03+08:00" />
-<meta itemprop="wordCount" content="473">
+<meta itemprop="wordCount" content="613">
 <meta itemprop="keywords" content="docker,Tutorial,tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker tutorial"/>
 <meta name="twitter:description" content="Recording the usage of docker."/>
@@ -206,11 +206,11 @@ $ sudo systemctl start docker
 <span class="nv">$docker</span> ps -a 
 <span class="c1">#show all containers</span>
 
-<span class="nv">$docker</span> run -d --name <span class="o">[</span>my_container<span class="o">]</span> host/dir:/client/dir -it <span class="o">[</span>container_name<span class="o">]</span>
+<span class="nv">$docker</span> run -d --name <span class="o">[</span>my_container<span class="o">]</span> host/dir:/client/dir -it <span class="o">[</span>container_name<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
 <span class="c1">#-d:&#39;show the container id&#39; | --name: &#39;modify the name&#39; | </span>
-<span class="c1">#-v host:client: &#39;Mount the local volume directory to docker as client&#39; |</span>
+<span class="c1">#-v host:client: &#39;Mount the local volume(in this machine) directory to docker as client&#39; |</span>
 <span class="c1">#-it: Run interactively and assign a terminal</span>
-<span class="c1"># [container_name]: the container name you want to run</span>
+<span class="c1"># [container_name]: the container name you want to run, also, you should add :[TAG], if necessary.</span>
 
 <span class="nv">$docker</span> start <span class="o">[</span>my_container<span class="o">]</span>
 <span class="nv">$docker</span> stop <span class="o">[</span>my_container<span class="o">]</span>
@@ -243,8 +243,30 @@ $ docker container logs <span class="o">[</span>containerID<span class="o">]</sp
 <span class="c1">#9. copy the file from docker to local. </span>
 $ docker container cp <span class="o">[</span>containID<span class="o">]</span>:<span class="o">[</span>/path/to/file<span class="o">]</span>
 
+<span class="c1">#10. Go to the command line interface of Docker.</span>
+$ docker <span class="nb">exec</span> -it containerID /bin/bash
+
+<span class="c1">#11. quit</span>
+$ <span class="nb">exit</span>
+
 </code></pre></div><p>You can find more docker command here: <a href="https://www.runoob.com/docker/docker-command-manual.html">Docker 命令大全</a></p>
 <p>My work environment is Ubuntu22.04, If your OS is win11, please refer to Ref.[2]. It also provides some ways to fix bugs.</p>
+<h1 id="docker-for-windows11">Docker for Windows11</h1>
+<p>Frist, you should install the docker for win11 and ensure it can work.
+If you need access a private IP, you need configure related mirror and untrust links:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">{</span>
+	 <span class="s2">&#34;registry-mirrors&#34;</span>: <span class="o">[</span><span class="s2">&#34;http://your_hostname:your_port(default:80)&#34;</span><span class="o">]</span>,
+	  <span class="s2">&#34;insecure-registries&#34;</span>: <span class="o">[</span>
+	    <span class="s2">&#34;your_hostname&#34;</span>
+	  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></div><p>and click the &ldquo;apply&rdquo;, then you can pull your images.</p>
+<h2 id="usage">Usage</h2>
+<ol>
+<li>Ensure that docker desktop is running.(service docker start)</li>
+<li>check for the images on your machine. <code> docker images</code> Now, the terminal will show that:</li>
+</ol>
+<p>&mdash;&ndash;repository， TAG， Image ID&mdash;&mdash;, in there, repository is the name of image.</p>
 <h1 id="reference">Reference</h1>
 <p>[1] <a href="https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html">&lsquo;Docker 入门教程&rsquo; by ruanyifeng</a></p>
 <p>[2] <a href="https://blog.csdn.net/joeyoj/article/details/136427362">【Docker】掌握 Docker魔法：Windows 11 平台上的完美容器部署终极指南</a></p>
