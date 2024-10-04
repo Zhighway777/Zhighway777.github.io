@@ -40,7 +40,7 @@
       <pubDate>Fri, 27 Sep 2024 13:19:05 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/09/27/buddy_src_2/</guid>
-      <description>Continue&amp;hellip;</description>
+      <description>Bud Dialect 有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversati</description>
     </item>
     
     <item>
@@ -78,7 +78,7 @@ Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </descri
       <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/09/06/buddy_src_0/</guid>
-      <description>Frontend 此文件夹包含Buddy的前端框架，包括FrontendGen前端代码生成、Interfaces接口文件和Python(功能未知)。 FrontendGen Fro</description>
+      <description>Compiler Arch 截止目前（2024/9）buddy compiler已经明显将编译器根据功能划分为Frontend-前端， Midend-中端， Backen</description>
     </item>
     
     <item>
@@ -87,7 +87,7 @@ Get in Touch  📧 Email: hwtsang@hotmail.com 🌐 GitHub: zhighway777  </descri
       <pubDate>Fri, 06 Sep 2024 23:23:03 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/09/06/buddy_src_1/</guid>
-      <description>Bud Dialect 有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversati</description>
+      <description>Examples 解读 首先解读关于： BudDialect, GemminiDialect, MLIRMemRef, MLIRTensor, RVVDialect, ToyDSL BudDialect 首先打开makefile 看能执行那些make操作。 bud-constant.mlir module { // CHECK: %{{.*}} = arith.constant 0 : i32 %i0 = bud.test_constant : i32 } 执行make bud-c</description>
     </item>
     
     <item>

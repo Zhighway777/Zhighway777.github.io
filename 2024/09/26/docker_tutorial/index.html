@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Docker tutorial">
 <meta itemprop="description" content="Recording the usage of docker."><meta itemprop="datePublished" content="2024-09-26T20:08:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-26T20:08:03+08:00" />
-<meta itemprop="wordCount" content="613">
+<meta itemprop="wordCount" content="614">
 <meta itemprop="keywords" content="docker,Tutorial,tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker tutorial"/>
 <meta name="twitter:description" content="Recording the usage of docker."/>
@@ -206,7 +206,7 @@ $ sudo systemctl start docker
 <span class="nv">$docker</span> ps -a 
 <span class="c1">#show all containers</span>
 
-<span class="nv">$docker</span> run -d --name <span class="o">[</span>my_container<span class="o">]</span> host/dir:/client/dir -it <span class="o">[</span>container_name<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
+<span class="nv">$docker</span> run -d --name <span class="o">[</span>my_container<span class="o">]</span> -v host/dir:/client/dir -it <span class="o">[</span>container_name<span class="o">]</span>:<span class="o">[</span>TAG<span class="o">]</span>
 <span class="c1">#-d:&#39;show the container id&#39; | --name: &#39;modify the name&#39; | </span>
 <span class="c1">#-v host:client: &#39;Mount the local volume(in this machine) directory to docker as client&#39; |</span>
 <span class="c1">#-it: Run interactively and assign a terminal</span>

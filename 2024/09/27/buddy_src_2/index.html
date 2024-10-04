@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Buddy Compiler 源码解读(2)">
 <meta itemprop="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy. (...)"><meta itemprop="datePublished" content="2024-09-27T13:19:05+08:00" />
 <meta itemprop="dateModified" content="2024-09-27T13:19:05+08:00" />
-<meta itemprop="wordCount" content="1">
+<meta itemprop="wordCount" content="1932">
 <meta itemprop="keywords" content="MLIR,AI Compiler," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Buddy Compiler 源码解读(2)"/>
 <meta name="twitter:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy. (...)"/>
@@ -164,7 +164,109 @@
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>Continue&hellip;</p>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="bud-dialect">Bud Dialect</h1>
+<p>有了之前的例子作为支撑，我们可以深入相关的Dialect, 分析Buddy Compiler是如何进行Lowering, Conversation等操作的。</p>
+<h2 id="dialect的tablegen">Dialect的TableGen</h2>
+<p>关于Dialect的部分，我们可以在midend中找到，这也符合其在编译器中的位置。</p>
+<p>/midend/include/Dialect/Bud 下有四个关于Bud Dialect的文件，分别是BudDialect.h, BudDialect.td, BudOps.h, BudOps.td。</p>
+<!-- raw HTML omitted -->
+<p>这里.h文件中incluce了一些.td文件需要的库，<strong>许多人第一次接触(.td)文件,这是什么？</strong>
+(.td)全称为TableGen文件，是LLVM的一个工具，功能就是读取一个文件（td文件），解析这个文件，输出成不同的结果文件。</p>
+<p>MLIR使用此文件作为为操作表述(ODS)，可以理解为TableGen语言中的DSL。这些代码最终会转换为C++代码</p>
+<p>[1] <a href="https://llvm.org/docs/TableGen/#tablegen-overview"><strong>TableGen Overview</strong></a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/141265959"><strong>有关于TableGen的简单介绍</strong></a></p>
+<!-- raw HTML omitted -->
+<p>在MLIR中，TableGen的格式如下所示：</p>
+<p><img src="/img/buddy_dialect_0.png" alt="image.png"></p>
+<p>从上往下依次是：Op名称，Op特征列表，Op的summary doc, Op的description doc, Op的参数列表， Op的结果及其类型约束。</p>
+<p>上面标红的项是定义一个Op的必要信息</p>
+<p>这里，在BudOps.td文件中主要定义了四种操作：</p>
+<p>Bud_TestConstantOp, Bud_TestPrintOp, Bud_TestEnumAttrOperation, Bud_TestArrayAttrOp</p>
+<h2 id="dialect-lowering">Dialect Lowering</h2>
+<p>有了上述的基础操作，我们就需要为Bud Dialect注册一个Lowering, 这个已经在 <code>lib/Conversion/LowerBud/LowerBudPass.cpp</code> 中实现的LowerBudPass 如下所示</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//类声明，BudTestConstantLowering类继承自OpRewritePAttern
+</span><span class="c1">//OpRewritePattern是模板类，专门用于定义重写MLIR的模板
+</span><span class="c1">//&lt;xx&gt;内是被重写的操作类型
+</span><span class="c1"></span><span class="k">class</span> <span class="nc">BudTestConstantLowering</span> <span class="o">:</span> <span class="k">public</span> <span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+	<span class="c1">//using可以从基类OpRewritePattern中继承构造函数，这里使用基类中的构造函数对类进行初始化
+</span><span class="c1"></span>  <span class="k">using</span> <span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span><span class="o">&gt;::</span><span class="n">OpRewritePattern</span><span class="p">;</span>
+	<span class="c1">//matchAndRewrite是OpRewritePattern&lt;..&gt;类中的一个虚函数，将会被进行重写
+</span><span class="c1"></span>  <span class="n">LogicalResult</span> <span class="nf">matchAndRewrite</span><span class="p">(</span><span class="n">bud</span><span class="o">::</span><span class="n">TestConstantOp</span> <span class="n">op</span><span class="p">,</span>
+                                <span class="n">PatternRewriter</span> <span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">loc</span> <span class="o">=</span> <span class="n">op</span><span class="p">.</span><span class="n">getLoc</span><span class="p">();</span>
+    <span class="c1">// Get type from the origin operation.
+</span><span class="c1"></span>    <span class="n">Type</span> <span class="n">resultType</span> <span class="o">=</span> <span class="n">op</span><span class="p">.</span><span class="n">getResult</span><span class="p">().</span><span class="n">getType</span><span class="p">();</span>
+    <span class="c1">// Create constant operation.
+</span><span class="c1"></span>    <span class="n">Value</span> <span class="n">c0</span> <span class="o">=</span> <span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">arith</span><span class="o">::</span><span class="n">ConstantOp</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="n">loc</span><span class="p">,</span> <span class="n">resultType</span><span class="p">,</span> <span class="n">rewriter</span><span class="p">.</span><span class="n">getZeroAttr</span><span class="p">(</span><span class="n">resultType</span><span class="p">));</span>
+
+    <span class="n">rewriter</span><span class="p">.</span><span class="n">replaceOp</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">c0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">success</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><p>如过你是一位C++新手，你需要补充类(class)，构造函数(construct function)，类的继承(derived class)，派生类的构造函数，虚函数(virtual function)相关知识点才能看懂上面的代码。</p>
+<p>可以看到该类的作用是在匹配到bud::TestConstantOp 后会将其重写为mlir::arith::ConstantOp</p>
+<p>其执行的过程在[Buddy 源码解读(0)]中可以看到。</p>
+<h3 id="阐述-td文件和lowering的关系">阐述 .td文件和Lowering的关系</h3>
+<p><code>.td</code> 文件中的定义描述了 <code>Bud_TestConstantOp</code> 是如何在 MLIR 中表示的，在MLIR的编译Pipeline中，他可能在前期作为IR被使用，但最终需要将他转化为某个已经定义的<code>低级别操作</code> 。而<code>BudTestConstantLowering</code> 类负责在编译过程中，将这个自定义的操作转换为标准的低级操作 <code>arith::ConstantOp</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="p">{</span>
+<span class="k">class</span> <span class="nc">LowerBudPass</span> <span class="o">:</span> <span class="k">public</span> <span class="n">PassWrapper</span><span class="o">&lt;</span><span class="n">LowerBudPass</span><span class="p">,</span> <span class="n">OperationPass</span><span class="o">&lt;</span><span class="n">ModuleOp</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="n">MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID</span><span class="p">(</span><span class="n">LowerBudPass</span><span class="p">)</span>
+  <span class="n">LowerBudPass</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+  <span class="n">LowerBudPass</span><span class="p">(</span><span class="k">const</span> <span class="n">LowerBudPass</span> <span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span>
+	<span class="c1">//两个虚函数
+</span><span class="c1"></span>	<span class="c1">//返回该 Pass 的命令行参数名称，在命令行中使用时，通过 --lower-bud 来调用这个 pass
+</span><span class="c1"></span>	<span class="c1">//命令行调用
+</span><span class="c1"></span>  <span class="n">StringRef</span> <span class="nf">getArgument</span><span class="p">()</span> <span class="k">const</span> <span class="k">final</span> <span class="p">{</span> <span class="k">return</span> <span class="s">&#34;lower-bud&#34;</span><span class="p">;</span> <span class="p">}</span>
+  <span class="c1">//getDescription() 返回该 Pass 的描述信息，用于提供用户可读的说明
+</span><span class="c1"></span>  <span class="n">StringRef</span> <span class="nf">getDescription</span><span class="p">()</span> <span class="k">const</span> <span class="k">final</span> <span class="p">{</span> <span class="k">return</span> <span class="s">&#34;Lower Bud Dialect.&#34;</span><span class="p">;</span> <span class="p">}</span>
+   <span class="c1">//纯虚函数，在派生类中必须被实现。
+</span><span class="c1"></span>   <span class="c1">//函数将在 ModuleOp 上执行 lower 过程。
+</span><span class="c1"></span>   <span class="c1">//在这里，ModuleOp 可能包含一系列高层次的 Bud 方言操作，
+</span><span class="c1"></span>   <span class="c1">//runOnOperation() 会将这些操作逐步转换为底层的 MLIR 操作，
+</span><span class="c1"></span>   <span class="c1">//如 FuncDialect、MemRefDialect、VectorDialect 等操作。这是 pass 的核心逻辑。
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="nf">runOnOperation</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
+	<span class="c1">//确指出了该 pass 在运行时依赖的方言
+</span><span class="c1"></span>	<span class="c1">//依赖方言注册
+</span><span class="c1"></span>  <span class="kt">void</span> <span class="nf">getDependentDialects</span><span class="p">(</span><span class="n">DialectRegistry</span> <span class="o">&amp;</span><span class="n">registry</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span>
+    <span class="c1">// clang-format off
+</span><span class="c1"></span>    <span class="n">registry</span><span class="p">.</span><span class="n">insert</span><span class="o">&lt;</span>
+        <span class="n">buddy</span><span class="o">::</span><span class="n">bud</span><span class="o">::</span><span class="n">BudDialect</span><span class="p">,</span>
+        <span class="n">func</span><span class="o">::</span><span class="n">FuncDialect</span><span class="p">,</span>
+        <span class="n">vector</span><span class="o">::</span><span class="n">VectorDialect</span><span class="p">,</span>
+        <span class="n">memref</span><span class="o">::</span><span class="n">MemRefDialect</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="c1">// clang-format on
+</span><span class="c1"></span>  <span class="p">}</span>
+<span class="p">};</span>
+<span class="p">}</span> <span class="c1">// end anonymous namespace.
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//这里是对继承类 LowerBudPass中 runOnOperation()方法的具体实现
+</span><span class="c1"></span><span class="kt">void</span> <span class="n">LowerBudPass</span><span class="o">::</span><span class="n">runOnOperation</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">MLIRContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">getContext</span><span class="p">();</span>
+  <span class="n">ModuleOp</span> <span class="n">module</span> <span class="o">=</span> <span class="n">getOperation</span><span class="p">();</span>
+	<span class="c1">//转换目标，定义了那些操作是合法的
+</span><span class="c1"></span>  <span class="n">ConversionTarget</span> <span class="nf">target</span><span class="p">(</span><span class="o">*</span><span class="n">context</span><span class="p">);</span>
+  <span class="n">target</span><span class="p">.</span><span class="n">addLegalDialect</span><span class="o">&lt;</span>
+      <span class="n">arith</span><span class="o">::</span><span class="n">ArithmeticDialect</span><span class="p">,</span>
+      <span class="n">func</span><span class="o">::</span><span class="n">FuncDialect</span><span class="p">,</span>
+      <span class="n">vector</span><span class="o">::</span><span class="n">VectorDialect</span><span class="p">,</span>
+      <span class="n">memref</span><span class="o">::</span><span class="n">MemRefDialect</span><span class="o">&gt;</span><span class="p">();</span>
+  <span class="n">target</span><span class="p">.</span><span class="n">addLegalOp</span><span class="o">&lt;</span><span class="n">ModuleOp</span><span class="p">,</span> <span class="n">func</span><span class="o">::</span><span class="n">FuncOp</span><span class="p">,</span> <span class="n">func</span><span class="o">::</span><span class="n">ReturnOp</span><span class="o">&gt;</span><span class="p">();</span>
+
+  <span class="n">RewritePatternSet</span> <span class="nf">patterns</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+  <span class="c1">//调用下面的函数手机与Bud相关的Lowering规则，如之前的BudTestConstantLowering 就是重写的模式之一
+</span><span class="c1"></span>  <span class="n">populateLowerBudConversionPatterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">);</span>
+	<span class="c1">//执行重写操作
+</span><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">failed</span><span class="p">(</span><span class="n">applyPartialConversion</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">patterns</span><span class="p">))))</span>
+    <span class="n">signalPassFailure</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><p>总结一下 LowerBudPass.cpp的作用：</p>
+<ul>
+<li><strong>转换自定义方言</strong>：它将高层次的 Bud 方言操作逐步降低为低层次的标准 MLIR 操作，使得这些操作可以更接近硬件执行，或者与标准编译基础设施（如 LLVM IR）兼容。</li>
+<li><strong>优化流程的一部分</strong>：MLIR Pipeline 中通常包含多个 pass，<code>LowerBudPass</code> 是其中的 <strong>Lowering pass</strong>，用于在编译的早期阶段将用户自定义的高级语言或领域特定语言（DSL）的操作转换为中间表示，准备进入后续优化阶段。</li>
+</ul>
+<p>通过 <code>LowerBudPass</code>，整个 MLIR 编译流程可以从高层次自定义语言层面逐渐转化为低层次、可执行的硬件友好代码</p>
 <ul class="pa0">
   
    <li class="list di">
