@@ -6,7 +6,16 @@
     <description>Recent content in 3drops on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 04 Oct 2024 18:08:34 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Oct 2024 20:25:10 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python_simple_tutorial</title>
+      <link>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</link>
+      <pubDate>Fri, 04 Oct 2024 20:25:10 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</guid>
+      <description>Common Functions print() Print the characters into the 屏幕 input() 等待用户在键盘上输入一些文本，并按下回车键，将此文本作为字符串赋值给一个变量。 len() 得到len中字符串字符的个数 str(), int(), float() st</description>
+    </item>
+    
     <item>
       <title>Computer network common concepts</title>
       <link>https://zhighway777.github.io/2024/10/04/computer_network_common_concepts/</link>
