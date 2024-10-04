@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HTTP on Zeng::blog</title>
+    <link>https://zhighway777.github.io/tags/http/</link>
+    <description>Recent content in HTTP on Zeng::blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 04 Oct 2024 18:08:34 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Computer_Network_Common_concepts</title>
+      <link>https://zhighway777.github.io/2024/10/04/computer_network_common_concepts/</link>
+      <pubDate>Fri, 04 Oct 2024 18:08:34 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/10/04/computer_network_common_concepts/</guid>
+      <description>Instances http://mail.163.com/index.html http:// HTTP is an application layer protocol in the internet protocol suite model. This is a stateless application-level protocol, so it requires a reliable network transport connection to ecxhange data between client and server. In HTTP, TCP/IP are used to use port 80(if connection is unencrypted) or 443(encrypted) mail This is a server name, which respresents a email server. 163.com This is a Domain Name,an unique name used</description>
+    </item>
+    
+  </channel>
+</rss>
