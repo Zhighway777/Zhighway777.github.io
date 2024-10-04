@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Zeng::blog</title>
+    <link>https://zhighway777.github.io/tags/python/</link>
+    <description>Recent content in Python on Zeng::blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 04 Oct 2024 20:25:10 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python Simple Tutorial</title>
+      <link>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</link>
+      <pubDate>Fri, 04 Oct 2024 20:25:10 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</guid>
+      <description>Common Functions print() Print the characters into the screen. input() 等待用户在键盘上输入一些文本，并按下回车键，将此文本作为字符串赋值给一个变量。 len() 得到len中字符串字符的个数 str(), int(), float() str</description>
+    </item>
+    
+  </channel>
+</rss>
