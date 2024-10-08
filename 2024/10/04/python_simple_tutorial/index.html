@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Simple Tutorial">
 <meta itemprop="description" content="A wiki for python with detailed links for most of the content. If your python foundation is weak, this article is for you."><meta itemprop="datePublished" content="2024-10-04T20:25:10+08:00" />
 <meta itemprop="dateModified" content="2024-10-04T20:25:10+08:00" />
-<meta itemprop="wordCount" content="1781">
+<meta itemprop="wordCount" content="2396">
 <meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Simple Tutorial"/>
 <meta name="twitter:description" content="A wiki for python with detailed links for most of the content. If your python foundation is weak, this article is for you."/>
@@ -390,11 +390,53 @@ float():将输入的类型转为浮点型</p>
 <h1 id="dictionary">Dictionary</h1>
 <h2 id="introduction">introduction</h2>
 <h2 id="dict-and-list">dict and list</h2>
+<p>字典可以看作为一种List， 字典的Index不仅仅时整数，还可以使用不同的数据类型。字典的Index可以作为“key”， 其相关连的值形成 {Key:Value}对。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">myCat</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;fat&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;gray&#39;</span><span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">myCat</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span>
+<span class="s1">&#39;fat&#39;</span>
+</code></pre></div><p>字典和列表不同的一点：字典中没有“顺序”的概念，因此无法切片，无法使用数字下标访问对应数字位置的value。</p>
+<p>判断两个字典是否相同时，顺序不影响判断结果，但是列表却会受到影响</p>
 <h2 id="keys-values-items">keys(), values(), items()</h2>
-<h2 id="get">get()</h2>
+<p>返回字典的键， 数值， 键值对，其数据类型分别为：</p>
+<p>dict_keys, dict_values, dict_items 与列表不同的是，这些返回值不是真正的列表，因此无法被修改，也没有 append()方法</p>
+<p>但是，这些数据类型可以用于 <strong>for loop：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">spam</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span> <span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">spam</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">spam</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">spam</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div><p>如果需要返回一个列表，需要使用<code>list()</code>函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span><span class="nb">list</span><span class="p">(</span><span class="n">spam</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span>
+<span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">]</span>
+</code></pre></div><p>也可以使用多重赋值来将key 和 value赋值给不同的变量</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">spam</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Key：&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;Value&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</code></pre></div><h2 id="get">get()</h2>
+<p>字典中，访问一个key对应的value， 如果key存在，那么直接访问对用value， 如果key不存在，那么访问get()设置的默认值。【不会改变dict】</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+
+<span class="n">spam</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div><p>可以保证在进行dict访问时不出现错误，同时输出默认value</p>
 <h2 id="setdefault">setdefault()</h2>
-<h2 id="pprint">pprint()</h2>
-<h2 id="neasted-dict-and-list">neasted dict and list</h2>
+<p>为某一个key设置默认值， 当这个key没有对应的value时，使用这个默认值，并将其添加到dict中。【会改变dict】</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python">
+<span class="n">spam</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+<span class="n">spam</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">spam</span>
+<span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+
+<span class="c1">#对已经存在的key设置默认value，不会改变dict</span>
+<span class="n">spam</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;whithe&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">spam</span>
+<span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+</code></pre></div><h2 id="beautiful-print">beautiful print</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">dictType</span><span class="p">)</span>
+</code></pre></div><p>将字典类型转化为字符串格式</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">dictType</span><span class="p">)</span>
+</code></pre></div><h2 id="neasted-dict-and-list">neasted dict and list</h2>
 <h1 id="string-operations">String Operations</h1>
 <ul class="pa0">
   
