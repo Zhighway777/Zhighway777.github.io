@@ -23,9 +23,12 @@ The perspective form Instructions. For a Turing Machine, the task will be broken
       <pubDate>Wed, 09 Oct 2024 20:39:53 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/10/09/python_toolkit/</guid>
-      <description>#pytest
-#Advanced methods
-OOP yield yield from </description>
+      <description>pytest Advanced methods OOP Here is a classical picture: Although is funny, it actually describes the OOP concept.
+Class: A set to describe which has the same attributes and methods.
+Object: is the instance of a class
+Class variables: Public in its instance object, usually are defined beyond function in a class.
+Data members: ?
+Rewrite method: A original method inherited from thee parent class can be modified if is can not meet the needs of the subclass.</description>
     </item>
     
     <item>
