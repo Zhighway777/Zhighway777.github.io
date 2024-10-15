@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Advanced Skills">
 <meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-15T20:39:53+08:00" />
 <meta itemprop="dateModified" content="2024-10-15T20:39:53+08:00" />
-<meta itemprop="wordCount" content="713">
+<meta itemprop="wordCount" content="690">
 <meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Advanced Skills"/>
 <meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
@@ -208,8 +208,7 @@
 <span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span> 
 <span class="c1">#抛出 StopIteration 异常 Process finished.</span>
 </code></pre></div><h2 id="yield-from">yield from</h2>
-<p>yield from 语法
-除了 yield 关键字，Python 还提供了 yield from 语法，它可以简化生成器函数的定义。yield from 可以将一个嵌套的生成器的值逐个返回给调用者，而不需要手动遍历嵌套生成器的每个值。例如：</p>
+<p>yield from 语法可以简化生成器函数的定义。yield from 可以将一个嵌套的生成器的值逐个返回给调用者，而不需要手动遍历嵌套生成器的每个值。例如：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">my_generator</span><span class="p">():</span>
     <span class="k">yield from</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
     <span class="k">yield from</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
