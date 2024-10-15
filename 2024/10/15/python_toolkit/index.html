@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Advanced Skills">
 <meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-15T20:39:53+08:00" />
 <meta itemprop="dateModified" content="2024-10-15T20:39:53+08:00" />
-<meta itemprop="wordCount" content="411">
+<meta itemprop="wordCount" content="456">
 <meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Advanced Skills"/>
 <meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
@@ -184,22 +184,29 @@
 
 <span class="c1">#1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="c1">#输出&lt;generator object generator at 0x0000....&gt;</span>
+
 
 <span class="c1">#2,3</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;frist time&#34;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+<span class="c1">#输出0</span>
+
 
 <span class="c1">#4</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;second time&#34;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+<span class="c1">#输出1</span>
+
 
 <span class="c1">#5</span>
 <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">func</span><span class="p">():</span>
 	<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="c1">#输出 4, 9, 16, .... , 81</span>
 
 <span class="c1">#6</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span> 
-
+<span class="c1">#抛出 StopIteration 异常 Process finished.</span>
 </code></pre></div><h2 id="yield-from">yield from</h2>
 <h2 id="getattr">getattr()</h2>
 <h2 id="enumerate">enumerate()</h2>
