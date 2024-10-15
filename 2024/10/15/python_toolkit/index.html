@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Python Advanced Skills | Zeng::blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test.">
+    <meta name="generator" content="Hugo 0.92.2" />
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    
+      <meta name="author" content = "Zeng">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/syntax.css">
+  
+
+    
+
+    
+      
+
+    
+
+		
+    
+
+    
+      <link rel="canonical" href="https://zhighway777.github.io/2024/10/15/python_toolkit/">
+    
+
+    <meta property="og:title" content="Python Advanced Skills" />
+<meta property="og:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhighway777.github.io/2024/10/15/python_toolkit/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-10-15T20:39:53+08:00" />
+<meta property="article:modified_time" content="2024-10-15T20:39:53+08:00" />
+
+<meta itemprop="name" content="Python Advanced Skills">
+<meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-15T20:39:53+08:00" />
+<meta itemprop="dateModified" content="2024-10-15T20:39:53+08:00" />
+<meta itemprop="wordCount" content="411">
+<meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python Advanced Skills"/>
+<meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
+
+	
+
+<link rel="stylesheet" href="/css/style.css">
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Zeng::blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/posts/" title="Blog page">
+              Blog
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/about/" title="About me page">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+<div class="ananke-socials">
+  
+    
+    <a href="https://github.com/Zhighway777" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Posts
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">Python Advanced Skills</h1>
+      
+      <p class="tracked">
+        By <strong>Zeng</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-10-15T20:39:53+08:00">October 15, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="useful-tools">Useful tools</h1>
+<h2 id="pytest">pytest</h2>
+<h1 id="advanced-methods">Advanced methods</h1>
+<h2 id="yield">yield</h2>
+<ol>
+<li>如果一个函数中使用yield来修饰一变量，那么这个函数会作为一个generate(), 当调用此函数的时候，并不会运行此函数，而是返回一个generate对象</li>
+<li>对于这个函数(对象)，使用next()方法让其开始运行。</li>
+<li>遇到yield就相当于遇到return, 这时将返回一个结果，但区别是函数会记录执行到此位置，下次接着从yield所在的地方开始执行()</li>
+<li>再次调用next(), 从上一次yield的地方开始运行，知道执行到下一次yield的地方。</li>
+<li>可以使用for语句来[循环迭代 生成器 (generate class)]， 逐个获取generate()的返回值。同时，for循环内部自动处理停止迭代异常。</li>
+<li>当生成器中的数据全部生成完毕(后续再也没有yield指令或者循环结束)，再次调用next(gen)的时候，会抛出StopIteration异常，表示数据生成完毕。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+		<span class="k">yield</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">1</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+
+
+<span class="c1">#1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+<span class="c1">#2,3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;frist time&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+
+<span class="c1">#4</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;second time&#34;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+
+<span class="c1">#5</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">func</span><span class="p">():</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1">#6</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span> 
+
+</code></pre></div><h2 id="yield-from">yield from</h2>
+<h2 id="getattr">getattr()</h2>
+<h2 id="enumerate">enumerate()</h2>
+<h2 id="get">get()</h2>
+<h2 id="asdit">asdit()</h2>
+<h2 id="classmethod">@classmethod</h2>
+<h2 id="functools">@functools</h2>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/python/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Python</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/tools/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Tools</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/tutorial/" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Tutorial</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/2024/10/04/python_simple_tutorial/">Python Simple Tutorial</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/10/09/python_oop/">Python Object Oriented Programming</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/09/28/hugo_custom/">Hugo custom</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/09/26/docker_tutorial/">Docker tutorial</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/09/05/my-first-post/">How to build personal website</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/10/04/computer_network_common_concepts/">Computer network common concepts</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/2024/09/29/cpp_learning_0/">Cpp Learning Recording(0)</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://zhighway777.github.io/" >
+    &copy;  Zeng::blog 2024 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+    
+    <a href="https://github.com/Zhighway777" target="_blank" rel="noopener" class="github ananke-social-link link-transition stackoverflow link dib z-999 pt3 pt0-l mr1" title="GitHub link" aria-label="follow on GitHub——Opens in a new window">
+      
+        <span class="icon"><svg style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <path d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/>
+</svg>
+</span>
+      
+<span class="new-window"><svg  height="8px"  style="enable-background:new 0 0 1000 1000;" version="1.1" viewBox="0 0 1000 1000"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<path d="M598 128h298v298h-86v-152l-418 418-60-60 418-418h-152v-86zM810 810v-298h86v298c0 46-40 86-86 86h-596c-48 0-86-40-86-86v-596c0-46 38-86 86-86h298v86h-298v596h596z" style="fill-rule:evenodd;clip-rule:evenodd;"/>
+</svg>
+</span></a>
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
