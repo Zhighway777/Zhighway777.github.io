@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Object Oriented Programming">
 <meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-09T20:39:53+08:00" />
 <meta itemprop="dateModified" content="2024-10-09T20:39:53+08:00" />
-<meta itemprop="wordCount" content="2981">
+<meta itemprop="wordCount" content="2973">
 <meta itemprop="keywords" content="Python,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Object Oriented Programming"/>
 <meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
@@ -447,8 +447,8 @@
 <span class="c1">#输出如下：</span>
 <span class="c1"># &#34;woolf, woolf, woolf!</span>
 </code></pre></div><p>以上关于子类继承父类构造函数的情况有些复杂，这里稍微总结一下：</p>
-<p>情况一：**子类需要自动调用父类的方法：**子类不重写__init__()方法，实例化子类后，会自动调用父类的__init__()的方法。</p>
-<p>情况二：**子类不需要自动调用父类的方法：**子类重写__init__()方法，实例化子类后，将不会自动调用父类的__init__()的方法。</p>
+<p>情况一：子类需要自动调用父类的方法：子类不重写__init__()方法，实例化子类后，会自动调用父类的__init__()的方法。</p>
+<p>情况二：子类不需要自动调用父类的方法：子类重写__init__()方法，实例化子类后，将不会自动调用父类的__init__()的方法。</p>
 <p>情况三：子类重写__init__()方法又需要调用父类的方法：使用super关键词：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">super</span><span class="p">(</span><span class="n">子类</span><span class="err">，</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">参数1</span><span class="err">，</span><span class="n">参数2</span><span class="err">，</span><span class="o">....</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Son</span><span class="p">(</span><span class="n">Father</span><span class="p">):</span>
