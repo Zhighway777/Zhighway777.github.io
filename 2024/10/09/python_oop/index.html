@@ -355,14 +355,13 @@
 <span class="c1"># My host is Jasper, and my weight is 3 kg.</span>
 </code></pre></div><p>关于继承的其他说明：</p>
 <ol>
-<li></li>
-</ol>
-<pre><code>在 Python 中定义派生类（子类）时，派生类的基类（父类）不必与派生类在同一个文件（模块）中定义。可以在不同的模块中定义基类，然后通过导入模块来继承该基类。
-
-这对于模块化编程非常有用，因为你可以将不同类的定义分散到不同的模块（文件）中，保持代码的组织性和可维护性。通过 `import` 语句，你可以从其他模块导入基类，并在当前模块中定义派生类
-</code></pre>
-<ol start="2">
-<li>除了直接从模块导入类，还可以用表达式定义基类，这意味着你可以动态决定哪个类作为基类。这在某些高级场景中可以实现灵活的继承模式。</li>
+<li>
+<p>在 Python 中定义派生类（子类）时，派生类的基类（父类）不必与派生类在同一个文件（模块）中定义。可以在不同的模块中定义基类，然后通过导入模块来继承该基类。</p>
+<p>这对于模块化编程非常有用，因为你可以将不同类的定义分散到不同的模块（文件）中，保持代码的组织性和可维护性。通过 <code>import</code> 语句，你可以从其他模块导入基类，并在当前模块中定义派生类</p>
+</li>
+<li>
+<p>除了直接从模块导入类，还可以用表达式定义基类，这意味着你可以动态决定哪个类作为基类。这在某些高级场景中可以实现灵活的继承模式。</p>
+</li>
 </ol>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"> <span class="n">假设我们有两个基类模块</span>
 <span class="k">class</span> <span class="nc">Base1</span><span class="p">:</span>
