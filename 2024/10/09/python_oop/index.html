@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Object Oriented Programming">
 <meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-09T20:39:53+08:00" />
 <meta itemprop="dateModified" content="2024-10-09T20:39:53+08:00" />
-<meta itemprop="wordCount" content="79">
+<meta itemprop="wordCount" content="2981">
 <meta itemprop="keywords" content="Python,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Object Oriented Programming"/>
 <meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
@@ -171,8 +171,291 @@
 <p>Class: A set to describe which has the same attributes and methods.</p>
 <p>Object: is the instance of a class</p>
 <p>Class variables: Public in its instance object, usually are defined beyond function in a class.</p>
-<p>Data members: ?</p>
+<p>Data members: Class members and Object members</p>
 <p>Rewrite method: A original method inherited from thee parent class can be modified if is can not meet the needs of the subclass. It can be rewritten.</p>
+<h2 id="类与对象">类与对象</h2>
+<p>这是一个is-a关系，an object is - a class 也就是说 一个 对象(object) 可以拥有一个类(class)的各种属性和方法， 同时一个类可以包含多个对象， 因此可以将类看作对象(object)的属(var)性和行为(func)的抽象表示。这里一个具体的对象也成为类的一个实例。</p>
+<h2 id="方法-数据成员">方法， 数据成员</h2>
+<p>这是一个类中所表象出来的具体特征，数据成员表示在一个类中所包含的属性，方法表示一个类可能的行为，这可能会对类中的属性进行组织和管理。</p>
+<ol>
+<li>
+<p>方法根据访问的类别（实例， 类）可以分为：</p>
+<p>实例方法（普通方法）：默认有self参数，访问具体对象的属性(实例变量)，一般作用于一个实例上。</p>
+<p>类方法：默认有cls参数，可以访问实例或者类的属性(类变量和是实例变量)，需要加上 @classmethod 装饰器，一般作用于类本身。</p>
+<p>静态方法：没有self或者cls默认参数，不依赖于实例或者类，只执行某种逻辑， 使用@staticmethod 装饰。</p>
+</li>
+<li>
+<p>数据成员是【类】或者【将类实例化】的【对象】中的属性，根据其可以被访问的范围不同，可以分为：</p>
+<p>类变量：类变量是在class定义的属性，可以被所有实例共享。</p>
+<p>实例变量：属于一个具体的对象，被这个实例对象独占。</p>
+</li>
+</ol>
+<h2 id="类的定义实例化以及对象的引用">类的定义，实例化以及对象的引用</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"> <span class="c1">#类的定义</span>
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine&#34;</span> <span class="c1">#类变量（也称属性）</span>
+	<span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#实例方法</span>
+		<span class="k">return</span> <span class="p">(</span><span class="s2">&#34;I am a Dog, woof!&#34;</span><span class="p">)</span>
+ <span class="c1">#类的实例化</span>
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">()</span>
+ <span class="c1">#对象的引用</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Dog 类的属性species为&#34;</span><span class="err">，</span> <span class="n">dog_1</span><span class="o">.</span><span class="n">species</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Dog 类的方法bark为&#34;</span><span class="err">，</span> <span class="n">dog_1</span><span class="o">.</span><span class="n">bark</span><span class="p">())</span>
+</code></pre></div><h2 id="类的构造方法">类的构造方法</h2>
+<p>在对类进行实例化的时候，可以使用向类中传入参数，通过类的构造函数来对实例化后的对象进行初始化，方便构造对象的属性。这个构造函数使用__init(self, arg0, …)__在类中进行定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine&#34;</span> <span class="c1">#类变量</span>
+	
+	<span class="c1">#构造函数，当实例化时需要同时传入self后的参数</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#实例变量</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="o">=</span> <span class="n">a</span>
+	
+	<span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#实例方法</span>
+		<span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&#34;I am a Dog, woof!&#34;</span><span class="p">)</span>
+		
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+	 <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, and I am </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years-old&#34;</span><span class="p">)</span>
+	
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="s2">&#34;Max&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#传入构造函数的参数</span>
+<span class="n">dog_2</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="s2">&#34;Luke&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="n">dog_1</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+<span class="n">dog_2</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+
+<span class="s1">&#39;&#39;&#39;注释
+</span><span class="s1">f 表示 f-string（格式化字符串），它是一种将变量值直接嵌入字符串中的简洁方式。
+</span><span class="s1">f-string 通过在字符串前加上字母 f，然后在字符串中使用大括号 </span><span class="si">{}</span><span class="s1"> 来包含变量或表达式，
+</span><span class="s1">从而将变量的值动态插入到字符串中。
+</span><span class="s1">&#39;&#39;&#39;</span>
+</code></pre></div><p>在python3.7++版本，使用@dataclass可以快速定义__init__()构造函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+  <span class="n">x</span><span class="p">:</span><span class="nb">int</span>
+  <span class="n">y</span><span class="p">:</span><span class="nb">int</span>
+  <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+    
+<span class="c1">#### &lt;=&gt; ####</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+  <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+</code></pre></div><h2 id="类方法-静态方法-以及静态方法的例子">类方法， 静态方法， 以及静态方法的例子</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine,（犬科动物）&#34;</span> <span class="c1">#类变量</span>
+	<span class="n">feets</span><span class="p">:</span> <span class="mi">4</span>
+	
+	<span class="c1">#构造函数，当实例化时需要同时传入self后的参数</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#实例变量</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">a</span>
+	
+	<span class="c1">#实例方法，访问对象的属性</span>
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+	 <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, and I am </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years-old&#34;</span><span class="p">)</span>
+	 
+	<span class="c1">#类方法，访问类的属性</span>
+	<span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;All Dogs are </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">species</span><span class="si">}</span><span class="s2"> and have </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">feets</span><span class="si">}</span><span class="s2"> feets.&#34;</span><span class="p">)</span>
+        
+  <span class="c1">#静态方法，不依赖于类或者对象</span>
+  <span class="nd">@staticmethod</span> 
+  <span class="k">def</span> <span class="nf">is_black</span><span class="p">(</span><span class="n">color_type</span><span class="p">):</span>
+	  <span class="k">return</span> <span class="n">color_type</span> <span class="o">==</span> <span class="n">black</span>
+	
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="s2">&#34;Max&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#传入构造函数的参数</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+
+<span class="c1">#通过类进行访问</span>
+<span class="n">Dog</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+
+<span class="c1">#直接通过类进行访问 ？？为什么仍然需要通过类访问函数？</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Dog</span><span class="o">.</span><span class="n">is_black</span><span class="p">(</span><span class="s2">&#34;white&#34;</span><span class="p">))</span>  <span class="c1"># 输出：False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Dog</span><span class="o">.</span><span class="n">is_black</span><span class="p">(</span><span class="s2">&#34;black&#34;</span><span class="p">))</span>  <span class="c1"># 输出：True</span>
+
+</code></pre></div><h2 id="类的私有属性和私有方法">类的私有属性和私有方法</h2>
+<p>在2.类的方法和数据成员中，其实可以定义私有的属性和方法这里，一般由两个下划线”__”来表征。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"> <span class="c1">#类的定义</span>
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine&#34;</span> <span class="c1">#类变量（也称属性）</span>
+	<span class="n">__host</span><span class="p">:</span> <span class="s2">&#34;Jasper&#34;</span> <span class="c1">#私有属性，只能在类中被访问，在外部无法被访问</span>
+		
+	<span class="c1">#私有方法</span>
+	<span class="k">def</span> <span class="nf">__private_bark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;a private woof!&#34;</span><span class="p">)</span>
+		
+	<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1">#实例方法，公共方法</span>
+		<span class="c1">#在公共方法中调用私有方法, 这里需要加【self.】表示时在本class内部的方法</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__private_bark</span><span class="p">()</span> 
+		<span class="c1">#在类中访问类的私有属性</span>
+		<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Its host is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__host</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+	
+	<span class="k">def</span> <span class="nf">change_host</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="c1">#在类中访问并【改变】类的私有属性</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__host</span> <span class="o">=</span> <span class="s2">&#34;Marry&#34;</span>
+		<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Its host is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__host</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+		
+ <span class="c1">#类的实例化</span>
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">()</span>
+<span class="n">通过公共方法访问私有方法和私有属性</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">change_host</span><span class="p">()</span>
+
+<span class="c1">#以下会报错，不存在该属性</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dog_1</span><span class="o">.</span><span class="n">__host</span><span class="p">)</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">__private_bark</span><span class="p">()</span>
+</code></pre></div><p>由此可以看出，其实构造函数__init__()也是私有方法，这其实时【类的专有方法】的一种。专有方法有许多，可以参考：https://blog.csdn.net/amber_o0k/article/details/90737799</p>
+<p>比较常见的有：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="fm">__init__</span> <span class="p">:</span> <span class="n">构造函数</span><span class="err">，</span><span class="n">在生成对象时调用</span>
+<span class="fm">__del__</span> <span class="p">:</span> <span class="n">析构函数</span><span class="err">，</span><span class="n">释放对象时使用</span>
+<span class="fm">__len__</span><span class="p">:</span> <span class="n">获得长度</span>
+<span class="fm">__str__</span><span class="p">:</span><span class="n">输出类中默认的字符串</span>
+</code></pre></div><h2 id="类的继承">类的继承</h2>
+<p>通过类的继承，可以快速派生出多个不同的类，进而灵活地构造各种不同的对象。继承时类的一个非常重要的特性。在类的继承中，根据主体不同，分为派生类和基类，如果一个类A继承了另一个类B的属性和方法，那么称A为派生类，B为基类。</p>
+<p>子类（Child class\派生类 DerivedClassName）</p>
+<p>父类（Parents class\基类 BaseClassName）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1">#BaseClass</span>
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine&#34;</span> <span class="c1">#类变量</span>
+	<span class="n">__host</span><span class="p">:</span> <span class="s2">&#34;&#34;</span> <span class="c1">#私有变量</span>
+	<span class="c1">#构造函数</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#实例变量</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">a</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__host</span> <span class="o">=</span> <span class="n">h</span>
+		
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1">#实例方法</span>
+	 <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, and I am </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years-old&#34;</span><span class="p">)</span>
+
+<span class="c1">#DerivedClass</span>
+<span class="k">class</span> <span class="nc">BeagleDog</span><span class="p">(</span><span class="n">Dog</span><span class="p">):</span>
+	<span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="c1">#建立子类的构造函数</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+		<span class="c1">#调用父类的构造函数</span>
+		<span class="n">Dog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+		<span class="c1">#构造子类独有的属性</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">w</span>
+	
+	<span class="c1">#注意这里的函数和父类中的函数同名，因此会重写overwrite该方法</span>
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="err">：</span>
+		<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, and I am </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years-old.&#34;</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My host is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__host</span><span class="si">}</span><span class="s2">, and my weight is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="si">}</span><span class="s2"> kg.&#34;</span><span class="p">)</span>
+		
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">BeagleDog</span><span class="p">(</span><span class="s2">&#34;Max&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&#34;Jasper&#34;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+<span class="c1">#输出如下：</span>
+<span class="c1"># My name is Max, and I am 1 years-old.</span>
+<span class="c1"># My host is Jasper, and my weight is 3 kg.</span>
+</code></pre></div><p>关于继承的其他说明：</p>
+<ol>
+<li></li>
+</ol>
+<pre><code>在 Python 中定义派生类（子类）时，派生类的基类（父类）不必与派生类在同一个文件（模块）中定义。可以在不同的模块中定义基类，然后通过导入模块来继承该基类。
+
+这对于模块化编程非常有用，因为你可以将不同类的定义分散到不同的模块（文件）中，保持代码的组织性和可维护性。通过 `import` 语句，你可以从其他模块导入基类，并在当前模块中定义派生类
+</code></pre>
+<ol start="2">
+<li>除了直接从模块导入类，还可以用表达式定义基类，这意味着你可以动态决定哪个类作为基类。这在某些高级场景中可以实现灵活的继承模式。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"> <span class="n">假设我们有两个基类模块</span>
+<span class="k">class</span> <span class="nc">Base1</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">Base2</span><span class="p">:</span>
+    <span class="k">pass</span>
+    
+<span class="c1"># 使用表达式选择哪个类作为基类</span>
+<span class="k">def</span> <span class="nf">get_base</span><span class="p">(</span><span class="n">use_base1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Base1</span> <span class="k">if</span> <span class="n">use_base1</span> <span class="k">else</span> <span class="n">Base2</span>
+
+<span class="c1"># 动态选择基类</span>
+<span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">get_base</span><span class="p">(</span><span class="kc">True</span><span class="p">)):</span>  <span class="c1"># 这里会继承 Base1</span>
+    <span class="k">pass</span>
+</code></pre></div><h2 id="类的多继承">类的多继承</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1">#BaseClass 0</span>
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+	<span class="n">species</span><span class="p">:</span> <span class="s2">&#34;Canine&#34;</span> <span class="c1">#类变量</span>
+	<span class="n">__host</span><span class="p">:</span> <span class="s2">&#34;&#34;</span> <span class="c1">#私有变量</span>
+	<span class="c1">#构造函数</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#实例变量</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">a</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__host</span> <span class="o">=</span> <span class="n">h</span>
+		
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1">#实例方法</span>
+	 <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, and I am </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years-old&#34;</span><span class="p">)</span>
+
+<span class="c1">#BaseClass 1 另一个基类</span>
+<span class="k">class</span> <span class="nc">Animal</span><span class="p">:</span>
+	<span class="n">feets</span> <span class="o">=</span> <span class="mi">0</span>
+	
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#与BaseClass 0的属性冲突</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">feets</span> <span class="o">=</span> <span class="n">f</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">has_tail</span> <span class="o">=</span> <span class="n">t</span>
+		
+	<span class="c1">#与BaseClass 0的方法名称冲突</span>
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;My name is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. I have </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">feets</span><span class="si">}</span><span class="s2"> feets, and my tail is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tail</span><span class="si">}</span><span class="s2">. &#34;</span><span class="p">)</span>
+		
+<span class="c1">#DerivedClass</span>
+<span class="k">class</span> <span class="nc">BeagleDog</span><span class="p">(</span><span class="n">Animal</span><span class="p">,</span> <span class="n">Dog</span><span class="p">):</span>
+	<span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">age</span> <span class="o">=</span> <span class="mi">0</span>
+	
+	<span class="c1">#建立子类的构造函数</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">):</span>
+     <span class="n">Animal</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+     <span class="n">Dog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">w</span>
+     <span class="bp">self</span><span class="p">,</span><span class="n">age</span> <span class="o">=</span> <span class="n">a</span>
+     
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">BeagleDog</span><span class="p">(</span><span class="s2">&#34;Max&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&#34;Jasper&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1">#方法名同，默认调用的是在多继承子类的括号中参数位置排前父类的方法</span>
+<span class="c1">#class BeagleDog(Animal, Dog)  也即是Animal的方法</span>
+
+<span class="n">dog_1</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+<span class="c1">#输出如下：</span>
+<span class="c1"># My name is Max. I have 4 feets, and my tail is Ture.</span>
+</code></pre></div><h2 id="方法重写">方法重写</h2>
+<p>在派生类中，如果基类的方法不满足要求，可以进行重写，接着上面的代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1">#DerivedClass</span>
+<span class="k">class</span> <span class="nc">BeagleDog</span><span class="p">(</span><span class="n">Animal</span><span class="p">,</span> <span class="n">Dog</span><span class="p">):</span>
+	<span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">age</span> <span class="o">=</span> <span class="mi">0</span>
+	
+	<span class="c1">#建立子类的构造函数</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">):</span>
+     <span class="n">Animal</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+     <span class="n">Dog</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">w</span>
+     <span class="bp">self</span><span class="p">,</span><span class="n">age</span> <span class="o">=</span> <span class="n">a</span>
+     
+	<span class="c1">#方法重写</span>
+	<span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;woolf, woolf, woolf!&#34;</span><span class="p">)</span>
+		
+<span class="n">dog_1</span> <span class="o">=</span> <span class="n">BeagleDog</span><span class="p">(</span><span class="s2">&#34;Max&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&#34;Jasper&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">dog_1</span><span class="o">.</span><span class="n">introduce</span><span class="p">()</span>
+<span class="c1">#输出如下：</span>
+<span class="c1"># &#34;woolf, woolf, woolf!</span>
+</code></pre></div><p>以上关于子类继承父类构造函数的情况有些复杂，这里稍微总结一下：</p>
+<p>情况一：**子类需要自动调用父类的方法：**子类不重写__init__()方法，实例化子类后，会自动调用父类的__init__()的方法。</p>
+<p>情况二：**子类不需要自动调用父类的方法：**子类重写__init__()方法，实例化子类后，将不会自动调用父类的__init__()的方法。</p>
+<p>情况三：子类重写__init__()方法又需要调用父类的方法：使用super关键词：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">super</span><span class="p">(</span><span class="n">子类</span><span class="err">，</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">参数1</span><span class="err">，</span><span class="n">参数2</span><span class="err">，</span><span class="o">....</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Son</span><span class="p">(</span><span class="n">Father</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Son</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div><p>Func</p>
+<p><a href="https://www.runoob.com/python/python-functions.html">https://www.runoob.com/python/python-functions.html</a></p>
 <ul class="pa0">
   
    <li class="list di">

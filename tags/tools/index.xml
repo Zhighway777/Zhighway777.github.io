@@ -6,16 +6,7 @@
     <description>Recent content in Tools on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 15 Oct 2024 20:39:53 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Python Advanced Skills</title>
-      <link>https://zhighway777.github.io/2024/10/15/python_toolkit/</link>
-      <pubDate>Tue, 15 Oct 2024 20:39:53 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/2024/10/15/python_toolkit/</guid>
-      <description>Useful tools pytest Advanced methods yield 如果一个函数中使用yield来修饰一变量，那么这个函数会作为一个generate(), 当调用此函数的时候，并不会运行此函数，而是</description>
-    </item>
-    
+    <lastBuildDate>Fri, 04 Oct 2024 20:25:10 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Python Simple Tutorial</title>
       <link>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</link>

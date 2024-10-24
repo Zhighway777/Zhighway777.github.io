@@ -6,28 +6,14 @@
     <description>Recent content in Python on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 15 Oct 2024 20:39:53 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Python Advanced Skills</title>
-      <link>https://zhighway777.github.io/2024/10/15/python_toolkit/</link>
-      <pubDate>Tue, 15 Oct 2024 20:39:53 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/2024/10/15/python_toolkit/</guid>
-      <description>Useful tools pytest Advanced methods yield 如果一个函数中使用yield来修饰一变量，那么这个函数会作为一个generate(), 当调用此函数的时候，并不会运行此函数，而是</description>
-    </item>
-    
+    <lastBuildDate>Wed, 09 Oct 2024 20:39:53 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Python Object Oriented Programming</title>
       <link>https://zhighway777.github.io/2024/10/09/python_oop/</link>
       <pubDate>Wed, 09 Oct 2024 20:39:53 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/10/09/python_oop/</guid>
-      <description>OOP Here is a classical picture: Although is funny, it actually describes the OOP concept.
-Class: A set to describe which has the same attributes and methods.
-Object: is the instance of a class
-Class variables: Public in its instance object, usually are defined beyond function in a class.
-Data members: ?
-Rewrite method: A original method inherited from thee parent class can be modified if is can not meet the needs of the subclass.</description>
+      <description>OOP Here is a classical picture: Although is funny, it actually describes the OOP concept. Class: A set to describe which has the same attributes and methods. Object: is the instance of a class Class variables: Public in its instance object, usually are defined beyond function in a class. Data members: Class members and Object members Rewrite method: A original method inherited from thee parent class can be modified if</description>
     </item>
     
     <item>
