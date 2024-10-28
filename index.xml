@@ -41,7 +41,7 @@ The perspective form Instructions. For a Turing Machine, the task will be broken
       <pubDate>Fri, 04 Oct 2024 20:25:10 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2024/10/04/python_simple_tutorial/</guid>
-      <description>Common Functions print() Print the characters into the screen. input() 等待用户在键盘上输入一些文本，并按下回车键，将此文本作为字符串赋值给一个变量。 len() 得到len中字符串字符的个数 str(), int(), float() str</description>
+      <description>Common Functions 在这里简单的介绍一下python的函数是有必要的。 在python中，存在很多内置函数，可以直接使用，如print()函数。用户也可以自行</description>
     </item>
     
     <item>

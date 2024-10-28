@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Simple Tutorial">
 <meta itemprop="description" content="A wiki for python with detailed links for most of the content. If your python foundation is weak, this article is for you."><meta itemprop="datePublished" content="2024-10-04T20:25:10+08:00" />
 <meta itemprop="dateModified" content="2024-10-04T20:25:10+08:00" />
-<meta itemprop="wordCount" content="2396">
+<meta itemprop="wordCount" content="3595">
 <meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Simple Tutorial"/>
 <meta name="twitter:description" content="A wiki for python with detailed links for most of the content. If your python foundation is weak, this article is for you."/>
@@ -165,7 +165,106 @@
       
     </header>
     <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="common-functions">Common Functions</h1>
-<h2 id="print">print()</h2>
+<p>在这里简单的介绍一下python的函数是有必要的。
+在python中，存在很多内置函数，可以直接使用，如print()函数。用户也可以自行定义一些函数，来实现一个具有一定功能的代码块。函数可以有参数，也可以沒有参数。对于有参数的函数，我们需要对参数进行传递。</p>
+<p>##参数传递
+python的函数和C语言作为对比，C语言中，参数需要指定类型，而且有型参和实参之分。但是在python中，只有对象(object)采用有“类型”这一特征，变量是没有类型的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;Zeng&#34;</span>
+</code></pre></div><p>在这里，需要把a理解为一个对象的引用(对象的指针)，可以指向List对象， 也可以指向String类的对象。</p>
+<h3 id="可变对象mutable和不可变对象immutable">可变对象(mutable)和不可变对象(immutable)</h3>
+<p>在python中， 三个不可更改的对象：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">strings</span>
+<span class="n">tuples</span>
+<span class="n">numbers</span>
+</code></pre></div><p>两个可更改对象：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">List</span>
+<span class="n">Dict</span>
+</code></pre></div><p>那么对于python的参数传递而言：
+mutable 可变类型：类似于C的引用传递，实参。func内部对参数的修改也会改变外部的该参数所对应对象的数值。例如</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">change_int</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># new variable b:</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">change_int</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="c1"># Output 2</span>
+</code></pre></div><p>immutable 不可变类型：类似于C的值传递，传递的只是该参数的数值，不会修改参数所对应的对象本身。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">change_list</span><span class="p">(</span><span class="n">my_list</span><span class="p">):</span>
+	<span class="n">my_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+	<span class="nb">print</span> <span class="s2">&#34;Value in function: &#34;</span><span class="p">,</span> <span class="n">my_list</span>
+	<span class="k">return</span>
+
+<span class="c1">#Call the function:</span>
+<span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]</span>
+<span class="n">change_int</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s2">&#34;Value out of function: &#34;</span><span class="p">,</span> <span class="n">my_list</span>	
+<span class="c1">#Value in function: [10, 20, 30, 40, [1, 2, 3, 4]]</span>
+<span class="c1">#Value out of function: [10, 20, 30, 40, [1, 2, 3, 4]] </span>
+</code></pre></div><p>可见函数确实会改变外部mutable的值。
+一下是对可变对象和不可变对象的进一步解释：</p>
+<ol>
+<li>不可变对象的引用是可变的，在对不可变对象进行修改时，实际上是创建了新的对象，然后将“引用”指向了这个新的对象。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">i</span> <span class="o">=</span> <span class="mi">73</span>
+<span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span>
+</code></pre></div><p><img src="/img/immutable.png" alt="immmutable">
+2. 可变对象的内容可以变化，但是变量的对象引用不会发生改变。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">m</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="n">m</span><span class="o">+=</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+</code></pre></div><p><img src="/img/mutable.png" alt="mutable"></p>
+<h3 id="参数的类型">参数的类型</h3>
+<p>必备参数， 关键字参数， 默认参数， 不定长参数</p>
+<ol>
+<li>
+<p>必备参数就是在调用函数是，使用函数定义时的参数顺序来进行传递，需要保证参数顺序的一致性，否则容易出错。</p>
+</li>
+<li>
+<p>关键字参数，通过在调用时使用关键字来表明传递的是哪一个参数，这样有助于清晰的进行参数传递。</p>
+</li>
+<li>
+<p>默认参数， 如果参数的数值没有传入，则使用默认参数作为该参数的值。</p>
+</li>
+<li>
+<p>不定长参数， 使用在一个函数可以处理的参数数量比声明时更多的情况下。注意，在声明的时候不会进行命名。</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">functionname</span><span class="p">([</span><span class="n">formal_args</span><span class="p">,]</span> <span class="o">*</span><span class="n">var_args_tuple</span> <span class="p">):</span>
+   <span class="s2">&#34;函数_文档字符串&#34;</span>
+   <span class="n">function_suite</span>
+   <span class="k">return</span> <span class="p">[</span><span class="n">expression</span><span class="p">]</span>
+</code></pre></div><p>这里加了 <code>*</code> 说明这个被<code>*</code>修饰的变量会存放所有未命名的参数：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">printinfo</span><span class="p">(</span> <span class="n">arg1</span><span class="p">,</span> <span class="o">*</span><span class="n">vartuple</span> <span class="p">):</span>
+   <span class="s2">&#34;打印任何传入的参数&#34;</span>
+   <span class="nb">print</span> <span class="s2">&#34;输出: &#34;</span>
+   <span class="nb">print</span> <span class="n">arg1</span>
+   <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">vartuple</span><span class="p">:</span>
+      <span class="nb">print</span> <span class="n">var</span>
+   <span class="k">return</span>
+
+
+<span class="c1"># 调用printinfo 函数</span>
+<span class="n">printinfo</span><span class="p">(</span> <span class="mi">10</span> <span class="p">)</span>
+<span class="n">printinfo</span><span class="p">(</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">50</span> <span class="p">)</span>
+</code></pre></div><h3 id="变量的作用域">变量的作用域</h3>
+<p>python中两个最基本的变量作用域：全局变量和局部变量。</p>
+<p>最简单的区分方式：定义在函数内部的变量具有局部作用域， 定义在函数外部的变量具有全局作用域。
+全局变量可以在整个程序范围内被访问。局部变量只能在被定义的函数的作用域内访问。</p>
+<p>全局变量想作用于函数内部，需要添加 global， 其作用是将一个变量定义为全局变量。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">globvar</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">set_globvar_to_one</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">globvar</span>    <span class="c1"># 使用 global 声明全局变量</span>
+    <span class="n">globvar</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">print_globvar</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">globvar</span><span class="p">)</span>     <span class="c1"># 没有使用 global</span>
+
+<span class="n">set_globvar_to_one</span><span class="p">()</span>
+<span class="nb">print</span>  <span class="n">globvar</span>        <span class="c1"># 输出 1</span>
+<span class="n">print_globvar</span><span class="p">()</span>       <span class="c1"># 输出 1，函数内的 globvar 已经是全局变量</span>
+
+</code></pre></div><h2 id="print">print()</h2>
 <p>Print the characters into the screen.</p>
 <h2 id="input">input()</h2>
 <p>等待用户在键盘上输入一些文本，并按下回车键，将此文本作为字符串赋值给一个变量。</p>
