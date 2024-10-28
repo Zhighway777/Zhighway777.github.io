@@ -6,7 +6,34 @@
     <description>Recent content in Tags on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 12 Oct 2024 22:31:36 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Oct 2024 20:39:53 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python</title>
+      <link>https://zhighway777.github.io/tags/python/</link>
+      <pubDate>Tue, 15 Oct 2024 20:39:53 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tools</title>
+      <link>https://zhighway777.github.io/tags/tools/</link>
+      <pubDate>Tue, 15 Oct 2024 20:39:53 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/tags/tools/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial</title>
+      <link>https://zhighway777.github.io/tags/tutorial/</link>
+      <pubDate>Tue, 15 Oct 2024 20:39:53 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/tags/tutorial/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Computer Architecture</title>
       <link>https://zhighway777.github.io/tags/computer-architecture/</link>
@@ -31,33 +58,6 @@
       <pubDate>Sat, 12 Oct 2024 22:31:36 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/tags/perf/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>https://zhighway777.github.io/tags/python/</link>
-      <pubDate>Wed, 09 Oct 2024 20:39:53 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tutorial</title>
-      <link>https://zhighway777.github.io/tags/tutorial/</link>
-      <pubDate>Wed, 09 Oct 2024 20:39:53 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/tags/tutorial/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tools</title>
-      <link>https://zhighway777.github.io/tags/tools/</link>
-      <pubDate>Fri, 04 Oct 2024 20:25:10 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/tags/tools/</guid>
       <description></description>
     </item>
     
