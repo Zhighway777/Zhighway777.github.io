@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Python Advanced Skills">
 <meta itemprop="description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."><meta itemprop="datePublished" content="2024-10-15T20:39:53+08:00" />
 <meta itemprop="dateModified" content="2024-10-15T20:39:53+08:00" />
-<meta itemprop="wordCount" content="1772">
+<meta itemprop="wordCount" content="2147">
 <meta itemprop="keywords" content="Python,Tools,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Advanced Skills"/>
 <meta name="twitter:description" content="This blog will show you some advanced python technology and common packages or tools in Modeling and Test."/>
@@ -152,6 +152,7 @@
 
       <h1 class="f1 athelas mt3 mb1">Python Advanced Skills</h1>
       
+      
       <p class="tracked">
         By <strong>Zeng</strong>
       </p>
@@ -239,7 +240,43 @@ getattr(object, name, default[optional]) 用于提取某个对象的属性，注
 		<span class="k">yield</span> <span class="n">n</span><span class="p">,</span> <span class="n">elem</span>
 		<span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
 </code></pre></div><h2 id="get">get()</h2>
+<p>字典中，访问一个key对应的value， 如果key存在，那么直接访问对用value， 如果key不存在，那么访问get()设置的默认值。【不会改变dict】</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+<span class="n">spam</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div><p>defaultValue: 可以保证在进行dict访问时不出现错误，同时输出默认value</p>
 <h2 id="asdit">asdit()</h2>
+<h2 id="setdefault">setdefault()</h2>
+<p>为某一个key设置默认值， 当这个key没有对应的value时，使用这个默认值，并将其添加到dict中。【会改变dict】</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">spam</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+<span class="n">spam</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">spam</span>
+<span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+
+<span class="c1">#对已经存在的key设置默认value，不会改变dict</span>
+<span class="n">spam</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;whithe&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">spam</span>
+<span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;&#39;name&#39;</span> <span class="p">:</span> <span class="n">pika</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="s1">&#39;42&#39;</span><span class="p">}</span>
+</code></pre></div><h2 id="dataclass">@dataclass</h2>
+<p>可以用来快速定义__init__()构造函数</p>
+<h3 id="field">field</h3>
+<p>允许为数据类的每个字段设置额外的选项，比如默认值，字段比较，初始化是是否包含构造函数等。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py">
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SubClass</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MyClass</span>
+	<span class="n">x</span><span class="p">:</span><span class="nb">int</span>
+	<span class="n">y</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> 
+
+<span class="n">obj1</span><span class="o">=</span><span class="n">MyClass</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">obj2</span><span class="o">=</span><span class="n">MyClass</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">obj1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">obj1</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div><p>这里default_factory=list 确保了 y 字段在每次实例化时是一个新的、独立的列表，而不是多个实例共享同一个对象。</p>
 <h2 id="functools">@functools</h2>
 <h2 id="tbc">TBC</h2>
 <p>Python语法问题和需要补充的常见语法概念：</p>
@@ -279,7 +316,31 @@ getattr(object, name, default[optional]) 用于提取某个对象的属性，注
       </div>
     </div>
 
-    <aside class="w-30-l mt6-l">
+    <aside class="w-30-l mt6-l"><div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Table of contents</p>
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#pytest">pytest</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#yield">yield</a></li>
+    <li><a href="#yield-from">yield from</a></li>
+    <li><a href="#getattr">getattr()</a></li>
+    <li><a href="#enumerate">enumerate()</a></li>
+    <li><a href="#get">get()</a></li>
+    <li><a href="#asdit">asdit()</a></li>
+    <li><a href="#setdefault">setdefault()</a></li>
+    <li><a href="#dataclass">@dataclass</a>
+      <ul>
+        <li><a href="#field">field</a></li>
+      </ul>
+    </li>
+    <li><a href="#functools">@functools</a></li>
+    <li><a href="#tbc">TBC</a></li>
+  </ul>
+</nav>
+  </div>
 
 
 

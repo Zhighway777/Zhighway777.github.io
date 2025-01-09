@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Zeng::blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 05 Nov 2024 22:06:01 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Jan 2025 21:45:10 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Archtecture Keywords</title>
+      <link>https://zhighway777.github.io/2025/01/09/arch_keywords/</link>
+      <pubDate>Thu, 09 Jan 2025 21:45:10 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2025/01/09/arch_keywords/</guid>
+      <description>HBM &amp;amp; DDR &amp;amp; SDRAM &amp;amp; DRAM https://m.huxiu.com/article/3047123.html HBM (High Bandwidth Memory) Defination: It has stacked DRAM architecture with core DRAM dies on top of a base logic die, based on the TSV and die stacking technologies. Technology[edit] Type Release Max data rate speed per pin(Gbit/s) Stack per Stack per Stack - - - - Max capacity(Number of dies × Die capacity = GByte) Max data rate(GByte/s) HBM 1 Oct</description>
+    </item>
+    
     <item>
       <title>AI Agentic Workflow</title>
       <link>https://zhighway777.github.io/2024/11/05/ai_agentic_workflow/</link>
