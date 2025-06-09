@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Docker tutorial">
 <meta itemprop="description" content="Recording the usage of docker."><meta itemprop="datePublished" content="2024-09-26T20:08:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-26T20:08:03+08:00" />
-<meta itemprop="wordCount" content="638">
+<meta itemprop="wordCount" content="640">
 <meta itemprop="keywords" content="Docker,Tutorial,Tools," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker tutorial"/>
 <meta name="twitter:description" content="Recording the usage of docker."/>
@@ -219,8 +219,8 @@ $ sudo systemctl start docker
 <span class="c1">#for GPU environment, you should add --gpus all to enable GPU drive</span>
 
 $  docker run -it --name cuda_container <span class="se">\
-</span><span class="se"></span>  -v host/dir:/workspace <span class="se">\
-</span><span class="se"></span>  nvidia/cuda:12.8.0-runtime-ubuntu22.04 /bin/bash
+</span><span class="se"></span>  -v host/dir:/workspace <span class="se">\ </span>--gpus all
+  nvidia/cuda:12.8.0-runtime-ubuntu22.04 /bin/bash
 
 <span class="c1">#1. catch the image files</span>
 $ docker image pull path/to/image_file
