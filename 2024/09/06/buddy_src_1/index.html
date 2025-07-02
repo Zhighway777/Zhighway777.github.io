@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Buddy Compiler 源码解读(1)">
 <meta itemprop="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."><meta itemprop="datePublished" content="2024-09-06T23:23:03+08:00" />
 <meta itemprop="dateModified" content="2024-09-06T23:23:03+08:00" />
-<meta itemprop="wordCount" content="2947">
+<meta itemprop="wordCount" content="2948">
 <meta itemprop="keywords" content="MLIR,AI Compiler," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Buddy Compiler 源码解读(1)"/>
 <meta name="twitter:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy, In This part, we delve into the Lower Pass to explore how the dialect is Lowered."/>
@@ -188,7 +188,7 @@
 </code></pre></div><p>比较二者区别 发现数据名称变得更加规范， dialect从bud变为了arith</p>
 <p>我们看看这里是如何发生的？ <strong>？未能解决</strong></p>
 <p>阅读makefile文件发现，这里其实是运行了buddy-opt ./bud-constant.mlir &ndash;lower-bud -o ./log.mlir</p>
-<p>官方文档的解释里 被Lower的 Target格式为：<!-- raw HTML omitted -->-<!-- raw HTML omitted --></p>
+<p>官方文档的解释里 被Lower的 Target格式为：<Dialect Name>-<Operation Name></p>
 <p><code>bud-array-attr.mlir</code></p>
 <p>Dialect：bud</p>
 <p>operation name：array</p>
@@ -418,10 +418,11 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><h3 id="edge-detection-example">Edge detection example</h3>
-<!-- raw HTML omitted -->
+<aside>
+💡
 <p>这里记录一个难点。在安装好opencv环境后，如果直接运行 <code>AutoConfig</code> 会产生报错：提示 can not find OpenCVConfig.cmake .</p>
 <p><code>解决方法</code> 需要在/path/to/opencv下使用 <code>find ./  -name &quot;OpenCVConfig.cmake&quot;</code> 并将该文件所在路径放到环境变量OpenCV_XXX_DIR中 此变量名在makefile中查找即可。</p>
-<!-- raw HTML omitted -->
+</aside>
 <p>具体ninjia的执行方式可以在build.ninja中查明。但是目前不熟悉ninjia的构成方式，暂时不作分析。</p>
 <p>这里可以开启副本，关注buddy-opt的benchmark</p>
 <h3 id="digital-image-processing-examples"><strong>Digital Image Processing Examples</strong></h3>

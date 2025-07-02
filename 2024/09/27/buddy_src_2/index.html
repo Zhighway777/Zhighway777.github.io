@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Buddy Compiler 源码解读(2)">
 <meta itemprop="description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy. (...)"><meta itemprop="datePublished" content="2024-09-27T13:19:05+08:00" />
 <meta itemprop="dateModified" content="2024-09-27T13:19:05+08:00" />
-<meta itemprop="wordCount" content="1932">
+<meta itemprop="wordCount" content="1933">
 <meta itemprop="keywords" content="MLIR,AI Compiler," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Buddy Compiler 源码解读(2)"/>
 <meta name="twitter:description" content="A brief introduction to the overall architectyre of buddy Compiler and an analysis some of the buddy. (...)"/>
@@ -176,13 +176,14 @@
 <h2 id="dialect的tablegen">Dialect的TableGen</h2>
 <p>关于Dialect的部分，我们可以在midend中找到，这也符合其在编译器中的位置。</p>
 <p>/midend/include/Dialect/Bud 下有四个关于Bud Dialect的文件，分别是BudDialect.h, BudDialect.td, BudOps.h, BudOps.td。</p>
-<!-- raw HTML omitted -->
+<aside>
+💡
 <p>这里.h文件中incluce了一些.td文件需要的库，<strong>许多人第一次接触(.td)文件,这是什么？</strong>
 (.td)全称为TableGen文件，是LLVM的一个工具，功能就是读取一个文件（td文件），解析这个文件，输出成不同的结果文件。</p>
 <p>MLIR使用此文件作为为操作表述(ODS)，可以理解为TableGen语言中的DSL。这些代码最终会转换为C++代码</p>
 <p>[1] <a href="https://llvm.org/docs/TableGen/#tablegen-overview"><strong>TableGen Overview</strong></a></p>
 <p>[2] <a href="https://zhuanlan.zhihu.com/p/141265959"><strong>有关于TableGen的简单介绍</strong></a></p>
-<!-- raw HTML omitted -->
+</aside>
 <p>在MLIR中，TableGen的格式如下所示：</p>
 <p><img src="/img/buddy_dialect_0.png" alt="image.png"></p>
 <p>从上往下依次是：Op名称，Op特征列表，Op的summary doc, Op的description doc, Op的参数列表， Op的结果及其类型约束。</p>
