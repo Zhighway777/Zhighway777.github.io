@@ -148,11 +148,11 @@
 <div class="music-player">
   <div class="music-controls">
     <button id="playPauseBtn" class="play-btn">🎵</button>
-    <span class="music-info">背景音乐</span>
+    <span class="music-info">Mystery of Love</span>
     <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="30">
     <span class="volume-label">🔊</span>
   </div>
-  <audio id="backgroundMusic" loop>
+  <audio id="backgroundMusic" loop autoplay>
     <source src="/audio/background.mp3" type="audio/mpeg">
     <source src="/audio/background.ogg" type="audio/ogg">
     您的浏览器不支持音频播放。
@@ -315,6 +315,32 @@
   color: #666;
 }
 
+/* 动画效果 */
+@keyframes pulse {
+  0% { 
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+  50% { 
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.8);
+    transform: scale(1.05);
+  }
+  100% { 
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .music-player {
@@ -352,15 +378,38 @@ document.addEventListener('DOMContentLoaded', function() {
   // 设置初始音量
   audio.volume = volumeSlider.value / 100;
   
+  // 自动播放函数
+  function tryAutoPlay() {
+    audio.play().then(() => {
+      console.log('音乐自动播放成功');
+      playPauseBtn.textContent = '⏸️';
+      playPauseBtn.classList.add('playing');
+      // 添加播放成功的动画效果
+      playPauseBtn.style.animation = 'pulse 2s infinite';
+    }).catch(e => {
+      console.log('自动播放被浏览器阻止:', e);
+      // 显示提示，鼓励用户点击
+      playPauseBtn.textContent = '🎵';
+      playPauseBtn.style.animation = 'bounce 1s infinite';
+      // 3秒后停止动画
+      setTimeout(() => {
+        playPauseBtn.style.animation = 'none';
+      }, 3000);
+    });
+  }
+  
   // 播放/暂停功能
   playPauseBtn.addEventListener('click', function() {
+    // 停止任何动画
+    playPauseBtn.style.animation = 'none';
+    
     if (audio.paused) {
       audio.play().then(() => {
         playPauseBtn.textContent = '⏸️';
         playPauseBtn.classList.add('playing');
       }).catch(e => {
         console.log('音频播放失败:', e);
-        alert('请点击页面任意位置后再试试播放音乐');
+        alert('音频播放失败，请检查文件是否正确加载');
       });
     } else {
       audio.pause();
@@ -379,12 +428,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('音频加载失败，请检查音频文件路径');
     playPauseBtn.style.opacity = '0.5';
     playPauseBtn.style.cursor = 'not-allowed';
+    playPauseBtn.textContent = '❌';
   });
   
-  // 音频加载成功
+  // 音频加载成功后尝试自动播放
   audio.addEventListener('loadeddata', function() {
-    console.log('音频文件加载成功');
+    console.log('音频文件加载成功，尝试自动播放');
+    setTimeout(tryAutoPlay, 500); // 延迟500ms再尝试播放
   });
+  
+  // 如果用户与页面交互，也尝试自动播放（备用方案）
+  let hasInteracted = false;
+  function handleFirstInteraction() {
+    if (!hasInteracted && audio.paused) {
+      hasInteracted = true;
+      tryAutoPlay();
+      // 移除事件监听器
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('scroll', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    }
+  }
+  
+  // 监听用户交互
+  document.addEventListener('click', handleFirstInteraction);
+  document.addEventListener('scroll', handleFirstInteraction);
+  document.addEventListener('keydown', handleFirstInteraction);
 });
 </script><blockquote>
 </blockquote>
