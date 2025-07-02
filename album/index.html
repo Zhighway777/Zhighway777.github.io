@@ -162,19 +162,19 @@
 <hr>
 <p><em>Capturing the poetry of dawn, dusk, and celestial moments</em></p>
 <div class="image-gallery"><div class="gallery-item" data-story="一个夏天的夜晚，两个疯子躺在江边的长椅上吹了一夜的风，快被睡意覆盖时，蓦然看到了此生最美的朝阳。" data-title="Sunrise on the Riverside">
-      <img src="https://zhighway777.github.io/img/album/sunrise.jpg" alt="Sunrise on the Riverside" loading="lazy" class="clickable-image" />
+      <img src="/img/album/sunrise.jpg" alt="Sunrise on the Riverside" loading="lazy" class="clickable-image" />
       <p>Sunrise on the Riverside</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="在海拔3000多米的村落里，晚饭过后往窗外一瞥，夕阳照在山顶，终于看到了金山。在高处，我们总能看得更远。" data-title="Golden Mountain">
-      <img src="https://zhighway777.github.io/img/album/sun_on_moutain.jpg" alt="Golden Mountain" loading="lazy" class="clickable-image" />
+      <img src="/img/album/sun_on_moutain.jpg" alt="Golden Mountain" loading="lazy" class="clickable-image" />
       <p>Golden Mountain</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="大巴行驶在山间公路，远远看到这朵云独自飘在蓝天中，我想起了自己。有时候，孤独不是寂寞，而是一种自由。" data-title="One Cloud">
-      <img src="https://zhighway777.github.io/img/album/cloud_.jpg" alt="One Cloud" loading="lazy" class="clickable-image" />
+      <img src="/img/album/cloud_.jpg" alt="One Cloud" loading="lazy" class="clickable-image" />
       <p>One Cloud</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="夜幕降临时，偶然发现了这轮小月亮。它偷偷藏在云层后面。" data-title="A Small Moon">
-      <img src="https://zhighway777.github.io/img/album/MoonAndCloud.jpg" alt="A Small Moon" loading="lazy" class="clickable-image" />
+      <img src="/img/album/MoonAndCloud.jpg" alt="A Small Moon" loading="lazy" class="clickable-image" />
       <p>A Small Moon</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div></div>
@@ -200,17 +200,17 @@
 <style>
 .image-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 15px;
   margin: 20px 0;
   align-items: start;  
 }
 
 .gallery-item {
   text-align: center;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
@@ -228,14 +228,14 @@
 
 .gallery-item img {
   width: 100%;
-  max-width: 100%;
   height: auto;  
-  max-height: 400px;  
+  max-height: 700px;  
+  max-width: 100%;  
   object-fit: contain;  
   border-radius: 4px;
   cursor: pointer;
   display: block;
-  margin: 0 auto;
+  margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -405,7 +405,8 @@
 }
 
 .gallery-item p {
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 0;
   font-size: 14px;
   color: #666;
 }
@@ -413,23 +414,32 @@
  
 @media (max-width: 768px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 10px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 300px;  
+    max-height: 600px;  
   }
 }
 
  
 @media (min-width: 1200px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+    gap: 20px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 500px;  
+    max-height: 800px;  
   }
 }
 </style>
@@ -503,19 +513,19 @@ document.addEventListener('DOMContentLoaded', function() {
 <hr>
 <p><em>The silence and majesty of snow-covered landscapes</em></p>
 <div class="image-gallery"><div class="gallery-item" data-story="这条路我走了两次，过去一次，回来一次，它最终会带我通向哪里？" data-title="Road to the Snow Mountain">
-      <img src="https://zhighway777.github.io/img/album/road_to_snow.jpg" alt="Road to the Snow Mountain" loading="lazy" class="clickable-image" />
+      <img src="/img/album/road_to_snow.jpg" alt="Road to the Snow Mountain" loading="lazy" class="clickable-image" />
       <p>Road to the Snow Mountain</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="站在密林深处，透过层峦叠嶂，我看向远方。" data-title="Look through the Trees">
-      <img src="https://zhighway777.github.io/img/album/LookThroughTrees.jpg" alt="Look through the Trees" loading="lazy" class="clickable-image" />
+      <img src="/img/album/LookThroughTrees.jpg" alt="Look through the Trees" loading="lazy" class="clickable-image" />
       <p>Look through the Trees</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="雨后的清晨，突然冒出一群小蘑菇。它静静地生长在腐朽的木头上，生命的顽强和美丽。" data-title="Mushroom">
-      <img src="https://zhighway777.github.io/img/album/Mushroom.jpg" alt="Mushroom" loading="lazy" class="clickable-image" />
+      <img src="/img/album/Mushroom.jpg" alt="Mushroom" loading="lazy" class="clickable-image" />
       <p>Mushroom</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="照片的主人还没有分享它的故事哦！" data-title="Forest and Fog | By SEVEN">
-      <img src="https://zhighway777.github.io/img/album/ForestandFog.jpg" alt="Forest and Fog | By SEVEN" loading="lazy" class="clickable-image" />
+      <img src="/img/album/ForestandFog.jpg" alt="Forest and Fog | By SEVEN" loading="lazy" class="clickable-image" />
       <p>Forest and Fog | By SEVEN</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div></div>
@@ -541,17 +551,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 .image-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 15px;
   margin: 20px 0;
   align-items: start;  
 }
 
 .gallery-item {
   text-align: center;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
@@ -569,14 +579,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .gallery-item img {
   width: 100%;
-  max-width: 100%;
   height: auto;  
-  max-height: 400px;  
+  max-height: 700px;  
+  max-width: 100%;  
   object-fit: contain;  
   border-radius: 4px;
   cursor: pointer;
   display: block;
-  margin: 0 auto;
+  margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -746,7 +756,8 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .gallery-item p {
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 0;
   font-size: 14px;
   color: #666;
 }
@@ -754,23 +765,32 @@ document.addEventListener('DOMContentLoaded', function() {
  
 @media (max-width: 768px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 10px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 300px;  
+    max-height: 600px;  
   }
 }
 
  
 @media (min-width: 1200px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+    gap: 20px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 500px;  
+    max-height: 800px;  
   }
 }
 </style>
@@ -844,15 +864,15 @@ document.addEventListener('DOMContentLoaded', function() {
 <hr>
 <p><em>Rivers, lakes, and the life they nurture</em></p>
 <div class="image-gallery"><div class="gallery-item" data-story="清晨的河面上，两只水鸟先后落在船舷上，一只想接近另一只，但是却被拒绝了，无奈只能飞到另一侧缓解尴尬。" data-title="Birds on the River">
-      <img src="https://zhighway777.github.io/img/album/two_birds.jpg" alt="Birds on the River" loading="lazy" class="clickable-image" />
+      <img src="/img/album/two_birds.jpg" alt="Birds on the River" loading="lazy" class="clickable-image" />
       <p>Birds on the River</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="在严寒之地，河水依然在流淌。它穿过雪地，带着不屈的生命力向前。" data-title="River from Snow">
-      <img src="https://zhighway777.github.io/img/album/RiverFromSnow.jpg" alt="River from Snow" loading="lazy" class="clickable-image" />
+      <img src="/img/album/RiverFromSnow.jpg" alt="River from Snow" loading="lazy" class="clickable-image" />
       <p>River from Snow</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="高山的湖泊纯粹和宁静，倒映着他上方的雪山。湖面偶尔飘过的冰块，像是时间的碎片。" data-title="Iceberg Lake">
-      <img src="https://zhighway777.github.io/img/album/IcebergLake.jpg" alt="Iceberg Lake" loading="lazy" class="clickable-image" />
+      <img src="/img/album/IcebergLake.jpg" alt="Iceberg Lake" loading="lazy" class="clickable-image" />
       <p>Iceberg Lake</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div></div>
@@ -878,17 +898,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 .image-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 15px;
   margin: 20px 0;
   align-items: start;  
 }
 
 .gallery-item {
   text-align: center;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
@@ -906,14 +926,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .gallery-item img {
   width: 100%;
-  max-width: 100%;
   height: auto;  
-  max-height: 400px;  
+  max-height: 700px;  
+  max-width: 100%;  
   object-fit: contain;  
   border-radius: 4px;
   cursor: pointer;
   display: block;
-  margin: 0 auto;
+  margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -1083,7 +1103,8 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .gallery-item p {
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 0;
   font-size: 14px;
   color: #666;
 }
@@ -1091,23 +1112,32 @@ document.addEventListener('DOMContentLoaded', function() {
  
 @media (max-width: 768px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 10px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 300px;  
+    max-height: 600px;  
   }
 }
 
  
 @media (min-width: 1200px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+    gap: 20px;
+  }
+  
+  .gallery-item {
+    padding: 3px;
   }
   
   .gallery-item img {
-    max-height: 500px;  
+    max-height: 800px;  
   }
 }
 </style>
