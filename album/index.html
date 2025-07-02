@@ -158,21 +158,44 @@
 </div>
 <h1 id="landscape--by-zeng">Landscape | By Zeng</h1>
 <p><em>Please taste them with me.</em></p>
+<p><em>Click the Pictures and I will tell you the story.</em></p>
 <hr>
 <p><em>Capturing the poetry of dawn, dusk, and celestial moments</em></p>
-<div class="image-gallery"><div class="gallery-item">
-      <img src="/img/album/sunrise.jpg" alt="Sunrise on the Riverside" loading="lazy" />
+<div class="image-gallery"><div class="gallery-item" data-story="一个夏天的夜晚，两个疯子躺在江边的长椅上吹了一夜的风，快被睡意覆盖时，蓦然看到了此生最美的朝阳" data-title="Sunrise on the Riverside">
+      <img src="https://zhighway777.github.io/img/album/sunrise.jpg" alt="Sunrise on the Riverside" loading="lazy" class="clickable-image" />
       <p>Sunrise on the Riverside</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/sun_on_moutain.jpg" alt="Golden Mountain" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="在海拔3000多米的村落里，晚饭过后往窗外一瞥，夕阳照在山顶，终于看到了金山。在高处，我们总能看得更远。" data-title="Golden Mountain">
+      <img src="https://zhighway777.github.io/img/album/sun_on_moutain.jpg" alt="Golden Mountain" loading="lazy" class="clickable-image" />
       <p>Golden Mountain</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/cloud_.jpg" alt="One Cloud" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="大巴行驶在山间公路，远远看到这朵云独自飘在蓝天中，我想起了自己。有时候，孤独不是寂寞，而是一种自由。" data-title="One Cloud">
+      <img src="https://zhighway777.github.io/img/album/cloud_.jpg" alt="One Cloud" loading="lazy" class="clickable-image" />
       <p>One Cloud</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/MoonAndCloud.jpg" alt="A Small Moon" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="夜幕降临时，偶然发现了这轮小月亮。它偷偷藏在云层后面。" data-title="A Small Moon">
+      <img src="https://zhighway777.github.io/img/album/MoonAndCloud.jpg" alt="A Small Moon" loading="lazy" class="clickable-image" />
       <p>A Small Moon</p>
+      <div class="story-hint">💭 点击查看故事</div>
     </div></div>
+
+
+<div id="storyModal" class="story-modal">
+  <div class="story-modal-content">
+    <div class="story-header">
+      <h3 id="storyTitle">照片故事</h3>
+      <span class="story-close">&times;</span>
+    </div>
+    <div class="story-body">
+      <div class="story-image-container">
+        <img id="storyImage" src="" alt="" />
+      </div>
+      <div class="story-text-container">
+        <div id="storyText">故事内容...</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
 .image-gallery {
@@ -198,6 +221,11 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
 .gallery-item img {
   width: 100%;
   max-width: 100%;
@@ -208,6 +236,172 @@
   cursor: pointer;
   display: block;
   margin: 0 auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.story-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.gallery-item:hover .story-hint {
+  opacity: 1;
+}
+
+ 
+.story-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.story-modal-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.story-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.story-close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.story-close:hover {
+  color: #ddd;
+}
+
+.story-body {
+  display: flex;
+  max-height: calc(85vh - 80px);
+  overflow: hidden;
+}
+
+.story-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.story-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.story-text-container {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  background: white;
+}
+
+#storyText {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+}
+
+#storyText h4 {
+  color: #667eea;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#storyText p {
+  margin-bottom: 15px;
+}
+
+ 
+@media (max-width: 768px) {
+  .story-modal-content {
+    margin: 10% auto;
+    width: 95%;
+    max-height: 80vh;
+  }
+  
+  .story-body {
+    flex-direction: column;
+  }
+  
+  .story-image-container,
+  .story-text-container {
+    flex: none;
+  }
+  
+  .story-image-container {
+    max-height: 40vh;
+  }
+  
+  .story-text-container {
+    max-height: 40vh;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
 }
 
 .gallery-item p {
@@ -238,22 +432,111 @@
     max-height: 500px;  
   }
 }
-</style> 
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modal = document.getElementById('storyModal');
+  const storyTitle = document.getElementById('storyTitle');
+  const storyImage = document.getElementById('storyImage');
+  const storyText = document.getElementById('storyText');
+  const closeBtn = document.querySelector('.story-close');
+  
+  
+  document.querySelectorAll('.clickable-image').forEach(img => {
+    img.addEventListener('click', function() {
+      const galleryItem = this.parentElement;
+      const title = galleryItem.getAttribute('data-title');
+      const story = galleryItem.getAttribute('data-story');
+      const imageSrc = this.src;
+      
+      
+      storyTitle.textContent = title;
+      storyImage.src = imageSrc;
+      storyImage.alt = title;
+      
+      
+      const formattedStory = formatStoryText(story);
+      storyText.innerHTML = formattedStory;
+      
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; 
+    });
+  });
+  
+  
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; 
+  }
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
+    }
+  });
+  
+  
+  function formatStoryText(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')  
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')      
+      .replace(/\n\n/g, '</p><p>')               
+      .replace(/\n/g, '<br>')                    
+      .replace(/^(.*)/, '<p>$1')                 
+      .replace(/(.*?)$/, '$1</p>');              
+  }
+});
+</script> 
 <hr>
 <p><em>The silence and majesty of snow-covered landscapes</em></p>
-<div class="image-gallery"><div class="gallery-item">
-      <img src="/img/album/road_to_snow.jpg" alt="Road to the Snow Mountain" loading="lazy" />
+<div class="image-gallery"><div class="gallery-item" data-story="这条路我走了两次，过去一次，回来一次，它最终会带我通向哪里？" data-title="Road to the Snow Mountain">
+      <img src="https://zhighway777.github.io/img/album/road_to_snow.jpg" alt="Road to the Snow Mountain" loading="lazy" class="clickable-image" />
       <p>Road to the Snow Mountain</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/LookThroughTrees.jpg" alt="Look through the Trees" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="站在密林深处，透过层峦叠嶂，我看向远方。" data-title="Look through the Trees">
+      <img src="https://zhighway777.github.io/img/album/LookThroughTrees.jpg" alt="Look through the Trees" loading="lazy" class="clickable-image" />
       <p>Look through the Trees</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/Mushroom.jpg" alt="Mushroom" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="雨后的清晨，突然冒出一群小蘑菇。它静静地生长在腐朽的木头上，生命的顽强和美丽。" data-title="Mushroom">
+      <img src="https://zhighway777.github.io/img/album/Mushroom.jpg" alt="Mushroom" loading="lazy" class="clickable-image" />
       <p>Mushroom</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/ForestandFog.jpg" alt="Forest and Fog | By SEVEN" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="照片的主人还没有分享它的故事哦！" data-title="Forest and Fog | By SEVEN">
+      <img src="https://zhighway777.github.io/img/album/ForestandFog.jpg" alt="Forest and Fog | By SEVEN" loading="lazy" class="clickable-image" />
       <p>Forest and Fog | By SEVEN</p>
+      <div class="story-hint">💭 点击查看故事</div>
     </div></div>
+
+
+<div id="storyModal" class="story-modal">
+  <div class="story-modal-content">
+    <div class="story-header">
+      <h3 id="storyTitle">照片故事</h3>
+      <span class="story-close">&times;</span>
+    </div>
+    <div class="story-body">
+      <div class="story-image-container">
+        <img id="storyImage" src="" alt="" />
+      </div>
+      <div class="story-text-container">
+        <div id="storyText">故事内容...</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
 .image-gallery {
@@ -279,6 +562,11 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
 .gallery-item img {
   width: 100%;
   max-width: 100%;
@@ -289,6 +577,172 @@
   cursor: pointer;
   display: block;
   margin: 0 auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.story-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.gallery-item:hover .story-hint {
+  opacity: 1;
+}
+
+ 
+.story-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.story-modal-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.story-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.story-close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.story-close:hover {
+  color: #ddd;
+}
+
+.story-body {
+  display: flex;
+  max-height: calc(85vh - 80px);
+  overflow: hidden;
+}
+
+.story-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.story-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.story-text-container {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  background: white;
+}
+
+#storyText {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+}
+
+#storyText h4 {
+  color: #667eea;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#storyText p {
+  margin-bottom: 15px;
+}
+
+ 
+@media (max-width: 768px) {
+  .story-modal-content {
+    margin: 10% auto;
+    width: 95%;
+    max-height: 80vh;
+  }
+  
+  .story-body {
+    flex-direction: column;
+  }
+  
+  .story-image-container,
+  .story-text-container {
+    flex: none;
+  }
+  
+  .story-image-container {
+    max-height: 40vh;
+  }
+  
+  .story-text-container {
+    max-height: 40vh;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
 }
 
 .gallery-item p {
@@ -319,19 +773,107 @@
     max-height: 500px;  
   }
 }
-</style> 
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modal = document.getElementById('storyModal');
+  const storyTitle = document.getElementById('storyTitle');
+  const storyImage = document.getElementById('storyImage');
+  const storyText = document.getElementById('storyText');
+  const closeBtn = document.querySelector('.story-close');
+  
+  
+  document.querySelectorAll('.clickable-image').forEach(img => {
+    img.addEventListener('click', function() {
+      const galleryItem = this.parentElement;
+      const title = galleryItem.getAttribute('data-title');
+      const story = galleryItem.getAttribute('data-story');
+      const imageSrc = this.src;
+      
+      
+      storyTitle.textContent = title;
+      storyImage.src = imageSrc;
+      storyImage.alt = title;
+      
+      
+      const formattedStory = formatStoryText(story);
+      storyText.innerHTML = formattedStory;
+      
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; 
+    });
+  });
+  
+  
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; 
+  }
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
+    }
+  });
+  
+  
+  function formatStoryText(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')  
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')      
+      .replace(/\n\n/g, '</p><p>')               
+      .replace(/\n/g, '<br>')                    
+      .replace(/^(.*)/, '<p>$1')                 
+      .replace(/(.*?)$/, '$1</p>');              
+  }
+});
+</script> 
 <hr>
 <p><em>Rivers, lakes, and the life they nurture</em></p>
-<div class="image-gallery"><div class="gallery-item">
-      <img src="/img/album/two_birds.jpg" alt="Birds on the River" loading="lazy" />
+<div class="image-gallery"><div class="gallery-item" data-story="清晨的河面上，两只水鸟先后落在船舷上，一只想接近另一只，但是却被拒绝了，无奈只能飞到另一侧缓解尴尬。" data-title="Birds on the River">
+      <img src="https://zhighway777.github.io/img/album/two_birds.jpg" alt="Birds on the River" loading="lazy" class="clickable-image" />
       <p>Birds on the River</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/RiverFromSnow.jpg" alt="River from Snow" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="在严寒之地，河水依然在流淌。它穿过雪地，带着不屈的生命力向前。" data-title="River from Snow">
+      <img src="https://zhighway777.github.io/img/album/RiverFromSnow.jpg" alt="River from Snow" loading="lazy" class="clickable-image" />
       <p>River from Snow</p>
-    </div><div class="gallery-item">
-      <img src="/img/album/IcebergLake.jpg" alt="Iceberg Lake" loading="lazy" />
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="高山的湖泊纯粹和宁静，倒映着他上方的雪山。湖面偶尔飘过的冰块，像是时间的碎片。" data-title="Iceberg Lake">
+      <img src="https://zhighway777.github.io/img/album/IcebergLake.jpg" alt="Iceberg Lake" loading="lazy" class="clickable-image" />
       <p>Iceberg Lake</p>
+      <div class="story-hint">💭 点击查看故事</div>
     </div></div>
+
+
+<div id="storyModal" class="story-modal">
+  <div class="story-modal-content">
+    <div class="story-header">
+      <h3 id="storyTitle">照片故事</h3>
+      <span class="story-close">&times;</span>
+    </div>
+    <div class="story-body">
+      <div class="story-image-container">
+        <img id="storyImage" src="" alt="" />
+      </div>
+      <div class="story-text-container">
+        <div id="storyText">故事内容...</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
 .image-gallery {
@@ -357,6 +899,11 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
 .gallery-item img {
   width: 100%;
   max-width: 100%;
@@ -367,6 +914,172 @@
   cursor: pointer;
   display: block;
   margin: 0 auto;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.story-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.gallery-item:hover .story-hint {
+  opacity: 1;
+}
+
+ 
+.story-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.story-modal-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.story-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.story-close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.story-close:hover {
+  color: #ddd;
+}
+
+.story-body {
+  display: flex;
+  max-height: calc(85vh - 80px);
+  overflow: hidden;
+}
+
+.story-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.story-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.story-text-container {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  background: white;
+}
+
+#storyText {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+}
+
+#storyText h4 {
+  color: #667eea;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#storyText p {
+  margin-bottom: 15px;
+}
+
+ 
+@media (max-width: 768px) {
+  .story-modal-content {
+    margin: 10% auto;
+    width: 95%;
+    max-height: 80vh;
+  }
+  
+  .story-body {
+    flex-direction: column;
+  }
+  
+  .story-image-container,
+  .story-text-container {
+    flex: none;
+  }
+  
+  .story-image-container {
+    max-height: 40vh;
+  }
+  
+  .story-text-container {
+    max-height: 40vh;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
 }
 
 .gallery-item p {
@@ -397,7 +1110,74 @@
     max-height: 500px;  
   }
 }
-</style> 
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modal = document.getElementById('storyModal');
+  const storyTitle = document.getElementById('storyTitle');
+  const storyImage = document.getElementById('storyImage');
+  const storyText = document.getElementById('storyText');
+  const closeBtn = document.querySelector('.story-close');
+  
+  
+  document.querySelectorAll('.clickable-image').forEach(img => {
+    img.addEventListener('click', function() {
+      const galleryItem = this.parentElement;
+      const title = galleryItem.getAttribute('data-title');
+      const story = galleryItem.getAttribute('data-story');
+      const imageSrc = this.src;
+      
+      
+      storyTitle.textContent = title;
+      storyImage.src = imageSrc;
+      storyImage.alt = title;
+      
+      
+      const formattedStory = formatStoryText(story);
+      storyText.innerHTML = formattedStory;
+      
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; 
+    });
+  });
+  
+  
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; 
+  }
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
+    }
+  });
+  
+  
+  function formatStoryText(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')  
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')      
+      .replace(/\n\n/g, '</p><p>')               
+      .replace(/\n/g, '<br>')                    
+      .replace(/^(.*)/, '<p>$1')                 
+      .replace(/(.*?)$/, '$1</p>');              
+  }
+});
+</script> 
 <hr>
 <style>
 /* 相册整体样式优化 */
