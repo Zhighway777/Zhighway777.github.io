@@ -166,7 +166,7 @@
       <p>Sunrise on the Riverside</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="在海拔3000多米的村落里，晚饭过后往窗外一瞥，夕阳照在山顶，终于看到了金山。在高处，我们总能看得更远。" data-title="Golden Mountain">
-      <img src="/img/album/sun_on_moutain.jpg" alt="Golden Mountain" loading="lazy" class="clickable-image" />
+      <img src="/img/album/sun_on_mountain.jpg" alt="Golden Mountain" loading="lazy" class="clickable-image" />
       <p>Golden Mountain</p>
       <div class="story-hint">💭 点击查看故事</div>
     </div><div class="gallery-item" data-story="大巴行驶在山间公路，远远看到这朵云独自飘在蓝天中，我想起了自己。有时候，孤独不是寂寞，而是一种自由。" data-title="One Cloud">
@@ -198,12 +198,19 @@
 </div>
 
 <style>
+ 
+body {
+  overflow-x: hidden;
+}
+
 .image-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 15px;
   margin: 20px 0;
   align-items: start;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item {
@@ -214,6 +221,8 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover {
@@ -237,6 +246,7 @@
   display: block;
   margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover img {
@@ -374,11 +384,56 @@
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .story-modal-content {
-    margin: 10% auto;
+    margin: 5% auto;
+    width: 98%;
+    max-width: calc(100vw - 10px);
+    max-height: 90vh;
+    border-radius: 10px;
+  }
+  
+  .story-header {
+    padding: 15px 20px;
+  }
+  
+  .story-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .story-close {
+    font-size: 24px;
+  }
+  
+  .story-body {
+    flex-direction: column;
+    max-height: calc(90vh - 60px);
+  }
+  
+  .story-image-container {
+    flex: none;
+    max-height: 35vh;
+    padding: 15px;
+  }
+  
+  .story-text-container {
+    flex: 1;
+    padding: 15px 20px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  
+  #storyText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .story-modal-content {
+    margin: 8% auto;
     width: 95%;
-    max-height: 80vh;
+    max-height: 85vh;
   }
   
   .story-body {
@@ -392,15 +447,16 @@
   
   .story-image-container {
     max-height: 40vh;
+    padding: 18px;
   }
   
   .story-text-container {
-    max-height: 40vh;
+    max-height: 45vh;
+    padding: 20px;
   }
   
-  .story-hint {
-    font-size: 11px;
-    padding: 6px 12px;
+  #storyText {
+    font-size: 15px;
   }
 }
 
@@ -412,18 +468,70 @@
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;  
+    gap: 15px;
+    margin: 15px 5px;
+    padding: 0 5px;
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
+    margin: 0;
+    max-width: 100%;
   }
   
   .gallery-item img {
-    max-height: 600px;  
+    max-height: 400px;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .gallery-item p {
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  
+  .story-hint {
+    font-size: 10px;
+    padding: 4px 8px;
+    bottom: 45px;
+  }
+}
+
+ 
+@media (min-width: 481px) and (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 15px 10px;
+    padding: 0 5px;
+  }
+  
+  .gallery-item {
+    padding: 5px;
+  }
+  
+  .gallery-item img {
+    max-height: 500px;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+ 
+@media (min-width: 769px) and (max-width: 1199px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 15px;
+  }
+  
+  .gallery-item img {
+    max-height: 650px;
   }
 }
 
@@ -435,11 +543,11 @@
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
   }
   
   .gallery-item img {
-    max-height: 800px;  
+    max-height: 800px;
   }
 }
 </style>
@@ -549,12 +657,19 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <style>
+ 
+body {
+  overflow-x: hidden;
+}
+
 .image-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 15px;
   margin: 20px 0;
   align-items: start;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item {
@@ -565,6 +680,8 @@ document.addEventListener('DOMContentLoaded', function() {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover {
@@ -588,6 +705,7 @@ document.addEventListener('DOMContentLoaded', function() {
   display: block;
   margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover img {
@@ -725,11 +843,56 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .story-modal-content {
-    margin: 10% auto;
+    margin: 5% auto;
+    width: 98%;
+    max-width: calc(100vw - 10px);
+    max-height: 90vh;
+    border-radius: 10px;
+  }
+  
+  .story-header {
+    padding: 15px 20px;
+  }
+  
+  .story-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .story-close {
+    font-size: 24px;
+  }
+  
+  .story-body {
+    flex-direction: column;
+    max-height: calc(90vh - 60px);
+  }
+  
+  .story-image-container {
+    flex: none;
+    max-height: 35vh;
+    padding: 15px;
+  }
+  
+  .story-text-container {
+    flex: 1;
+    padding: 15px 20px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  
+  #storyText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .story-modal-content {
+    margin: 8% auto;
     width: 95%;
-    max-height: 80vh;
+    max-height: 85vh;
   }
   
   .story-body {
@@ -743,15 +906,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
   .story-image-container {
     max-height: 40vh;
+    padding: 18px;
   }
   
   .story-text-container {
-    max-height: 40vh;
+    max-height: 45vh;
+    padding: 20px;
   }
   
-  .story-hint {
-    font-size: 11px;
-    padding: 6px 12px;
+  #storyText {
+    font-size: 15px;
   }
 }
 
@@ -763,18 +927,70 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;  
+    gap: 15px;
+    margin: 15px 5px;
+    padding: 0 5px;
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
+    margin: 0;
+    max-width: 100%;
   }
   
   .gallery-item img {
-    max-height: 600px;  
+    max-height: 400px;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .gallery-item p {
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  
+  .story-hint {
+    font-size: 10px;
+    padding: 4px 8px;
+    bottom: 45px;
+  }
+}
+
+ 
+@media (min-width: 481px) and (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 15px 10px;
+    padding: 0 5px;
+  }
+  
+  .gallery-item {
+    padding: 5px;
+  }
+  
+  .gallery-item img {
+    max-height: 500px;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+ 
+@media (min-width: 769px) and (max-width: 1199px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 15px;
+  }
+  
+  .gallery-item img {
+    max-height: 650px;
   }
 }
 
@@ -786,11 +1002,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
   }
   
   .gallery-item img {
-    max-height: 800px;  
+    max-height: 800px;
   }
 }
 </style>
@@ -896,12 +1112,19 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <style>
+ 
+body {
+  overflow-x: hidden;
+}
+
 .image-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 15px;
   margin: 20px 0;
   align-items: start;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item {
@@ -912,6 +1135,8 @@ document.addEventListener('DOMContentLoaded', function() {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
   break-inside: avoid;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover {
@@ -935,6 +1160,7 @@ document.addEventListener('DOMContentLoaded', function() {
   display: block;
   margin: 0;
   transition: transform 0.3s ease, filter 0.3s ease;
+  box-sizing: border-box;
 }
 
 .gallery-item:hover img {
@@ -1072,11 +1298,56 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .story-modal-content {
-    margin: 10% auto;
+    margin: 5% auto;
+    width: 98%;
+    max-width: calc(100vw - 10px);
+    max-height: 90vh;
+    border-radius: 10px;
+  }
+  
+  .story-header {
+    padding: 15px 20px;
+  }
+  
+  .story-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .story-close {
+    font-size: 24px;
+  }
+  
+  .story-body {
+    flex-direction: column;
+    max-height: calc(90vh - 60px);
+  }
+  
+  .story-image-container {
+    flex: none;
+    max-height: 35vh;
+    padding: 15px;
+  }
+  
+  .story-text-container {
+    flex: 1;
+    padding: 15px 20px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  
+  #storyText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .story-modal-content {
+    margin: 8% auto;
     width: 95%;
-    max-height: 80vh;
+    max-height: 85vh;
   }
   
   .story-body {
@@ -1090,15 +1361,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
   .story-image-container {
     max-height: 40vh;
+    padding: 18px;
   }
   
   .story-text-container {
-    max-height: 40vh;
+    max-height: 45vh;
+    padding: 20px;
   }
   
-  .story-hint {
-    font-size: 11px;
-    padding: 6px 12px;
+  #storyText {
+    font-size: 15px;
   }
 }
 
@@ -1110,18 +1382,70 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
  
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .image-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;  
+    gap: 15px;
+    margin: 15px 5px;
+    padding: 0 5px;
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
+    margin: 0;
+    max-width: 100%;
   }
   
   .gallery-item img {
-    max-height: 600px;  
+    max-height: 400px;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .gallery-item p {
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  
+  .story-hint {
+    font-size: 10px;
+    padding: 4px 8px;
+    bottom: 45px;
+  }
+}
+
+ 
+@media (min-width: 481px) and (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 15px 10px;
+    padding: 0 5px;
+  }
+  
+  .gallery-item {
+    padding: 5px;
+  }
+  
+  .gallery-item img {
+    max-height: 500px;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+ 
+@media (min-width: 769px) and (max-width: 1199px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 15px;
+  }
+  
+  .gallery-item img {
+    max-height: 650px;
   }
 }
 
@@ -1133,11 +1457,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   .gallery-item {
-    padding: 3px;
+    padding: 8px;
   }
   
   .gallery-item img {
-    max-height: 800px;  
+    max-height: 800px;
   }
 }
 </style>
@@ -1210,6 +1534,17 @@ document.addEventListener('DOMContentLoaded', function() {
 </script> 
 <hr>
 <style>
+/* 全局移动端优化 - 防止水平滚动 */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 /* 相册整体样式优化 */
 .nested-copy-line-height h1 {
   font-size: 2.5rem;
@@ -1219,6 +1554,8 @@ document.addEventListener('DOMContentLoaded', function() {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .nested-copy-line-height h2 {
@@ -1228,6 +1565,8 @@ document.addEventListener('DOMContentLoaded', function() {
   border-left: 4px solid #667eea;
   padding-left: 1rem;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .nested-copy-line-height em {
@@ -1237,6 +1576,13 @@ document.addEventListener('DOMContentLoaded', function() {
   display: block;
   margin-bottom: 1.5rem;
   opacity: 0.8;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.nested-copy-line-height p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* 分隔线样式 */
@@ -1246,6 +1592,8 @@ document.addEventListener('DOMContentLoaded', function() {
   background: linear-gradient(90deg, transparent, #667eea, transparent);
   margin: 3rem 0;
   position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .nested-copy-line-height hr::after {
@@ -1260,15 +1608,69 @@ document.addEventListener('DOMContentLoaded', function() {
   font-size: 16px;
 }
 
-/* 响应式优化 */
-@media (max-width: 768px) {
+/* 小屏手机优化 */
+@media (max-width: 480px) {
   .nested-copy-line-height h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
   }
   
   .nested-copy-line-height h2 {
-    font-size: 1.5rem;
-    margin: 2rem 0 1rem 0;
+    font-size: 1.3rem;
+    margin: 1.5rem 10px 1rem 10px;
+    padding-left: 0.8rem;
+  }
+  
+  .nested-copy-line-height em {
+    font-size: 0.9rem;
+    margin: 0 10px 1rem 10px;
+  }
+  
+  .nested-copy-line-height p {
+    margin: 0 10px;
+    font-size: 0.9rem;
+  }
+  
+  .nested-copy-line-height hr {
+    margin: 2rem 10px;
+  }
+}
+
+/* 平板和大屏手机 */
+@media (min-width: 481px) and (max-width: 768px) {
+  .nested-copy-line-height h1 {
+    font-size: 2.2rem;
+    padding: 0 15px;
+  }
+  
+  .nested-copy-line-height h2 {
+    font-size: 1.6rem;
+    margin: 2rem 15px 1rem 15px;
+  }
+  
+  .nested-copy-line-height em {
+    margin: 0 15px 1.2rem 15px;
+  }
+  
+  .nested-copy-line-height p {
+    margin: 0 15px;
+  }
+  
+  .nested-copy-line-height hr {
+    margin: 2.5rem 15px;
+  }
+}
+
+/* 桌面优化 */
+@media (min-width: 769px) {
+  .nested-copy-line-height h1 {
+    font-size: 2.5rem;
+  }
+  
+  .nested-copy-line-height h2 {
+    font-size: 1.8rem;
+    margin: 2.5rem 0 1rem 0;
   }
 }
 .music-player {
@@ -1369,12 +1771,56 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
 
-/* 移动端适配 */
-@media (max-width: 768px) {
+/* 小屏手机音乐播放器适配 */
+@media (max-width: 480px) {
+  .music-player {
+    bottom: 8px;
+    right: 8px;
+    padding: 8px 12px;
+    max-width: calc(100vw - 20px);
+    border-radius: 12px;
+  }
+  
+  .music-controls {
+    gap: 6px;
+    font-size: 11px;
+    flex-wrap: nowrap;
+  }
+  
+  .play-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  
+  .music-info {
+    min-width: 40px;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+  
+  .volume-slider {
+    width: 50px;
+    flex-shrink: 0;
+  }
+  
+  .volume-label {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+}
+
+/* 平板和大屏手机音乐播放器适配 */
+@media (min-width: 481px) and (max-width: 768px) {
   .music-player {
     bottom: 10px;
     right: 10px;
     padding: 10px 15px;
+    max-width: calc(100vw - 30px);
   }
   
   .music-controls {
@@ -1394,6 +1840,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   .music-info {
     min-width: 50px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 </style>
