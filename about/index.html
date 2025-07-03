@@ -52,15 +52,99 @@
 <meta itemprop="name" content="About me">
 <meta itemprop="description" content="Profile About Me"><meta itemprop="datePublished" content="2024-09-08T12:00:00+08:00" />
 <meta itemprop="dateModified" content="2024-09-08T12:00:00+08:00" />
-<meta itemprop="wordCount" content="61">
+<meta itemprop="wordCount" content="1896">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="About me"/>
 <meta name="twitter:description" content="Profile About Me"/>
 
 	
-
 <link rel="stylesheet" href="/css/style.css">
 
+
+<script src="/js/visit-counter.js"></script>
+
+
+<style>
+   
+  .visit-counter-info {
+    font-size: 0.8em;
+    color: #666;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+   
+  .visit-stats-hidden {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 1000;
+    display: none;
+  }
+  
+   
+  body.debug-mode .visit-stats-hidden {
+    display: block;
+  }
+</style>
+
+
+<div class="visit-stats-hidden" id="globalVisitStats">
+  网站访问: <span id="globalVisitCount">0</span>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  function updateGlobalVisitDisplay() {
+    if (window.VisitCounter) {
+      const visitCount = window.VisitCounter.getWebsiteVisits();
+      const globalCountElement = document.getElementById('globalVisitCount');
+      if (globalCountElement) {
+        globalCountElement.textContent = visitCount.toLocaleString();
+      }
+    }
+  }
+  
+  
+  document.addEventListener('websiteVisitUpdated', function(event) {
+    updateGlobalVisitDisplay();
+    
+    
+    console.log('网站访问统计更新:', event.detail);
+  });
+  
+  
+  setTimeout(updateGlobalVisitDisplay, 200);
+  
+  
+  let clickCount = 0;
+  document.addEventListener('click', function() {
+    clickCount++;
+    if (clickCount === 3) {
+      document.body.classList.toggle('debug-mode');
+      console.log('调试模式已', document.body.classList.contains('debug-mode') ? '开启' : '关闭');
+      clickCount = 0;
+    }
+    setTimeout(() => { clickCount = 0; }, 1000);
+  });
+});
+</script>
+
+
+
+  
+
+
+
+ 
   </head>
 
   <body class="ma0 avenir bg-near-white">
@@ -150,6 +234,586 @@
 <li><strong>📧 Email</strong>: <a href="mailto:hwtsang@hotmail.com">hwtsang@hotmail.com</a></li>
 <li><strong>🌐 GitHub</strong>: <a href="https://github.com/zhighway777">zhighway777</a></li>
 </ul>
+<h2 id="visitor-statistics">Visitor Statistics</h2>
+<div class="visitor-stats">
+  <div class="globe-container">
+    <div class="globe">
+      <div class="earth-base">🌍</div>
+      <div class="visitor-markers" id="visitorMarkers">
+        <!-- 访问者标记将在这里动态添加 -->
+      </div>
+    </div>
+    <div class="orbit"></div>
+  </div>
+  <div class="stats-info">
+    <div class="stat-item">
+      <span class="stat-label">Total Visits:</span>
+      <span class="stat-value" id="visitCount">Loading...</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Current Visitor:</span>
+      <span class="stat-value" id="userLocation">Detecting...</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Active Regions:</span>
+      <span class="stat-value" id="activeRegions">Loading...</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Welcome!</span>
+      <span class="stat-value" id="welcomeMsg">Thanks for visiting!</span>
+    </div>
+  </div>
+</div>
+<style>
+.visitor-stats {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 30px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.visitor-stats::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+}
+
+.globe-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.globe {
+  animation: spin 4s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  z-index: 2;
+}
+
+.earth-base {
+  font-size: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.visitor-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.visitor-marker {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FFD700;
+  box-shadow: 0 0 6px #FFD700, 0 0 12px #FFD700;
+  animation: pulse-marker 2s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+}
+
+.visitor-marker::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #FFD700;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 2s ease-out infinite;
+}
+
+@keyframes pulse-marker {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  100% {
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+  }
+}
+
+.visitor-marker.new {
+  background: #FF6B6B;
+  box-shadow: 0 0 6px #FF6B6B, 0 0 12px #FF6B6B;
+  animation: new-visitor 3s ease-in-out;
+}
+
+@keyframes new-visitor {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbit 6s linear infinite;
+}
+
+.orbit::before {
+  content: '🛰️';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  animation: satellite 6s linear infinite reverse;
+}
+
+@keyframes orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes satellite {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(-360deg); }
+}
+
+.stats-info {
+  flex: 1;
+  z-index: 2;
+  position: relative;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.stat-label {
+  font-weight: 500;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 16px;
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .visitor-stats {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .globe-container {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .globe {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .earth-base {
+    font-size: 65px;
+  }
+  
+  .orbit {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .orbit::before {
+    font-size: 16px;
+  }
+  
+  .stat-item {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+  
+  .stat-label, .stat-value {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .visitor-stats {
+    margin: 20px 0;
+    padding: 20px;
+  }
+  
+  .globe {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .earth-base {
+    font-size: 55px;
+  }
+  
+  .globe-container {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .orbit {
+    width: 100px;
+    height: 100px;
+  }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 访问者位置数据存储
+  let visitorsData = JSON.parse(localStorage.getItem('visitorsData') || '{}');
+  
+  // 国家/地区对应的地球坐标位置 (相对于120x120的地球)
+  const countryPositions = {
+    'China': { x: 90, y: 52 },
+    'United States': { x: 30, y: 52 },
+    'Japan': { x: 105, y: 45 },
+    'Germany': { x: 67, y: 37 },
+    'United Kingdom': { x: 63, y: 37 },
+    'France': { x: 66, y: 45 },
+    'Canada': { x: 27, y: 37 },
+    'Australia': { x: 97, y: 90 },
+    'India': { x: 82, y: 60 },
+    'Brazil': { x: 37, y: 82 },
+    'Russia': { x: 82, y: 30 },
+    'South Korea': { x: 102, y: 48 },
+    'Italy': { x: 69, y: 52 },
+    'Spain': { x: 63, y: 52 },
+    'Netherlands': { x: 66, y: 34 },
+    'Sweden': { x: 69, y: 27 },
+    'Norway': { x: 67, y: 22 },
+    'Singapore': { x: 87, y: 75 },
+    'Hong Kong': { x: 93, y: 57 },
+    'Taiwan': { x: 96, y: 57 },
+    'Thailand': { x: 84, y: 67 },
+    'Malaysia': { x: 85, y: 75 },
+    'Indonesia': { x: 90, y: 78 },
+    'Philippines': { x: 96, y: 67 },
+    'Vietnam': { x: 87, y: 64 },
+    'Mexico': { x: 22, y: 60 },
+    'Argentina': { x: 42, y: 97 },
+    'Chile': { x: 37, y: 97 },
+    'Egypt': { x: 72, y: 60 },
+    'South Africa': { x: 72, y: 97 },
+    'Nigeria': { x: 67, y: 67 },
+    'Kenya': { x: 75, y: 75 },
+    'Israel': { x: 73, y: 57 },
+    'Turkey': { x: 72, y: 48 },
+    'Poland': { x: 70, y: 34 },
+    'Czech Republic': { x: 69, y: 37 },
+    'Austria': { x: 69, y: 42 },
+    'Switzerland': { x: 67, y: 42 },
+    'Belgium': { x: 66, y: 37 },
+    'Denmark': { x: 67, y: 30 },
+    'Finland': { x: 72, y: 22 },
+    'Ireland': { x: 61, y: 34 },
+    'Portugal': { x: 61, y: 52 },
+    'Greece': { x: 70, y: 52 },
+    'Ukraine': { x: 75, y: 37 },
+    'Belarus': { x: 73, y: 33 },
+    'Kazakhstan': { x: 78, y: 37 },
+    'Uzbekistan': { x: 78, y: 45 },
+    'Iran': { x: 78, y: 52 },
+    'Iraq': { x: 75, y: 57 },
+    'Saudi Arabia': { x: 75, y: 60 },
+    'United Arab Emirates': { x: 78, y: 57 },
+    'Kuwait': { x: 75, y: 55 },
+    'Qatar': { x: 76, y: 57 },
+    'Bahrain': { x: 76, y: 57 },
+    'Oman': { x: 79, y: 60 },
+    'Yemen': { x: 76, y: 67 },
+    'Jordan': { x: 73, y: 57 },
+    'Lebanon': { x: 73, y: 54 },
+    'Syria': { x: 73, y: 54 },
+    'Cyprus': { x: 72, y: 54 },
+    'Armenia': { x: 75, y: 48 },
+    'Azerbaijan': { x: 76, y: 48 },
+    'Georgia': { x: 75, y: 46 },
+    'Mongolia': { x: 87, y: 42 },
+    'North Korea': { x: 100, y: 45 },
+    'Myanmar': { x: 84, y: 63 },
+    'Laos': { x: 85, y: 63 },
+    'Cambodia': { x: 85, y: 67 },
+    'Bangladesh': { x: 82, y: 60 },
+    'Sri Lanka': { x: 81, y: 72 },
+    'Nepal': { x: 81, y: 57 },
+    'Bhutan': { x: 82, y: 57 },
+    'Maldives': { x: 79, y: 75 },
+    'Afghanistan': { x: 78, y: 52 },
+    'Pakistan': { x: 78, y: 55 },
+    'default': { x: 60, y: 60 } // 默认位置
+  };
+  
+  // 更新访问次数显示
+  function updateVisitCount() {
+    // 使用全站访问统计
+    const totalVisits = window.VisitCounter ? window.VisitCounter.getWebsiteVisits() : 0;
+    document.getElementById('visitCount').textContent = totalVisits.toLocaleString();
+  }
+  
+  // 监听全站访问统计更新事件
+  document.addEventListener('websiteVisitUpdated', function(event) {
+    const { totalVisits, currentPage, isNewSession } = event.detail;
+    
+    // 更新访问次数显示
+    document.getElementById('visitCount').textContent = totalVisits.toLocaleString();
+    
+    // 如果是新会话，可以显示特殊提示
+    if (isNewSession) {
+      console.log(`新会话访问，页面：${currentPage}，总访问次数：${totalVisits}`);
+    }
+  });
+  
+  // 在地球上添加访问标记
+  function addVisitorMarker(country, city, isNew = false) {
+    const markersContainer = document.getElementById('visitorMarkers');
+    const position = countryPositions[country] || countryPositions['default'];
+    
+    // 为同一个国家的不同城市添加小偏移
+    const cityOffset = city ? (city.charCodeAt(0) % 10 - 5) : 0;
+    const adjustedX = Math.max(8, Math.min(112, position.x + cityOffset));
+    const adjustedY = Math.max(8, Math.min(112, position.y + (cityOffset * 0.5)));
+    
+    const marker = document.createElement('div');
+    marker.className = `visitor-marker ${isNew ? 'new' : ''}`;
+    marker.style.left = `${adjustedX}%`;
+    marker.style.top = `${adjustedY}%`;
+    marker.title = `${city || 'Unknown'}, ${country}`;
+    
+    markersContainer.appendChild(marker);
+    
+    // 限制标记数量，避免过多
+    const markers = markersContainer.querySelectorAll('.visitor-marker');
+    if (markers.length > 20) {
+      markersContainer.removeChild(markers[0]);
+    }
+  }
+  
+  // 更新活跃地区统计
+  function updateActiveRegions() {
+    const regions = Object.keys(visitorsData);
+    const activeCount = regions.length;
+    const regionText = activeCount > 0 ? `${activeCount} regions` : 'Loading...';
+    document.getElementById('activeRegions').textContent = regionText;
+  }
+  
+  // 获取用户位置信息
+  async function getUserLocation() {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      
+      if (data.city && data.country_name) {
+        const location = `${data.city}, ${data.country_name}`;
+        const country = data.country_name;
+        const city = data.city;
+        
+        document.getElementById('userLocation').textContent = location;
+        
+        // 检查是否是新访问者
+        const locationKey = `${country}-${city}`;
+        const isNewVisitor = !visitorsData[locationKey];
+        
+        // 更新访问者数据
+        if (!visitorsData[locationKey]) {
+          visitorsData[locationKey] = {
+            country: country,
+            city: city,
+            firstVisit: new Date().toISOString(),
+            visits: 1
+          };
+        } else {
+          visitorsData[locationKey].visits++;
+        }
+        
+        // 保存数据
+        localStorage.setItem('visitorsData', JSON.stringify(visitorsData));
+        
+        // 在地球上添加标记
+        addVisitorMarker(country, city, isNewVisitor);
+        
+        // 设置欢迎消息
+        const hour = new Date().getHours();
+        let greeting;
+        if (hour >= 5 && hour < 12) {
+          greeting = 'Good Morning! 🌅';
+        } else if (hour >= 12 && hour < 17) {
+          greeting = 'Good Afternoon! ☀️';
+        } else if (hour >= 17 && hour < 21) {
+          greeting = 'Good Evening! 🌅';
+        } else {
+          greeting = 'Good Night! 🌙';
+        }
+        
+        if (isNewVisitor) {
+          greeting += ' Welcome new visitor! 🎉';
+        }
+        
+        document.getElementById('welcomeMsg').textContent = greeting;
+        
+        // 更新活跃地区
+        updateActiveRegions();
+        
+      } else {
+        throw new Error('Location data not available');
+      }
+    } catch (error) {
+      console.log('无法获取位置信息:', error);
+      document.getElementById('userLocation').textContent = 'Unknown Location 🗺️';
+      document.getElementById('welcomeMsg').textContent = 'Welcome! 🎉';
+      
+      // 添加默认标记
+      addVisitorMarker('default', 'Unknown', true);
+      updateActiveRegions();
+    }
+  }
+  
+  // 备用的简单位置检测
+  function fallbackLocationDetection() {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const region = timezone.split('/')[0];
+    document.getElementById('userLocation').textContent = `${region} (Timezone)`;
+    addVisitorMarker('default', region, true);
+  }
+  
+  // 初始化现有访问者标记
+  function initializeExistingMarkers() {
+    Object.values(visitorsData).forEach(visitor => {
+      addVisitorMarker(visitor.country, visitor.city, false);
+    });
+  }
+  
+  // 初始化函数
+  function initialize() {
+    updateVisitCount();
+    initializeExistingMarkers();
+    getUserLocation().catch(() => {
+      fallbackLocationDetection();
+    });
+  }
+  
+  // 确保VisitCounter加载后再初始化
+  if (window.VisitCounter) {
+    initialize();
+  } else {
+    // 如果VisitCounter还没加载，等待一下再初始化
+    setTimeout(initialize, 100);
+  }
+  
+  // 添加一些互动效果
+  const globe = document.querySelector('.globe');
+  const globeContainer = document.querySelector('.globe-container');
+  
+  globeContainer.addEventListener('mouseenter', function() {
+    globe.style.animationDuration = '1s';
+    globe.style.transform = 'scale(1.1)';
+  });
+  
+  globeContainer.addEventListener('mouseleave', function() {
+    globe.style.animationDuration = '4s';
+    globe.style.transform = 'scale(1)';
+  });
+  
+  // 点击地球的彩蛋
+  globe.addEventListener('click', function() {
+    const messages = [
+      'Hello from the Earth! 🌍',
+      'You found the secret! 🎉',
+      'Thanks for exploring! 🚀',
+      'Keep coding! 💻',
+      'Stay curious! 🔍',
+      `Visitors from ${Object.keys(visitorsData).length} locations! 🗺️`
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById('welcomeMsg').textContent = randomMessage;
+    
+    // 添加点击动画
+    globe.style.animation = 'none';
+    setTimeout(() => {
+      globe.style.animation = 'spin 4s linear infinite';
+    }, 100);
+  });
+});
+</script>
 
       </div>
     </article>

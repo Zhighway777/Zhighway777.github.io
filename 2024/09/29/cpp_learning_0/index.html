@@ -58,9 +58,93 @@
 <meta name="twitter:description" content="This series of articles focuses on documenting my cpp learning process and sharing notes."/>
 
 	
-
 <link rel="stylesheet" href="/css/style.css">
 
+
+<script src="/js/visit-counter.js"></script>
+
+
+<style>
+   
+  .visit-counter-info {
+    font-size: 0.8em;
+    color: #666;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+   
+  .visit-stats-hidden {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 1000;
+    display: none;
+  }
+  
+   
+  body.debug-mode .visit-stats-hidden {
+    display: block;
+  }
+</style>
+
+
+<div class="visit-stats-hidden" id="globalVisitStats">
+  网站访问: <span id="globalVisitCount">0</span>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  function updateGlobalVisitDisplay() {
+    if (window.VisitCounter) {
+      const visitCount = window.VisitCounter.getWebsiteVisits();
+      const globalCountElement = document.getElementById('globalVisitCount');
+      if (globalCountElement) {
+        globalCountElement.textContent = visitCount.toLocaleString();
+      }
+    }
+  }
+  
+  
+  document.addEventListener('websiteVisitUpdated', function(event) {
+    updateGlobalVisitDisplay();
+    
+    
+    console.log('网站访问统计更新:', event.detail);
+  });
+  
+  
+  setTimeout(updateGlobalVisitDisplay, 200);
+  
+  
+  let clickCount = 0;
+  document.addEventListener('click', function() {
+    clickCount++;
+    if (clickCount === 3) {
+      document.body.classList.toggle('debug-mode');
+      console.log('调试模式已', document.body.classList.contains('debug-mode') ? '开启' : '关闭');
+      clickCount = 0;
+    }
+    setTimeout(() => { clickCount = 0; }, 1000);
+  });
+});
+</script>
+
+
+
+  
+
+
+
+ 
   </head>
 
   <body class="ma0 avenir bg-near-white">
