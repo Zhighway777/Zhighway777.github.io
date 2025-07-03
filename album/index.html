@@ -145,14 +145,14 @@
     <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray"><!-- 背景音乐播放器 -->
 <div class="music-player">
   <div class="music-controls">
+    <button id="prevBtn" class="nav-btn">⏮️</button>
     <button id="playPauseBtn" class="play-btn">🎵</button>
-    <span class="music-info">Mystery of Love</span>
+    <button id="nextBtn" class="nav-btn">⏭️</button>
+    <span class="music-info" id="musicInfo">加载中...</span>
     <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="30">
     <span class="volume-label">🔊</span>
   </div>
-  <audio id="backgroundMusic" loop autoplay>
-    <source src="/audio/background.mp3" type="audio/mpeg">
-    <source src="/audio/background.ogg" type="audio/ogg">
+  <audio id="backgroundMusic" loop>
     您的浏览器不支持音频播放。
   </audio>
 </div>
@@ -1693,7 +1693,7 @@ html, body {
 .music-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   font-size: 14px;
 }
 
@@ -1718,6 +1718,36 @@ html, body {
 
 .play-btn.playing {
   background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+}
+
+.play-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.nav-btn {
+  background: rgba(102, 126, 234, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+}
+
+.nav-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.1);
+}
+
+.nav-btn:active {
+  transform: scale(0.95);
 }
 
 .music-info {
@@ -1786,7 +1816,7 @@ html, body {
   }
   
   .music-controls {
-    gap: 6px;
+    gap: 4px;
     font-size: 11px;
     flex-wrap: nowrap;
   }
@@ -1798,22 +1828,29 @@ html, body {
     flex-shrink: 0;
   }
   
+  .nav-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  
   .music-info {
-    min-width: 40px;
-    max-width: 60px;
+    min-width: 30px;
+    max-width: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 10px;
+    font-size: 9px;
   }
   
   .volume-slider {
-    width: 50px;
+    width: 40px;
     flex-shrink: 0;
   }
   
   .volume-label {
-    font-size: 14px;
+    font-size: 12px;
     flex-shrink: 0;
   }
 }
@@ -1828,7 +1865,7 @@ html, body {
   }
   
   .music-controls {
-    gap: 8px;
+    gap: 6px;
     font-size: 12px;
   }
   
@@ -1838,13 +1875,19 @@ html, body {
     font-size: 14px;
   }
   
+  .nav-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
   .volume-slider {
     width: 60px;
   }
   
   .music-info {
-    min-width: 50px;
-    max-width: 80px;
+    min-width: 40px;
+    max-width: 70px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1853,51 +1896,267 @@ html, body {
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // 歌曲列表配置
+  const playlist = [
+    {
+      name: "Mystery of Love",
+      src: "/audio/mystery_of_love.mp3",
+      ogg: "/audio/mystery_of_love.ogg"
+    },
+    {
+      name: "LonelyMountain",
+      src: "/audio/LonelyMountain.mp3",
+      ogg: "/audio/LonelyMountain.ogg"
+    },
+    {
+      name: "PLANET",
+      src: "/audio/PLANET.mp3",
+      ogg: "/audio/PLANET.ogg"
+    },
+  ];
+  
+  // 获取DOM元素
   const audio = document.getElementById('backgroundMusic');
   const playPauseBtn = document.getElementById('playPauseBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
   const volumeSlider = document.getElementById('volumeSlider');
+  const musicInfo = document.getElementById('musicInfo');
   
-  // 设置初始音量
-  audio.volume = volumeSlider.value / 100;
+  // 播放器状态
+  let currentSongIndex = 0;
+  let isPlaying = false;
   
-  // 自动播放函数
-  function tryAutoPlay() {
-    audio.play().then(() => {
-      console.log('音乐自动播放成功');
-      playPauseBtn.textContent = '⏸️';
-      playPauseBtn.classList.add('playing');
-      // 添加播放成功的动画效果
-      playPauseBtn.style.animation = 'pulse 2s infinite';
-    }).catch(e => {
-      console.log('自动播放被浏览器阻止:', e);
-      // 显示提示，鼓励用户点击
-      playPauseBtn.textContent = '🎵';
-      playPauseBtn.style.animation = 'bounce 1s infinite';
-      // 3秒后停止动画
-      setTimeout(() => {
-        playPauseBtn.style.animation = 'none';
-      }, 3000);
-    });
+  // 随机选择初始歌曲
+  function getRandomSong() {
+    return Math.floor(Math.random() * playlist.length);
   }
   
-  // 播放/暂停功能
-  playPauseBtn.addEventListener('click', function() {
-    // 停止任何动画
+  // 加载歌曲（懒加载优化）
+  function loadSong(index) {
+    if (index < 0 || index >= playlist.length) return;
+    
+    const song = playlist[index];
+    currentSongIndex = index;
+    
+    // 更新歌曲信息显示
+    musicInfo.textContent = song.name;
+    
+    // 清空当前音频源
+    audio.innerHTML = '';
+    
+    // 添加新的音频源
+    const mp3Source = document.createElement('source');
+    mp3Source.src = song.src;
+    mp3Source.type = 'audio/mpeg';
+    audio.appendChild(mp3Source);
+    
+    if (song.ogg) {
+      const oggSource = document.createElement('source');
+      oggSource.src = song.ogg;
+      oggSource.type = 'audio/ogg';
+      audio.appendChild(oggSource);
+    }
+    
+    // 设置预加载策略为 metadata（只加载元数据，不加载整个文件）
+    audio.preload = 'metadata';
+    
+    // 重新加载音频
+    audio.load();
+    
+    console.log(`加载歌曲: ${song.name}`);
+  }
+  
+  // 播放/暂停功能（优化加载）
+  function togglePlayPause() {
     playPauseBtn.style.animation = 'none';
     
     if (audio.paused) {
-      audio.play().then(() => {
-        playPauseBtn.textContent = '⏸️';
-        playPauseBtn.classList.add('playing');
-      }).catch(e => {
-        console.log('音频播放失败:', e);
-        alert('音频播放失败，请检查文件是否正确加载');
-      });
+      // 显示加载状态
+      playPauseBtn.textContent = '⏳';
+      playPauseBtn.disabled = true;
+      
+      // 如果音频还没有加载足够数据，先加载
+      if (audio.readyState < 2) {
+        audio.preload = 'auto'; // 临时改为完整加载
+        audio.load();
+        
+        // 等待数据加载
+        audio.addEventListener('canplay', function onCanPlay() {
+          audio.removeEventListener('canplay', onCanPlay);
+          playPauseBtn.disabled = false;
+          attemptPlay();
+        });
+      } else {
+        playPauseBtn.disabled = false;
+        attemptPlay();
+      }
     } else {
       audio.pause();
       playPauseBtn.textContent = '🎵';
       playPauseBtn.classList.remove('playing');
+      isPlaying = false;
     }
+  }
+  
+  // 尝试播放音频
+  function attemptPlay() {
+    audio.play().then(() => {
+      playPauseBtn.textContent = '⏸️';
+      playPauseBtn.classList.add('playing');
+      isPlaying = true;
+      console.log('音乐播放成功');
+    }).catch(e => {
+      console.log('音频播放失败:', e);
+      playPauseBtn.textContent = '❌';
+      setTimeout(() => {
+        playPauseBtn.textContent = '🎵';
+        // 如果当前歌曲播放失败，尝试下一首
+        nextSong();
+      }, 1000);
+    });
+  }
+  
+  // 上一首歌曲
+  function prevSong() {
+    let newIndex = currentSongIndex - 1;
+    if (newIndex < 0) {
+      newIndex = playlist.length - 1;
+    }
+    loadSong(newIndex);
+    if (isPlaying) {
+      // 自动播放下一首
+      playPauseBtn.textContent = '⏳';
+      setTimeout(() => {
+        togglePlayPause();
+      }, 200);
+    }
+  }
+  
+  // 下一首歌曲
+  function nextSong() {
+    let newIndex = currentSongIndex + 1;
+    if (newIndex >= playlist.length) {
+      newIndex = 0;
+    }
+    loadSong(newIndex);
+    if (isPlaying) {
+      // 自动播放下一首
+      playPauseBtn.textContent = '⏳';
+      setTimeout(() => {
+        togglePlayPause();
+      }, 200);
+    }
+  }
+  
+  // 快速初始化（保留自动播放功能）
+  function quickInit() {
+    // 设置初始音量
+    audio.volume = volumeSlider.value / 100;
+    
+    // 随机选择第一首歌曲（但不加载）
+    const randomIndex = getRandomSong();
+    currentSongIndex = randomIndex;
+    
+    // 只显示歌曲信息，不加载音频
+    musicInfo.textContent = playlist[randomIndex].name;
+    
+    // 显示提示用户点击播放
+    playPauseBtn.textContent = '🎵';
+    playPauseBtn.style.animation = 'bounce 1s infinite';
+    setTimeout(() => {
+      playPauseBtn.style.animation = 'none';
+    }, 3000);
+    
+    console.log('播放器初始化完成，尝试自动播放');
+    
+    // 延迟尝试自动播放
+    setTimeout(() => {
+      tryAutoPlay();
+    }, 1000);
+  }
+  
+  // 自动播放函数（懒加载版本）
+  function tryAutoPlay() {
+    // 先懒加载当前歌曲
+    lazyLoadCurrentSong();
+    
+    // 等待音频元数据加载后尝试播放
+    if (audio.readyState < 1) {
+      audio.addEventListener('loadedmetadata', function onMetadataLoaded() {
+        audio.removeEventListener('loadedmetadata', onMetadataLoaded);
+        attemptAutoPlay();
+      });
+    } else {
+      attemptAutoPlay();
+    }
+  }
+  
+  // 尝试自动播放
+  function attemptAutoPlay() {
+    audio.play().then(() => {
+      console.log('音乐自动播放成功');
+      playPauseBtn.textContent = '⏸️';
+      playPauseBtn.classList.add('playing');
+      isPlaying = true;
+      playPauseBtn.style.animation = 'pulse 2s infinite';
+    }).catch(e => {
+      console.log('自动播放被浏览器阻止:', e);
+      playPauseBtn.textContent = '🎵';
+      playPauseBtn.style.animation = 'bounce 1s infinite';
+      setTimeout(() => {
+        playPauseBtn.style.animation = 'none';
+      }, 3000);
+      
+      // 添加用户交互监听器作为备用方案
+      addInteractionListeners();
+    });
+  }
+  
+  // 添加用户交互监听器
+  function addInteractionListeners() {
+    let hasInteracted = false;
+    function handleFirstInteraction() {
+      if (!hasInteracted && audio.paused) {
+        hasInteracted = true;
+        console.log('检测到用户交互，尝试自动播放');
+        attemptAutoPlay();
+        // 移除事件监听器
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('scroll', handleFirstInteraction);
+        document.removeEventListener('keydown', handleFirstInteraction);
+      }
+    }
+    
+    // 监听用户交互
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('scroll', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+  }
+  
+  // 懒加载当前歌曲
+  function lazyLoadCurrentSong() {
+    if (audio.src === '' || audio.src === location.href) {
+      // 第一次加载当前歌曲
+      loadSong(currentSongIndex);
+    }
+  }
+  
+  // 事件监听器
+  playPauseBtn.addEventListener('click', function() {
+    // 懒加载当前歌曲
+    lazyLoadCurrentSong();
+    togglePlayPause();
+  });
+  
+  prevBtn.addEventListener('click', function() {
+    lazyLoadCurrentSong();
+    prevSong();
+  });
+  
+  nextBtn.addEventListener('click', function() {
+    lazyLoadCurrentSong();
+    nextSong();
   });
   
   // 音量控制
@@ -1905,37 +2164,25 @@ document.addEventListener('DOMContentLoaded', function() {
     audio.volume = this.value / 100;
   });
   
+  // 音频结束时自动播放下一首
+  audio.addEventListener('ended', function() {
+    nextSong();
+  });
+  
   // 音频加载错误处理
   audio.addEventListener('error', function() {
-    console.log('音频加载失败，请检查音频文件路径');
-    playPauseBtn.style.opacity = '0.5';
-    playPauseBtn.style.cursor = 'not-allowed';
-    playPauseBtn.textContent = '❌';
+    console.log('当前音频加载失败，尝试播放下一首');
+    // 如果当前歌曲加载失败，自动尝试下一首
+    nextSong();
   });
   
-  // 音频加载成功后尝试自动播放
+  // 音频加载成功事件
   audio.addEventListener('loadeddata', function() {
-    console.log('音频文件加载成功，尝试自动播放');
-    setTimeout(tryAutoPlay, 500); // 延迟500ms再尝试播放
+    console.log('音频文件加载成功');
   });
   
-  // 如果用户与页面交互，也尝试自动播放（备用方案）
-  let hasInteracted = false;
-  function handleFirstInteraction() {
-    if (!hasInteracted && audio.paused) {
-      hasInteracted = true;
-      tryAutoPlay();
-      // 移除事件监听器
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('scroll', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-    }
-  }
-  
-  // 监听用户交互
-  document.addEventListener('click', handleFirstInteraction);
-  document.addEventListener('scroll', handleFirstInteraction);
-  document.addEventListener('keydown', handleFirstInteraction);
+  // 初始化播放器（快速启动）
+  quickInit();
 });
 </script><blockquote>
 </blockquote>
