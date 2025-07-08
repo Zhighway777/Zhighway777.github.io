@@ -1619,6 +1619,457 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script> 
 <hr>
+<p><em>City, buildings, and people living here</em></p>
+<div class="image-gallery"><div class="gallery-item" data-story="台风前夕，夕阳渲染了整栋大楼，正好遇到一对男女站在窗边，于是拍下这个剪影。想起这首《断桥》：你站在桥上看风景。看风景的人在楼上看你。明月装饰了你的窗子。你装饰了别人的梦。‌‌" data-title="Two People in the Building">
+      <img src="/img/album/TwoPeopleinBuilding.jpg" alt="Two People in the Building" loading="lazy" class="clickable-image" />
+      <p>Two People in the Building</p>
+      <div class="story-hint">💭 点击查看故事</div>
+    </div><div class="gallery-item" data-story="躺在草坪上往天空看，在城市里，夜晚的天空也是明亮的。看向同一片天空的人，是否没有辜负这个夜晚？" data-title="Towers under Cloud">
+      <img src="/img/album/Tower.jpg" alt="Towers under Cloud" loading="lazy" class="clickable-image" />
+      <p>Towers under Cloud</p>
+      <div class="story-hint">💭 点击查看故事</div>
+    </div></div>
+
+
+<div id="storyModal" class="story-modal">
+  <div class="story-modal-content">
+    <div class="story-header">
+      <h3 id="storyTitle">照片故事</h3>
+      <span class="story-close">&times;</span>
+    </div>
+    <div class="story-body">
+      <div class="story-image-container">
+        <img id="storyImage" src="" alt="" />
+      </div>
+      <div class="story-text-container">
+        <div id="storyText">故事内容...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+ 
+body {
+  overflow-x: hidden;
+}
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  align-items: start;  
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery-item {
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  break-inside: avoid;  
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;  
+  max-height: 700px;  
+  max-width: 100%;  
+  object-fit: contain;  
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 0;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  box-sizing: border-box;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.story-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.gallery-item:hover .story-hint {
+  opacity: 1;
+}
+
+ 
+.story-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.story-modal-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.story-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.story-close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.story-close:hover {
+  color: #ddd;
+}
+
+.story-body {
+  display: flex;
+  max-height: calc(85vh - 80px);
+  overflow: hidden;
+}
+
+.story-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.story-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.story-text-container {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  background: white;
+}
+
+#storyText {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+}
+
+#storyText h4 {
+  color: #667eea;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#storyText p {
+  margin-bottom: 15px;
+}
+
+ 
+@media (max-width: 480px) {
+  .story-modal-content {
+    margin: 5% auto;
+    width: 98%;
+    max-width: calc(100vw - 10px);
+    max-height: 90vh;
+    border-radius: 10px;
+  }
+  
+  .story-header {
+    padding: 15px 20px;
+  }
+  
+  .story-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .story-close {
+    font-size: 24px;
+  }
+  
+  .story-body {
+    flex-direction: column;
+    max-height: calc(90vh - 60px);
+  }
+  
+  .story-image-container {
+    flex: none;
+    max-height: 35vh;
+    padding: 15px;
+  }
+  
+  .story-text-container {
+    flex: 1;
+    padding: 15px 20px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  
+  #storyText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .story-modal-content {
+    margin: 8% auto;
+    width: 95%;
+    max-height: 85vh;
+  }
+  
+  .story-body {
+    flex-direction: column;
+  }
+  
+  .story-image-container,
+  .story-text-container {
+    flex: none;
+  }
+  
+  .story-image-container {
+    max-height: 40vh;
+    padding: 18px;
+  }
+  
+  .story-text-container {
+    max-height: 45vh;
+    padding: 20px;
+  }
+  
+  #storyText {
+    font-size: 15px;
+  }
+}
+
+.gallery-item p {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+ 
+@media (max-width: 480px) {
+  .image-gallery {
+    grid-template-columns: 1fr;  
+    gap: 15px;
+    margin: 15px 5px;
+    padding: 0 5px;
+  }
+  
+  .gallery-item {
+    padding: 8px;
+    margin: 0;
+    max-width: 100%;
+  }
+  
+  .gallery-item img {
+    max-height: 400px;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .gallery-item p {
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  
+  .story-hint {
+    font-size: 10px;
+    padding: 4px 8px;
+    bottom: 45px;
+  }
+}
+
+ 
+@media (min-width: 481px) and (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    margin: 15px 10px;
+    padding: 0 5px;
+  }
+  
+  .gallery-item {
+    padding: 5px;
+  }
+  
+  .gallery-item img {
+    max-height: 500px;
+  }
+  
+  .story-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+ 
+@media (min-width: 769px) and (max-width: 1199px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 15px;
+  }
+  
+  .gallery-item img {
+    max-height: 650px;
+  }
+}
+
+ 
+@media (min-width: 1200px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+    gap: 20px;
+  }
+  
+  .gallery-item {
+    padding: 8px;
+  }
+  
+  .gallery-item img {
+    max-height: 800px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const modal = document.getElementById('storyModal');
+  const storyTitle = document.getElementById('storyTitle');
+  const storyImage = document.getElementById('storyImage');
+  const storyText = document.getElementById('storyText');
+  const closeBtn = document.querySelector('.story-close');
+  
+  
+  document.querySelectorAll('.clickable-image').forEach(img => {
+    img.addEventListener('click', function() {
+      const galleryItem = this.parentElement;
+      const title = galleryItem.getAttribute('data-title');
+      const story = galleryItem.getAttribute('data-story');
+      const imageSrc = this.src;
+      
+      
+      storyTitle.textContent = title;
+      storyImage.src = imageSrc;
+      storyImage.alt = title;
+      
+      
+      const formattedStory = formatStoryText(story);
+      storyText.innerHTML = formattedStory;
+      
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; 
+    });
+  });
+  
+  
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; 
+  }
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
+    }
+  });
+  
+  
+  function formatStoryText(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')  
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')      
+      .replace(/\n\n/g, '</p><p>')               
+      .replace(/\n/g, '<br>')                    
+      .replace(/^(.*)/, '<p>$1')                 
+      .replace(/(.*?)$/, '$1</p>');              
+  }
+});
+</script> 
+<hr>
 <style>
 /* 全局移动端优化 - 防止水平滚动 */
 html, body {
