@@ -8,10 +8,10 @@ window.VisitConfig = {
   server: {
     // 使用 JSONBin.io 作为免费的数据存储服务
     // 注册地址: https://jsonbin.io/
-    enabled: false, // 设置为 true 启用服务器同步
+    enabled: true, // 设置为 true 启用服务器同步
     apiUrl: 'https://api.jsonbin.io/v3/b',
-    apiKey: '$2a$10$YOUR_API_KEY_HERE', // 从 JSONBin.io 获取
-    binId: 'YOUR_BIN_ID_HERE', // 从 JSONBin.io 获取
+    apiKey: '$2a$10$$2a$10$s1Qt7kzC8vd29sBFitzE0u1gC74T0ad8WJ8l0JI65pSZN7TdZLYfK', // 从 JSONBin.io 获取
+    binId: '68805872bd1b6d704afae3f0', // 从 JSONBin.io 获取
     syncInterval: 2 * 60 * 1000, // 同步间隔（毫秒）
     maxRetries: 3,
     retryDelay: 1000
