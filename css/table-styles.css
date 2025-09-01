@@ -1,0 +1,324 @@
+/* Hugo 表格样式优化 */
+
+/* 基础表格样式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.95em;
+  line-height: 1.4;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 表格头部样式 */
+thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+thead th {
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: 0.5px;
+  border: none;
+  position: relative;
+}
+
+thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+/* 表格主体样式 */
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+  background-color: #e3f2fd;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+tbody td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: top;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 表格单元格内容样式 */
+td, th {
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* 表格中的代码样式 */
+table code {
+  background: #f1f3f4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+  color: #d73a49;
+}
+
+/* 表格中的链接样式 */
+table a {
+  color: #0366d6;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+table a:hover {
+  border-bottom-color: #0366d6;
+}
+
+/* 响应式表格 */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85em;
+    margin: 1em 0;
+  }
+  
+  thead th,
+  tbody td {
+    padding: 10px 8px;
+  }
+  
+  /* 在小屏幕上让表格可以水平滚动 */
+  .table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table-container table {
+    margin: 0;
+    box-shadow: none;
+  }
+}
+
+/* 特殊表格样式变体 */
+/* 紧凑型表格 */
+table.table-compact {
+  font-size: 0.9em;
+}
+
+table.table-compact thead th,
+table.table-compact tbody td {
+  padding: 10px 8px;
+}
+
+/* 条纹型表格 */
+table.table-striped tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+table.table-striped tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* 边框型表格 */
+table.table-bordered {
+  border: 2px solid #dee2e6;
+}
+
+table.table-bordered th,
+table.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+/* 高亮行 */
+tbody tr.highlight {
+  background-color: #fff3cd !important;
+  border-left: 4px solid #ffc107;
+}
+
+/* 表格标题样式 */
+.table-caption {
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5em;
+  font-style: italic;
+}
+
+/* 表格脚注样式 */
+.table-footer {
+  text-align: center;
+  font-size: 0.85em;
+  color: #6c757d;
+  margin-top: 0.5em;
+  font-style: italic;
+}
+
+/* 表格中的图标样式 */
+table .icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* 表格中的状态标签 */
+.status-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-tag.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-tag.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-tag.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-tag.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* 表格中的进度条 */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+/* 表格中的按钮样式 */
+table .btn {
+  display: inline-block;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+table .btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+table .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+table .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+table .btn-secondary:hover {
+  background-color: #545b62;
+}
+
+/* 表格中的徽章 */
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 10px;
+}
+
+.badge-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* 表格中的工具提示 */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
+}
+
+.tooltip:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333;
+  z-index: 1000;
+  margin-bottom: -5px;
+}

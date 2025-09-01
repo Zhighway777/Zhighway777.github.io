@@ -52,13 +52,22 @@
 <meta itemprop="name" content="Cpp Learning(0)">
 <meta itemprop="description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."><meta itemprop="datePublished" content="2025-06-01T19:39:48+08:00" />
 <meta itemprop="dateModified" content="2025-06-01T19:39:48+08:00" />
-<meta itemprop="wordCount" content="1757">
+<meta itemprop="wordCount" content="2028">
 <meta itemprop="keywords" content="Cpp,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Cpp Learning(0)"/>
 <meta name="twitter:description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."/>
 
 	
 <link rel="stylesheet" href="/css/style.css">
+
+
+<link rel="stylesheet" href="/css/table-styles.css">
+
+
+<link rel="stylesheet" href="/css/code-highlight.css">
+
+
+<script src="/js/code-enhancements.js"></script>
 
 
 <script src="/js/visit-counter.js"></script>
@@ -511,6 +520,56 @@ xvalue用于资源转移<br>
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div><h2 id="parameter--argument">parameter &amp; argument</h2>
+<blockquote>
+<p>形式参数 parameter <strong>Parameter</strong> = &ldquo;占位符&rdquo;（函数定义里的名字）= declare time<br>
+实际参数 arg <strong>Argument</strong> = &ldquo;真实数值&rdquo;（调用时传进去的东西）= call time</p>
+</blockquote>
+<blockquote>
+<p>这里引出method中 argument的传递方式</p>
+<ol>
+<li>Pass by Value 值传递</li>
+<li>Pass by Reference 引用传递</li>
+<li>Pass by const Reference 常量引用传递</li>
+<li>Pass by rvalue Reference 右值引用传递</li>
+<li>Forwarding Reference 万能引用 / 转发引用</li>
+</ol>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th style="text-align:center">推荐方式</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小型内建类型（int, double, 指针等）</td>
+<td style="text-align:center">值传递</td>
+<td>拷贝开销极小，简单安全</td>
+</tr>
+<tr>
+<td>大对象且需要修改</td>
+<td style="text-align:center">引用传递</td>
+<td>避免复制并允许修改</td>
+</tr>
+<tr>
+<td>大对象但只读</td>
+<td style="text-align:center">const 引用传递</td>
+<td>避免复制且保持只读</td>
+</tr>
+<tr>
+<td>接收临时对象并可接管资源</td>
+<td style="text-align:center">右值引用传递</td>
+<td>支持移动语义</td>
+</tr>
+<tr>
+<td>模板通用接口</td>
+<td style="text-align:center">转发引用 + std::forward</td>
+<td>保留值类别，适配多种情况</td>
+</tr>
+</tbody>
+</table>
 <h2 id="变量存储类型">变量存储类型</h2>
 <h2 id="constexpr">constexpr</h2>
 <h2 id="array--vector">array &amp; vector</h2>
