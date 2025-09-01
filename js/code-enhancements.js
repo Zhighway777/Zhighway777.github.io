@@ -29,9 +29,9 @@ function enhanceCodeBlocks() {
     header.className = 'code-header';
     
     // 语言标签
-    const languageLabel = document.createElement('span');
+    // const languageLabel = document.createElement('span');
     languageLabel.className = 'language-label';
-    languageLabel.textContent = language || 'CODE';
+    // languageLabel.textContent = language || 'CODE';
     
     // 复制按钮
     const copyButton = document.createElement('button');
