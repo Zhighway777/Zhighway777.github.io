@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Cpp Learning(0)">
 <meta itemprop="description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."><meta itemprop="datePublished" content="2025-06-01T19:39:48+08:00" />
 <meta itemprop="dateModified" content="2025-06-01T19:39:48+08:00" />
-<meta itemprop="wordCount" content="156">
+<meta itemprop="wordCount" content="1757">
 <meta itemprop="keywords" content="Cpp,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Cpp Learning(0)"/>
 <meta name="twitter:description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."/>
@@ -263,8 +263,254 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>语法速查：[输入输出流， 左值右值， 参数， 存储类型说明符， constexpr， 数组， 循环， 枚举和联合体， 布局]</p>
 </blockquote>
 <h2 id="输入输出流stdin-stdout-stderr">输入输出流：stdin/ stdout/ stderr</h2>
-<h2 id="值类型">值类型</h2>
-<h2 id="parameter--argument">parameter &amp; argument</h2>
+<ul>
+<li>流 stream 是一种用于交流的数据格式 分为文本流和二进制流。文本流以文本（人类可读）的形式读写，二进制流成用来做图片，语音等非文本的读写，不需要进行字符转换。
+文本流分类控制语法如下表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">常见用途</th>
+<th style="text-align:center">默认缓冲方式（一般情况）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>stdin</code></td>
+<td style="text-align:center">输入流</td>
+<td style="text-align:center">从键盘读取数据</td>
+<td style="text-align:center"><strong>完全缓冲</strong>（非终端设备）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>stdout</code></td>
+<td style="text-align:center">输出流</td>
+<td style="text-align:center">向屏幕输出信息</td>
+<td style="text-align:center"><strong>完全缓冲</strong>（非终端设备）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>stderr</code></td>
+<td style="text-align:center">错误流</td>
+<td style="text-align:center">输出错误/调试信息</td>
+<td style="text-align:center"><strong>无缓冲</strong>（立即输出）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="概念解释">概念解释</h3>
+<ul>
+<li>
+<p>常规输入输出：用于程序运行时用户输入和显示给终端设备输出字符。</p>
+</li>
+<li>
+<p>诊断输出：主要用于显示错误和调试信息 因此无缓冲 需要立即输出。</p>
+</li>
+<li>
+<p>完全缓冲（Fully Buffered）：等数据将缓冲区填满后再一次性写出，常用于stdout连接到终端输出。</p>
+</li>
+<li>
+<p>无缓冲（Unbuffered）：数据立即写出无延迟，常用于stderr错误显示。</p>
+</li>
+</ul>
+<hr>
+<p>与C printf对比</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th style="text-align:center">printf</th>
+<th style="text-align:center">std::format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型安全</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅（编译期检查）</td>
+</tr>
+<tr>
+<td>可读性</td>
+<td style="text-align:center">中</td>
+<td style="text-align:center">高</td>
+</tr>
+<tr>
+<td>STL 容器支持</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td>编译期格式检查</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td>自定义类型支持</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+</tbody>
+</table>
+<h3 id="工程技巧">工程技巧</h3>
+<ul>
+<li>使用cerr和cout分离结果于调试日志</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Result: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>    <span class="c1">// 普通结果
+</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Error: file not found</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>      <span class="c1">// 错误信息
+</span></code></pre></div><ul>
+<li>处理海量数据时避免同步，解除绑定和刷新</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#include</span> <span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="c1">// 解除Cpp和C的同步，提升IO性能
+</span><span class="c1"></span>    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>            <span class="c1">// 解绑 cin 与 cout，需要自己手动刷新（`std::cout &lt;&lt; std::flush`）才能立即显示
+</span><span class="c1"></span>    
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span> <span class="c1">// &#39;\n&#39; 比 std::endl 快（不会刷新）
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>使用std::format代替printf</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#include</span> <span class="cpf">&lt;format&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">//`{}` 是占位符，按参数顺序替换
+</span><span class="c1">//不需要指定类型转换, 会根据参数类型自动处理
+</span><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&#34;Hello {}!, &#34;</span><span class="n">world</span><span class="s">&#34;);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span>
+
+<span class="c1">//语法说明
+</span><span class="c1"></span><span class="p">{</span> <span class="n">arg</span><span class="o">-</span><span class="n">id</span><span class="p">(</span><span class="n">optional</span><span class="p">)</span> <span class="o">:</span> <span class="n">format</span><span class="o">-</span><span class="n">spec</span><span class="p">(</span><span class="n">optional</span><span class="p">)</span> <span class="p">}</span>
+<span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span><span class="err">`</span> <span class="err">表示第一个参数，`</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span><span class="err">`</span> <span class="err">表示第二个参数</span>
+<span class="o">-</span> <span class="err">如果省略（`</span><span class="p">{}</span><span class="err">`），会自动按参数顺序替换。</span>
+
+<span class="c1">//format-spec（格式说明）
+</span><span class="c1"></span><span class="o">-</span> <span class="err">类似</span> <span class="n">Python</span> <span class="err">格式化语法，例如：</span>
+    <span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="o">:</span><span class="n">d</span><span class="p">}</span><span class="err">`</span> <span class="err">→</span> <span class="err">十进制整数</span>   
+    <span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="o">:</span><span class="n">x</span><span class="p">}</span><span class="err">`</span> <span class="err">→</span> <span class="err">十六进制</span>   
+    <span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="o">:</span><span class="mf">.2f</span><span class="p">}</span><span class="err">`</span> <span class="err">→</span> <span class="err">浮点数保留</span> <span class="mi">2</span> <span class="err">位小数</span>   
+    <span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="o">:&gt;</span><span class="mi">10</span><span class="p">}</span><span class="err">`</span> <span class="err">→</span> <span class="err">宽度</span> <span class="mi">10</span><span class="err">，右对齐</span>   
+    <span class="o">-</span> <span class="err">`</span><span class="p">{</span><span class="o">:^</span><span class="mi">10</span><span class="p">}</span><span class="err">`</span> <span class="err">→</span> <span class="err">居中对齐</span>
+
+</code></pre></div><h2 id="表达式--值类型">表达式 &amp; 值类型</h2>
+<ul>
+<li>值类型是Cpp与C的重要区别之一，而且与之后的移动/拷贝语义，完美转发等操作密切相关，需要认真掌握。</li>
+<li>每个表达式在编译时都有一个确定的类型，每个表达式只会产生两个后果  1）产生值 2）产生副作用 （如i++）</li>
+<li>值类别用下表分类</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类别</th>
+<th>说明</th>
+<th style="text-align:center">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">lvalue</td>
+<td>可取地址、有名字</td>
+<td style="text-align:center"><code>x</code>, <code>arr[0]</code></td>
+</tr>
+<tr>
+<td style="text-align:left">xvalue (expiring value)</td>
+<td>将要被销毁的对象，可移动资源</td>
+<td style="text-align:center"><code>std::move(x)</code></td>
+</tr>
+<tr>
+<td style="text-align:left">glvalue (generalized lvalue)</td>
+<td>lvalue + xvalue，广义左值</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">prvalue (pure rvalue)</td>
+<td>纯右值，临时结果</td>
+<td style="text-align:center"><code>42</code>, <code>x+3</code>, <code>MyClass()临时对象</code> ,<code>hello</code></td>
+</tr>
+<tr>
+<td style="text-align:left">rvalue</td>
+<td>临时值</td>
+<td style="text-align:center"><code>2+3</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<ul>
+<li>速记 :  <br></li>
+</ul>
+<blockquote>
+<p>变量名永远是lvalue<br>
+prvalue 是可以生成临时对象<br>
+xvalue用于资源转移<br>
+函数返回值会影响值类别</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">f1</span><span class="p">()</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>   <span class="c1">// 返回 prvalue
+</span><span class="c1"></span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">f2</span><span class="p">()</span> <span class="p">{</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 返回 lvalue
+</span><span class="c1"></span><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">f3</span><span class="p">()</span> <span class="p">{</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="p">}</span> <span class="c1">// 返回 xvalue
+</span></code></pre></div><h3 id="概念解释-1">概念解释</h3>
+<ul>
+<li>特别关注左值和右值的区别</li>
+</ul>
+<blockquote>
+<p>左值：有持久的存储位置，可以取地址，具有较长的生命周期。<br>
+右值：没有存储位置的临时值，不能取地址。生命周期在语句结束前有效。</p>
+</blockquote>
+<h3 id="工程技巧-1">工程技巧</h3>
+<ul>
+<li>减少拷贝  </br>
+【由于parameter在函数体内有名字 s 因此是一个左值】<br>
+【使用 data_ = s 会调用拷贝运算符】<br>
+【意味着：<br>
+ 	 这需要为data_重新分配一大块内存<br>
+ 	 把s的字符序列逐个字节复制到这里<br>
+ 	 原来的s缓冲区仍然保留 需要被析构函数释放】<br>
+【额外开销：<br>
+ 	一次堆内存分配（可能外加一次对齐/冗余空间的分配）<br>
+ 	一次完整的字符串拷贝<br>
+ 	原缓冲区仍然需要被析构】<br>
+【使用移动复制运算：<br>
+  把s的指针，长度，容量搬运到data_<br>
+ 	原来的s字符串被设置为空字符，没有堆内存，几乎没有析构成本<br>
+ 	不存在内存分配和拷贝】</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//避免不必要的拷贝：利用右值引用（T&amp;&amp;） + std::move
+</span><span class="c1">//适合处理临时对象传参（减少内存分配和拷贝）。
+</span><span class="c1"></span><span class="kt">void</span> <span class="nf">setData</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">data_</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="c1">// 直接转移资源 
+</span><span class="c1"></span>   <span class="err">【对比】</span><span class="n">data_</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span> <span class="c1">//拷贝赋值运算
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><ul>
+<li>完美转发</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// 完美转发（Perfect Forwarding）保留实参的值类别（左值/右值）
+</span><span class="c1">// 适合写通用工厂函数、容器构造函数等
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">make</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">T</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+<span class="p">}</span>
+</code></pre></div><ul>
+<li>返回值优化</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp">
+</code></pre></div><ul>
+<li>移动构造和移动赋值</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//移动构造和移动赋值
+</span><span class="c1">//适合含有堆内存、文件句柄、GPU buffer 等昂贵资源的类
+</span><span class="c1"></span><span class="k">class</span> <span class="nc">Buffer</span> <span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">data_</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Buffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">data_</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">data_</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">other</span><span class="p">.</span><span class="n">data_</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><h2 id="parameter--argument">parameter &amp; argument</h2>
 <h2 id="变量存储类型">变量存储类型</h2>
 <h2 id="constexpr">constexpr</h2>
 <h2 id="array--vector">array &amp; vector</h2>
@@ -291,8 +537,18 @@ document.addEventListener('DOMContentLoaded', function() {
     <p class="f5 b mb3">Table of contents</p>
       <nav id="TableOfContents">
   <ul>
-    <li><a href="#输入输出流stdin-stdout-stderr">输入输出流：stdin/ stdout/ stderr</a></li>
-    <li><a href="#值类型">值类型</a></li>
+    <li><a href="#输入输出流stdin-stdout-stderr">输入输出流：stdin/ stdout/ stderr</a>
+      <ul>
+        <li><a href="#概念解释">概念解释</a></li>
+        <li><a href="#工程技巧">工程技巧</a></li>
+      </ul>
+    </li>
+    <li><a href="#表达式--值类型">表达式 &amp; 值类型</a>
+      <ul>
+        <li><a href="#概念解释-1">概念解释</a></li>
+        <li><a href="#工程技巧-1">工程技巧</a></li>
+      </ul>
+    </li>
     <li><a href="#parameter--argument">parameter &amp; argument</a></li>
     <li><a href="#变量存储类型">变量存储类型</a></li>
     <li><a href="#constexpr">constexpr</a></li>
