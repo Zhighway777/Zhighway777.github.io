@@ -8,6 +8,15 @@
     <language>zh-cn</language>
     <lastBuildDate>Tue, 01 Jul 2025 00:00:00 +0800</lastBuildDate><atom:link href="https://zhighway777.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Cpp Learning(0)</title>
+      <link>https://zhighway777.github.io/2025/06/01/cpp_learning_0/</link>
+      <pubDate>Sun, 01 Jun 2025 19:39:48 +0800</pubDate>
+      
+      <guid>https://zhighway777.github.io/2025/06/01/cpp_learning_0/</guid>
+      <description>Basic Grammar 注意，要求学习者具备C语言基础。这部分的语法大多与C保持一致，因此重点摘除，我会重点标注出有变化的部分。本文的语法来源均参考cpp reference 语法</description>
+    </item>
+    
+    <item>
       <title>Archtecture Keywords</title>
       <link>https://zhighway777.github.io/2025/01/09/arch_keywords/</link>
       <pubDate>Thu, 09 Jan 2025 21:45:10 +0800</pubDate>
@@ -69,15 +78,6 @@ The perspective form Instructions. For a Turing Machine, the task will be broken
       
       <guid>https://zhighway777.github.io/2024/10/04/computer_network_common_concepts/</guid>
       <description>Instances There is a Website: http://mail.163.com/index.html http:// HTTP is an application layer protocol in the internet protocol suite model. This is a stateless application-level protocol, so it requires a reliable network transport connection to ecxhange data between client and server. In HTTP, TCP/IP are used to use port 80(if connection is unencrypted) or 443(encrypted) mail This is a server name, which respresents a email server. 163.com This is a Domain</description>
-    </item>
-    
-    <item>
-      <title>Cpp Learning Recording(0)</title>
-      <link>https://zhighway777.github.io/2024/09/29/cpp_learning_0/</link>
-      <pubDate>Sun, 29 Sep 2024 19:39:48 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/2024/09/29/cpp_learning_0/</guid>
-      <description>Essential C++ 笔记</description>
     </item>
     
     <item>
