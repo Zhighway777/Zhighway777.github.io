@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Cpp Learning(0)">
 <meta itemprop="description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."><meta itemprop="datePublished" content="2025-06-01T19:39:48+08:00" />
 <meta itemprop="dateModified" content="2025-06-01T19:39:48+08:00" />
-<meta itemprop="wordCount" content="2021">
+<meta itemprop="wordCount" content="3212">
 <meta itemprop="keywords" content="Cpp,Tutorial," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Cpp Learning(0)"/>
 <meta name="twitter:description" content="This series of articles focuses on documenting my cpp learning process and sharing notes. And I will try to use the most simple language to explain the concept of C&#43;&#43; and the morden traits."/>
@@ -571,7 +571,178 @@ xvalue用于资源转移<br>
 </tbody>
 </table>
 <h2 id="变量存储类型">变量存储类型</h2>
-<h2 id="constexpr">constexpr</h2>
+<blockquote>
+<p>存储类型说明符 Storage Class Specifiers 限定了变量在内存中的存活时间(Storage Duration)和在不同文件中是否能够互相访问(Linkage)</p>
+</blockquote>
+<ul>
+<li>
+<p>以存活时间 Storage Duration 划分</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">存储周期</th>
+<th style="text-align:center">说明</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>动态存储（dynamic）</strong></td>
+<td style="text-align:center"><code>new</code> / <code>delete</code></td>
+<td>手动管理</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>静态存储（static）</strong></td>
+<td style="text-align:center"><code>static</code> 或全局/命名空间定义</td>
+<td>程序开始到结束</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>自动存储（automatic）</strong></td>
+<td style="text-align:center">默认的局部变量（不加 static/extern/thread_local）</td>
+<td>进入作用域时分配，退出时释放</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>线程存储（thread_local）</strong></td>
+<td style="text-align:center">每个线程一份独立数据</td>
+<td>线程开始到线程结束</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>以互相访问性 Linkage 划分</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th style="text-align:center">作用</th>
+<th>工程建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>static</strong></td>
+<td style="text-align:center">静态变量/内部链接</td>
+<td>小范围共享数据/缓存</td>
+</tr>
+<tr>
+<td><strong>extern</strong></td>
+<td style="text-align:center">外部链接（跨文件）</td>
+<td>用于跨 <code>.cpp</code> 共享全局变量（不建议滥用）</td>
+</tr>
+<tr>
+<td><strong>thread_local</strong></td>
+<td style="text-align:center">线程独立变量</td>
+<td>线程安全优化（替代锁）</td>
+</tr>
+<tr>
+<td><strong>mutable</strong></td>
+<td style="text-align:center">允许在 <code>const</code> 对象中修改变量</td>
+<td>用于缓存（cache）或延迟计算 或常用于lambda表达式</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>注意 <strong>static</strong> 关键字修饰<strong>变量</strong>和<strong>函数</strong>的意义不同</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">int</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">param</span><span class="p">){</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="k">static</span> <span class="o">=</span> <span class="n">param</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;static_ =&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">static_</span> <span class="o">&lt;&lt;</span><span class="nl">std</span><span class="p">:</span><span class="n">endl</span><span class="p">;</span>
+	<span class="k">return</span> <span class="n">static_</span> <span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//1. 修饰函数的static实际上是修饰的【链接属性】，
+</span><span class="c1">//      使得此函数只在当前的单元内可见，其他cpp不能调用。
+</span><span class="c1">//2. 修饰变量的static是修饰【存活时间】这使得生命周期变为全局存活。
+</span></code></pre></div><h3 id="概念解释-2">概念解释</h3>
+<p>全局或命名空间相关语法见 namespace<br>
+lambda 表达式相关语法见 lambda表达式</p>
+<p>extern 相关解释：<br>
+在整个工程文件中一个变量只能有<strong>一个定义</strong>，在定义时真正开辟变量空间。 其余均为<strong>声明</strong>，extern的作用是告诉cpp这个是声明，不分配存储。<br>
+但是由于安全性和难以debug，一般不使用extern作为全局关键字。代替方式如下：1）采用普通函数传递参数 2）采用懒加载 Lazy load</p>
+<p>1）采用普通函数传递参数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// config.h
+</span><span class="c1"></span><span class="cp">#pragma once
+</span><span class="cp"></span><span class="k">struct</span> <span class="nc">Config</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">timeoutMs</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">Config</span> <span class="nf">loadConfig</span><span class="p">();</span>          <span class="c1">// 从文件或命令行解析
+</span><span class="c1"></span>
+<span class="c1">// config.cpp
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;config.h&#34;</span><span class="cp">
+</span><span class="cp"></span><span class="n">Config</span> <span class="nf">loadConfig</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Config</span> <span class="n">c</span><span class="p">;</span>
+    <span class="cm">/* 解析 JSON / CLI */</span>
+    <span class="n">c</span><span class="p">.</span><span class="n">timeoutMs</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">;</span>       <span class="c1">// 假设读到了 2000
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// main.cpp
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;config.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Config</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">loadConfig</span><span class="p">();</span>      <span class="c1">// 一次性读取
+</span><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cfg</span><span class="p">.</span><span class="n">timeoutMs</span><span class="p">;</span>     <span class="c1">// 2000
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>2）懒加载</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// config_singleton.h
+</span><span class="c1"></span><span class="cp">#pragma once
+</span><span class="cp"></span><span class="k">class</span> <span class="nc">Config</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">static</span> <span class="n">Config</span><span class="o">&amp;</span> <span class="n">instance</span><span class="p">();</span>   <span class="c1">// 唯一访问点
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="nf">timeoutMs</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">timeoutMs_</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">Config</span><span class="p">();</span>                    <span class="c1">// 私有构造
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">timeoutMs_</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// config_singleton.cpp
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;config_singleton.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="n">Config</span><span class="o">&amp;</span> <span class="n">Config</span><span class="o">::</span><span class="n">instance</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="n">Config</span> <span class="n">inst</span><span class="p">;</span>          <span class="c1">// C++11 线程安全
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">inst</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">Config</span><span class="o">::</span><span class="n">Config</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">f</span><span class="p">(</span><span class="s">&#34;cfg.json&#34;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">timeoutMs_</span><span class="p">;</span>      <span class="c1">// 简单示意
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="c1">// any_file.cpp
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;config_singleton.h&#34;</span><span class="cp">
+</span><span class="cp"></span><span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Config</span><span class="o">::</span><span class="n">instance</span><span class="p">().</span><span class="n">timeoutMs</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="工程实践">工程实践</h3>
+<ul>
+<li>使用栈变量(auto) 或静态缓存(static) 来减少动态分配(new)在堆上操作所带来的开销和碎片化问题</li>
+</ul>
+<p>适用场景：昂贵的开销+只读不变+高频使用 这里 FilePath在程序执行的过程中是保持不变的.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">//使用静态缓存优化
+</span><span class="c1"></span>
+<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">getConfigPAth</span><span class="p">(){</span>
+	<span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">path</span> <span class="o">=</span> <span class="n">loadFromFile</span><span class="p">();</span>  <span class="c1">//这里每次调用只初始化一次
+</span><span class="c1"></span>	<span class="k">return</span> <span class="n">path</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><blockquote>
+<p>简单解释堆，栈的区别：<br>
+堆 Heap： 一块自由组织，无序的内存区域，用于存储runtime是的动态数据(如new操作)，因此需要<strong>手动管理</strong>(new, delete) / (malloc, free)，空间较大。<br>
+栈 Stack： 先进后出的组织，用于存储局部变量，函数参数和调用信息，由<strong>编译器</strong>进行管理，会自动分配和释放。空间有限，递归过深可能栈溢出。</p>
+</blockquote>
+<ul>
+<li>静态局部变量做 延迟初始化 Lazy Initialization</li>
+</ul>
+<blockquote>
+<p>延迟初始化的含义：当数值在第一次用到时才会被计算</p>
+</blockquote>
+<p>不适用场景：需要重置、动态重载、析构顺序敏感</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">getHeavyValue</span><span class="p">(){</span>
+	<span class="k">static</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">computeGeavy</span><span class="p">();</span>
+	<span class="k">return</span> <span class="n">val</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="constexpr">constexpr</h2>
 <h2 id="array--vector">array &amp; vector</h2>
 <h2 id="enum--union">enum &amp; union</h2>
 <h2 id="trivial">trivial</h2>
@@ -609,7 +780,12 @@ xvalue用于资源转移<br>
       </ul>
     </li>
     <li><a href="#parameter--argument">parameter &amp; argument</a></li>
-    <li><a href="#变量存储类型">变量存储类型</a></li>
+    <li><a href="#变量存储类型">变量存储类型</a>
+      <ul>
+        <li><a href="#概念解释-2">概念解释</a></li>
+        <li><a href="#工程实践">工程实践</a></li>
+      </ul>
+    </li>
     <li><a href="#constexpr">constexpr</a></li>
     <li><a href="#array--vector">array &amp; vector</a></li>
     <li><a href="#enum--union">enum &amp; union</a></li>
