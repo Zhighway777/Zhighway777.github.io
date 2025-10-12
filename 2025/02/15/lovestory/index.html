@@ -52,7 +52,7 @@
 <meta itemprop="name" content="Love Story">
 <meta itemprop="description" content="一份基于情聊天记录的温馨分析，从活跃度、文字节奏到情绪温度，记录言语里的心动瞬间。"><meta itemprop="datePublished" content="2025-02-15T09:05:46+08:00" />
 <meta itemprop="dateModified" content="2025-02-15T09:05:46+08:00" />
-<meta itemprop="wordCount" content="694">
+<meta itemprop="wordCount" content="793">
 <meta itemprop="keywords" content="Love,Chatlog,Visualization," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Love Story"/>
 <meta name="twitter:description" content="一份基于情聊天记录的温馨分析，从活跃度、文字节奏到情绪温度，记录言语里的心动瞬间。"/>
@@ -289,6 +289,49 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><blockquote>
 <p>记录彼此的言语温度，珍藏聊天里的心动瞬间。</p>
 </blockquote>
+<div class="love-music-player" data-src="/audio/lovestory.mp3">
+  <button type="button" aria-label="播放/暂停">🎵</button>
+  <span class="track-title">Love Story · 温柔循环</span>
+  <span class="volume-group">
+    🔊<input type="range" min="0" max="100" value="35" aria-label="音量">
+  </span>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const player = document.querySelector('.love-music-player');
+  if (!player) return;
+
+  const audio = new Audio(player.dataset.src || '/audio/lovestory.mp3');
+  const playBtn = player.querySelector('button');
+  const volumeSlider = player.querySelector('input[type="range"]');
+
+  audio.loop = true;
+  audio.preload = 'metadata';
+  audio.volume = (volumeSlider?.value || 35) / 100;
+
+  function updateIcon() {
+    playBtn.textContent = audio.paused ? '🎵' : '⏸️';
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  });
+
+  volumeSlider?.addEventListener('input', () => {
+    audio.volume = volumeSlider.value / 100;
+  });
+
+  audio.addEventListener('play', updateIcon);
+  audio.addEventListener('pause', updateIcon);
+  audio.addEventListener('ended', updateIcon);
+
+  updateIcon();
+});
+</script>
 <h2 id="概览--我们的小档案">概览 · 我们的小档案</h2>
 <table>
 <thead>

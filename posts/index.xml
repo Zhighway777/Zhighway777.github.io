@@ -22,7 +22,7 @@
       <pubDate>Sat, 15 Feb 2025 09:05:46 +0800</pubDate>
       
       <guid>https://zhighway777.github.io/2025/02/15/lovestory/</guid>
-      <description>记录彼此的言语温度，珍藏聊天里的心动瞬间。 概览 · 我们的小档案 指标 数值 聊天时间范围 2025-06-23 → 2025-10-12（112 天） 总消息数 / 日均 15,236 条 · 136 条</description>
+      <description>记录彼此的言语温度，珍藏聊天里的心动瞬间。 🎵 Love Story · 温柔循环 🔊 document.addEventListener(&#39;DOMContentLoaded&#39;, function () { const player = document.querySelector(&#39;.love-music-player&#39;); if (!player) return; const audio = new Audio(player.dataset.src || &#39;/audio/lovestory.mp3&#39;); const playBtn = player.querySelector(&#39;button&#39;); const volumeSlider = player.querySelector(&#39;input[type=&#34;range&#34;]&#39;); audio.loop = true; audio.preload = &#39;metadata&#39;; audio.volume = (volumeSlider?.value || 35) / 100; function</description>
     </item>
     
     <item>
