@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>温暖的聊天</title>
+  <style>
+    body {
+      font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f7f5ff;
+      color: #2f2a47;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #a066ff, #ff8ad4);
+      color: #fff;
+      padding: 48px 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.4em;
+      letter-spacing: 0.05em;
+    }
+    header p {
+      margin: 12px 0 0;
+      font-size: 1.1em;
+    }
+    .container {
+      max-width: 980px;
+      margin: -40px auto 60px;
+      padding: 0 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 16px 35px rgba(160, 102, 255, 0.12);
+      margin-bottom: 32px;
+      padding: 32px;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.6em;
+      color: #5a3dc6;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 24px 0;
+    }
+    .metric {
+      border-radius: 16px;
+      padding: 18px;
+      background: linear-gradient(135deg, rgba(160,102,255,0.12), rgba(255,138,212,0.12));
+    }
+    .metric strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 6px;
+      color: #5a3dc6;
+    }
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      justify-items: center;
+      align-items: start;
+    }
+    figure {
+      margin: 0;
+      background: #faf9ff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 32px rgba(160, 102, 255, 0.18);
+      transition: transform 0.3s ease;
+      padding: 18px;
+      width: 92%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    figure:hover {
+      transform: translateY(-6px);
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+    }
+    }
+    figure figcaption {
+      padding: 12px 16px 16px;
+      font-size: 0.92em;
+      color: #6a5b9b;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    footer {
+      text-align: center;
+      padding: 24px 12px 40px;
+      color: #8675d9;
+      font-size: 0.9em;
+    }
+    @media (max-width: 640px) {
+      header {
+        padding: 36px 16px;
+      }
+      .card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>♥语言的温度♥</h1>
+    <p>记录彼此的言语温度，珍藏聊天里的心动瞬间。</p>
+  </header>
+  <main class="container">
+    <section class="card">
+      <h2>概览</h2>
+      <div class="metrics">
+        <div class="metric">
+          <strong>聊天时间范围</strong>
+          <span>2025-06-23 → 2025-10-12（112 天）</span>
+        </div>
+        <div class="metric">
+          <strong>总消息数</strong>
+          <span>15,236 条 · 日均 136 条</span>
+        </div>
+        <div class="metric">
+          <strong>最热闹日</strong>
+          <span>2025-07-03 · 537 条</span>
+        </div>
+        <div class="metric">
+          <strong>最常问候</strong>
+          <span>夜猫时段 22:00-01:00 · 2025-09-01 问候最多</span>
+        </div>
+        <div class="metric">
+          <strong>平均字数</strong>
+          <span>10.6 字 / 条<br />2025-07-18 达到 334.3 字 / 条</span>
+        </div>
+        <div class="metric">
+          <strong>情绪温度</strong>
+          <span>平均 0.01 · 2025-07-01 最温暖 · 2025-08-24 最平静</span>
+        </div>
+      </div>
+      <p>
+        双方发言占比近似 53% : 47%，互动十分均衡。整体情绪呈柔和波动，正向占 2.6%、中性 95.8%、负向 1.6%，说明多数对话用于温柔的日常分享与互相陪伴。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>日常足迹</h2>
+      <div class="images-grid">
+        <figure>
+          <img src="img/wx_record/daily_heatmap.png" alt="每日活跃热力图" />
+          <figcaption>GitHub 风格的热力图，7 月初的活跃度显著升温。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/weekly_volume.png" alt="每周消息量走势" />
+          <figcaption>周维度看，7 月第 27 周达到 2084 条，是最热烈的一周。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/hourly_distribution.png" alt="按小时分布" />
+          <figcaption>夜间 22:00-01:00 是深度交流时段，属于彼此的“睡前仪式”。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/participant_share.png" alt="双方发言占比" />
+          <figcaption>发言量接近五五开，倾诉与倾听保持着漂亮的平衡。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>文字里的心情</h2>
+      <div class="images-grid">
+        <figure>
+          <img src="img/wx_record/daily_message_length.png" alt="每日平均字数" />
+          <figcaption>字数峰值常发生在周末/节日，预示更深入的分享与关怀。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/daily_emotion.png" alt="情绪温度曲线" />
+          <figcaption>情绪走线柔和而稳定，9 月底出现温暖的小高峰。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/emotion_balance.png" alt="情绪平衡" />
+          <figcaption>双方都以中性交流为主，偶尔出现的正向峰值点缀着惊喜与甜蜜。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/daily_greetings.png" alt="每日问候次数" />
+          <figcaption>已统计 445 次问候，几乎每天都有“早安”“晚安”，最懂得彼此的日常问候。</figcaption>
+        </figure>
+      </div>
+      <p>
+        情感温度在微妙起伏中保持温暖稳定。7 月 1 日是情绪高峰的一天，可回顾当时发生的开心事件；而 8 月 24 日略显平静，值得关注是否有工作或生活压力。问候频次是另一条温柔的折线——在“早安”“晚安”里，彼此确认着对方的存在，这些小小习惯是关系里最浪漫的日常。
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>高频关键词</h2>
+      <div class="images-grid">
+        <figure>
+          <img src="img/wx_record/top_keywords.png" alt="关键词柱状图" />
+          <figcaption>关键词聚焦在“喜欢、发现、好吃、竟然”等真实话题，记录着共同经历。</figcaption>
+        </figure>
+        <figure>
+          <img src="img/wx_record/wordcloud.png" alt="词云" />
+          <figcaption>去除重复与无意义词后，词云呈现更多动词、名词，情感与生活充满线索。</figcaption>
+        </figure>
+      </div>
+      <ul>
+        <li>“喜欢、好吃、惊喜”——表达味蕾的重合与被照顾的幸福。</li>
+        <li>“发现、竟然、可能”——说明彼此常分享新鲜事与未来计划。</li>
+        <li>“静香、小七”——频繁出现的昵称，代表专属的欢乐瞬间。</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>温馨小结</h2>
+      <p>
+        从时间轴看，7 月初是阶段性的热烈高光，尤其 7 月 1 日充满惊喜与甜蜜；进入 9 月后，问候次数仍保持高频，彼此的关心与陪伴持续在线。
+        即便大部分对话只是平静的日常同步，“晚安”“有点想你”“好好吃饭”这些短句，也都在悄悄累积安全感。
+      </p>
+      <p>
+        建议在之后的聊天里保留这份夜间的陪伴仪式，也可以把值得纪念的高峰日（比如 7 月 1 日）做成特别的“纪念日”小记，定期翻阅，持续放大彼此的爱的证据。
+      </p>
+    </section>
+  </main>
+  <footer>
+    未来的日子里，愿你们继续在文字里相遇、在生活中相拥。
+  </footer>
+</body>
+</html>
