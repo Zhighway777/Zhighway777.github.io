@@ -17,15 +17,6 @@
     </item>
     
     <item>
-      <title>Love Story</title>
-      <link>https://zhighway777.github.io/2025/02/15/lovestory/</link>
-      <pubDate>Sat, 15 Feb 2025 09:05:46 +0800</pubDate>
-      
-      <guid>https://zhighway777.github.io/2025/02/15/lovestory/</guid>
-      <description>记录彼此的言语温度，珍藏聊天里的心动瞬间。 🎵 Love Story · 温柔循环 🔊 document.addEventListener(&#39;DOMContentLoaded&#39;, function () { const player = document.querySelector(&#39;.love-music-player&#39;); if (!player) return; const audio = document.createElement(&#39;audio&#39;); audio.src = player.dataset.src || &#39;/audio/lovestory.mp3&#39;; audio.loop = true; audio.preload = &#39;auto&#39;; audio.setAttribute(&#39;playsinline&#39;, &#39;&#39;); audio.setAttribute(&#39;preload&#39;, &#39;auto&#39;); audio.style.display = &#39;none&#39;; player.appendChild(audio); const playBtn = player.querySelector(&#39;.play-toggle&#39;); const volumeSlider</description>
-    </item>
-    
-    <item>
       <title>Archtecture Keywords</title>
       <link>https://zhighway777.github.io/2025/01/09/arch_keywords/</link>
       <pubDate>Thu, 09 Jan 2025 21:45:10 +0800</pubDate>
