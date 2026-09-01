@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, RotateCcw } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, ChevronLeft, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import MilestoneToast, { type Milestone } from "../components/MilestoneToast";
@@ -37,6 +37,8 @@ export default function Test() {
   }, [milestone]);
 
   const question = questions[currentIndex];
+  const isLastQuestion = currentIndex === questions.length - 1;
+  const hasCurrentAnswer = Boolean(answers[question.id]);
   const answeredCount = useMemo(
     () => questions.filter((item) => answers[item.id]).length,
     [answers],
@@ -72,15 +74,19 @@ export default function Test() {
       });
     }
 
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      finish(nextAnswers);
-    }
   };
 
   const goPrevious = () => {
     setCurrentIndex(Math.max(0, currentIndex - 1));
+  };
+
+  const goNext = () => {
+    if (!hasCurrentAnswer) return;
+    if (!isLastQuestion) {
+      setCurrentIndex(currentIndex + 1);
+      return;
+    }
+    finish(answers);
   };
 
   const restart = () => {
@@ -93,55 +99,80 @@ export default function Test() {
   return (
     <main className="page-shell narrow">
       <header className="test-header">
-        <button className="button ghost small" type="button" onClick={() => navigate("/")}>
+        <button
+          className="button ghost small icon-button"
+          type="button"
+          onClick={() => navigate("/")}
+          aria-label="返回首页"
+        >
           <ChevronLeft aria-hidden="true" />
-          首页
         </button>
         <div className="test-meta">
           <strong>
-            {currentIndex + 1} / {questions.length}
+            第 {currentIndex + 1} / {questions.length} 题
           </strong>
           <span>{question.scenario}</span>
-          <button className="button ghost small" type="button" onClick={restart}>
+          <button
+            className="button ghost small icon-button"
+            type="button"
+            onClick={restart}
+            aria-label="重新开始测试"
+          >
             <RotateCcw aria-hidden="true" />
-            重答
           </button>
         </div>
       </header>
 
-      <div
-        className="progress-track"
-        role="progressbar"
-        aria-valuenow={Math.round(progress)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="测试进度"
-      >
-        <motion.span animate={{ width: `${progress}%` }} transition={{ duration: 0.25 }} />
+      <div className="test-progress">
+        <div className="progress-copy">
+          <span>答题进度</span>
+          <strong>{Math.round(progress)}%</strong>
+        </div>
+        <div
+          className="progress-track"
+          role="progressbar"
+          aria-valuenow={Math.round(progress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="测试进度"
+        >
+          <motion.span animate={{ width: `${progress}%` }} transition={{ duration: 0.25 }} />
+        </div>
+        <p>
+          已答 {answeredCount} 题 · 剩余 {questions.length - answeredCount} 题 · 进度本机保存
+        </p>
       </div>
 
-      <AnimatePresence mode="wait">
-        <QuestionCard
-          key={question.id}
-          question={question}
-          selectedOption={answers[question.id]}
-          onSelect={selectOption}
-        />
-      </AnimatePresence>
+      <QuestionCard
+        key={question.id}
+        question={question}
+        selectedOption={answers[question.id]}
+        onSelect={selectOption}
+      />
 
       <footer className="test-footer">
+        <p className="test-footer-copy">
+          选择后可修改答案，也可以直接进入下一题。
+        </p>
         <button
           className="button ghost"
           type="button"
           onClick={goPrevious}
           disabled={currentIndex === 0}
+          aria-label="上一题"
         >
           <ChevronLeft aria-hidden="true" />
-          上一题
+          <span className="test-footer-label">上一题</span>
         </button>
-        <span>
-          已答 {answeredCount} 题，剩余 {questions.length - answeredCount} 题
-        </span>
+        <button
+          className="button primary"
+          type="button"
+          onClick={goNext}
+          disabled={!hasCurrentAnswer}
+        >
+          {isLastQuestion ? "查看结果" : "下一题"}
+          {!isLastQuestion && <ArrowRight aria-hidden="true" />}
+        </button>
       </footer>
 
       <MilestoneToast milestone={milestone} />

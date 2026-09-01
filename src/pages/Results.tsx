@@ -1,9 +1,10 @@
-import { RotateCcw, Share2 } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import DimensionRadar from "../components/DimensionRadar";
 import PersonaCard from "../components/PersonaCard";
+import ShareSummary from "../components/ShareSummary";
 import { dimensions, personaById } from "../lib/personas";
 import { sessionStore } from "../lib/session";
 import type { AssessmentResult } from "../lib/types";
@@ -55,6 +56,12 @@ export default function Results() {
     return () => timers.forEach((timer) => window.clearTimeout(timer));
   }, [result]);
 
+  useEffect(() => {
+    if (!shareMessage) return;
+    const timer = window.setTimeout(() => setShareMessage(""), 2200);
+    return () => window.clearTimeout(timer);
+  }, [shareMessage]);
+
   if (!ready) {
     return <main className="page-shell"><div className="panel">正在读取结果…</div></main>;
   }
@@ -92,20 +99,6 @@ export default function Results() {
     .map((id) => personaById.get(id))
     .filter(Boolean);
 
-  const share = async () => {
-    const text = `${result.nickname} 的公司人格主原型是 ${primary.name}，副原型是 ${secondary.name}。`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: "公司人格图鉴", text, url: window.location.href });
-      } else {
-        await navigator.clipboard.writeText(`${text} ${window.location.href}`);
-        setShareMessage("分享文案已复制");
-      }
-    } catch {
-      setShareMessage("已取消分享");
-    }
-  };
-
   return (
     <main className="page-shell">
       <header className="result-header">
@@ -118,10 +111,6 @@ export default function Results() {
             <RotateCcw aria-hidden="true" />
             再测一次
           </button>
-          <button className="button ghost" type="button" onClick={share}>
-            <Share2 aria-hidden="true" />
-            分享摘要
-          </button>
         </div>
       </header>
 
@@ -130,6 +119,13 @@ export default function Results() {
         secondaryPersona={secondary}
         matchScore={result.matchScores[primary.id]}
         nickname={result.nickname}
+      />
+
+      <ShareSummary
+        result={result}
+        primary={primary}
+        secondary={secondary}
+        onMessage={setShareMessage}
       />
 
       <div className="result-grid">
