@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, RotateCcw } from "lucide-react";
+import { ChevronLeft, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import MilestoneToast, { type Milestone } from "../components/MilestoneToast";
@@ -37,8 +37,6 @@ export default function Test() {
   }, [milestone]);
 
   const question = questions[currentIndex];
-  const isLastQuestion = currentIndex === questions.length - 1;
-  const hasCurrentAnswer = Boolean(answers[question.id]);
   const answeredCount = useMemo(
     () => questions.filter((item) => answers[item.id]).length,
     [answers],
@@ -74,19 +72,16 @@ export default function Test() {
       });
     }
 
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      finish(nextAnswers);
+    }
+
   };
 
   const goPrevious = () => {
     setCurrentIndex(Math.max(0, currentIndex - 1));
-  };
-
-  const goNext = () => {
-    if (!hasCurrentAnswer) return;
-    if (!isLastQuestion) {
-      setCurrentIndex(currentIndex + 1);
-      return;
-    }
-    finish(answers);
   };
 
   const restart = () => {
@@ -152,7 +147,7 @@ export default function Test() {
 
       <footer className="test-footer">
         <p className="test-footer-copy">
-          选择后可修改答案，也可以直接进入下一题。
+          点击选项会自动进入下一题；如需修改，请点上一题。
         </p>
         <button
           className="button ghost"
@@ -163,15 +158,6 @@ export default function Test() {
         >
           <ChevronLeft aria-hidden="true" />
           <span className="test-footer-label">上一题</span>
-        </button>
-        <button
-          className="button primary"
-          type="button"
-          onClick={goNext}
-          disabled={!hasCurrentAnswer}
-        >
-          {isLastQuestion ? "查看结果" : "下一题"}
-          {!isLastQuestion && <ArrowRight aria-hidden="true" />}
         </button>
       </footer>
 
