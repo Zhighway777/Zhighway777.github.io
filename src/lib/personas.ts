@@ -1,6 +1,6 @@
 import type { Dimension, DimensionId, Persona } from "./types";
 
-export const MODEL_VERSION = "dimensions-v010/personas-v005";
+export const MODEL_VERSION = "dimensions-v010/personas-v006";
 
 export const dimensions: Dimension[] = [
   {
@@ -135,6 +135,7 @@ export const personas: Persona[] = [
     collaborationStyle: "给探索设置期限、证据要求和输出格式。",
     recommendedPartnerIds: ["P04", "P02", "P10"],
     vector: vector(75, 85, 72, 78, 50, 78, 45, 50, 52, 74),
+    distanceBonus: -442.2,
   },
   {
     id: "P02",
@@ -149,6 +150,7 @@ export const personas: Persona[] = [
     collaborationStyle: "提前给完整上下文，并要求输出分阶段方案。",
     recommendedPartnerIds: ["P04", "P03", "P08"],
     vector: vector(55, 65, 92, 82, 55, 85, 45, 55, 75, 55),
+    distanceBonus: 465.06,
   },
   {
     id: "P03",
@@ -163,6 +165,7 @@ export const personas: Persona[] = [
     collaborationStyle: "给明确问题、期限和阶段性同步要求。",
     recommendedPartnerIds: ["P08", "P04", "P09"],
     vector: vector(40, 50, 40, 88, 40, 70, 38, 45, 35, 35),
+    distanceBonus: -94.64,
   },
   {
     id: "P04",
@@ -177,6 +180,7 @@ export const personas: Persona[] = [
     collaborationStyle: "直接给出状态、影响、需要的决策和时间点。",
     recommendedPartnerIds: ["P06", "P02", "P10"],
     vector: vector(65, 10, 55, 30, 60, 10, 55, 45, 75, 65),
+    distanceBonus: 26.64,
   },
   {
     id: "P05",
@@ -191,6 +195,7 @@ export const personas: Persona[] = [
     collaborationStyle: "区分客户表达、真实需求和候选方案。",
     recommendedPartnerIds: ["P01", "P10", "P02"],
     vector: vector(5, 35, 65, 50, 90, 45, 60, 50, 85, 50),
+    distanceBonus: -946.34,
   },
   {
     id: "P06",
@@ -205,6 +210,7 @@ export const personas: Persona[] = [
     collaborationStyle: "同时输出风险等级、影响范围和缓解方案。",
     recommendedPartnerIds: ["P04", "P01", "P14"],
     vector: vector(45, 20, 70, 75, 55, 55, 40, 90, 65, 30),
+    distanceBonus: -28.08,
   },
   {
     id: "P07",
@@ -219,6 +225,7 @@ export const personas: Persona[] = [
     collaborationStyle: "设定优化阈值、时间盒和前后对比要求。",
     recommendedPartnerIds: ["P10", "P04", "P13"],
     vector: vector(35, 45, 45, 88, 40, 60, 38, 60, 35, 40),
+    distanceBonus: -625.56,
   },
   {
     id: "P08",
@@ -233,6 +240,7 @@ export const personas: Persona[] = [
     collaborationStyle: "明确责任边界、结论和待办，不让信息在你这里丢包。",
     recommendedPartnerIds: ["P03", "P02", "P12"],
     vector: vector(60, 55, 90, 45, 95, 55, 60, 40, 95, 70),
+    distanceBonus: 232.19,
   },
   {
     id: "P09",
@@ -247,6 +255,7 @@ export const personas: Persona[] = [
     collaborationStyle: "提供完整版本、环境、日志和复现步骤。",
     recommendedPartnerIds: ["P04", "P08", "P14"],
     vector: vector(40, 30, 60, 95, 25, 55, 40, 50, 35, 55),
+    distanceBonus: 308.3,
   },
   {
     id: "P10",
@@ -260,7 +269,8 @@ export const personas: Persona[] = [
     blindSpots: ["可能迭代过频", "对不完善状态容忍度低", "容易增加改进成本"],
     collaborationStyle: "明确改进目标、度量方式和回顾节奏，让变化可追踪。",
     recommendedPartnerIds: ["P04", "P07", "P13"],
-    vector: vector(65, 65, 70, 70, 65, 75, 55, 55, 75, 75),
+    vector: vector(55, 75, 45, 65, 55, 80, 65, 65, 65, 80),
+    distanceBonus: -1231.86,
   },
   {
     id: "P11",
@@ -275,6 +285,7 @@ export const personas: Persona[] = [
     collaborationStyle: "输出风险等级、影响范围和合规替代路径。",
     recommendedPartnerIds: ["P04", "P01", "P14"],
     vector: vector(50, 20, 65, 60, 70, 75, 65, 98, 70, 20),
+    distanceBonus: 1124.9,
   },
   {
     id: "P12",
@@ -289,6 +300,7 @@ export const personas: Persona[] = [
     collaborationStyle: "先讲清原因、收益和过渡方案，再明确阶段责任。",
     recommendedPartnerIds: ["P04", "P11", "P16"],
     vector: vector(60, 80, 85, 50, 85, 80, 55, 40, 90, 70),
+    distanceBonus: 624.21,
   },
   {
     id: "P13",
@@ -303,6 +315,7 @@ export const personas: Persona[] = [
     collaborationStyle: "输出对比矩阵、实测计划和放弃条件。",
     recommendedPartnerIds: ["P04", "P10", "P02"],
     vector: vector(70, 85, 75, 55, 70, 70, 85, 35, 90, 80),
+    distanceBonus: 702.86,
   },
   {
     id: "P14",
@@ -317,6 +330,7 @@ export const personas: Persona[] = [
     collaborationStyle: "明确目标、上下文、禁区、工具权限和验收标准。",
     recommendedPartnerIds: ["P06", "P09", "P11"],
     vector: vector(70, 20, 85, 60, 75, 50, 70, 75, 90, 95),
+    distanceBonus: 1255.08,
   },
   {
     id: "P15",
@@ -331,6 +345,7 @@ export const personas: Persona[] = [
     collaborationStyle: "用明确优先级和暂停机制保护重点任务。",
     recommendedPartnerIds: ["P04", "P16", "P12"],
     vector: vector(65, 50, 85, 50, 80, 35, 65, 25, 80, 65),
+    distanceBonus: -745.37,
   },
   {
     id: "P16",
@@ -345,6 +360,7 @@ export const personas: Persona[] = [
     collaborationStyle: "先接住分歧，再把问题转成共同目标和可执行选项。",
     recommendedPartnerIds: ["P12", "P15", "P08"],
     vector: vector(55, 35, 70, 45, 95, 40, 60, 70, 95, 65),
+    distanceBonus: -625.19,
   },
 ];
 

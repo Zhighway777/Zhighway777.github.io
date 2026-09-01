@@ -3,23 +3,23 @@ import { questions } from "./questions";
 import { dimensionIds } from "./personas";
 import { calculateDimensionScores, matchPersonas } from "./scoring";
 
-const primaryCoveragePatterns: Record<string, string> = {
-  P01: "AACACBABCCBABABDBCACCBBDA",
-  P02: "BEBADCABCCAABABBCCBCDBBAA",
-  P03: "DDBADBABCCBAABBACCCCBAACB",
-  P04: "ABDCDACDAAADCBDCBAABBDBDB",
-  P05: "DBACDEDCAADBDEDDCDAADACAD",
-  P06: "ECBABCCBDCADBACACBBCDDABB",
-  P07: "DDBADBABBCBDABBACCDCCBACB",
+export const primaryCoveragePatterns: Record<string, string> = {
+  P01: "BABDCCABCDBABABDDCACCBDAC",
+  P02: "DEBDCCDBCDAABABDDCBCDBAAA",
+  P03: "DDBADBABCCBAABBDDACCDBACB",
+  P04: "ABDCADCCAAADCBCCBAABDDBDB",
+  P05: "DBACDEDCAADBBEDDCDAADACBD",
+  P06: "ECBDBCCBCCADBACAACBCDDCAB",
+  P07: "DDBAABCBCCBDABBBCCBCABDCB",
   P08: "BEDBDCDCCBDCBEDDBDADDABAD",
-  P09: "EDBACBCBCABDAABDCACCCBACB",
-  P10: "AEBCCBACCCAABAEDBDACDBAAD",
-  P11: "EBCBBEBBDCADDACACCBDDBAAB",
-  P12: "CADADEACCDDABADDDDADDBBAA",
-  P13: "AEDBCEACCDAABDDDBDACCABAA",
-  P14: "ABDBBCBCCAADBEECBBADDDDAD",
-  P15: "AEDBADDDCBDCBEDDDAABCABAB",
-  P16: "CEDCDEDAABADBEDCADADDDCAD",
+  P09: "DCBACBCBCCBDBABBBACCCDADB",
+  P10: "DACBCEACACAAADEBBCACAAABA",
+  P11: "EECBBEBBCCADDACACCBDDDAAD",
+  P12: "DEDBDCACCDDABEDDDDADDBDAA",
+  P13: "CEDBCEACCDDABDDDDDACCADAA",
+  P14: "EBDBBCBCCAADBEECBBADCBCAD",
+  P15: "AEABCCCDADDDBEDDDAABCABAD",
+  P16: "BEDCAEDCABADDEDCADADDDCAD",
 };
 
 export function validateModel(): string[] {
@@ -48,6 +48,10 @@ export function validateModel(): string[] {
   personas.forEach((persona) => {
     if (!persona.imagePath.startsWith("personas/")) {
       errors.push(`${persona.id} has an invalid image path.`);
+    }
+
+    if (!Number.isFinite(persona.distanceBonus) || Math.abs(persona.distanceBonus) > 2000) {
+      errors.push(`${persona.id} has an invalid distance calibration.`);
     }
 
     persona.recommendedPartnerIds.forEach((partnerId) => {

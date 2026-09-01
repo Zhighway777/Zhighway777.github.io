@@ -1,6 +1,6 @@
 import type { Question } from "./types";
 
-export const QUESTION_SET_VERSION = "question-set-v003";
+export const QUESTION_SET_VERSION = "question-set-v004";
 
 export const questions: Question[] = [
   {
@@ -11,17 +11,17 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "收集资料并建议尽快小范围试点",
-        impacts: { D1: 3, D2: 2, D8: -1 },
+        impacts: { D1: 3, D2: 2, D4: -1, D7: -1, D8: -1 },
       },
       {
         id: "B",
         text: "先看外部反馈和已有案例",
-        impacts: { D1: 1, D4: -1, D6: 1 },
+        impacts: { D1: 1, D4: -1, D6: 1, D9: -1 },
       },
       {
         id: "C",
         text: "比较成本、学习成本和迁移成本",
-        impacts: { D7: 3, D6: -1, D8: 1 },
+        impacts: { D5: -1, D7: 3, D6: -1, D8: 1, D9: -1 },
       },
       {
         id: "D",
@@ -43,7 +43,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "继续收集更多可选方案",
-        impacts: { D2: 3, D6: 2 },
+        impacts: { D1: 1, D2: 3, D6: 2 },
       },
       {
         id: "B",
@@ -58,7 +58,7 @@ export const questions: Question[] = [
       {
         id: "D",
         text: "会后先独立研究，形成结论再同步",
-        impacts: { D5: -3, D9: -2, D3: -1 },
+        impacts: { D3: -2, D5: -3, D9: -2 },
       },
       {
         id: "E",
@@ -75,7 +75,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "优先响应客户，重新调整内部排期",
-        impacts: { D1: -3, D6: -2 },
+        impacts: { D1: -3, D4: -1, D6: -2, D8: -2 },
       },
       {
         id: "B",
@@ -85,7 +85,7 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "评估对长期方案和现有质量的影响",
-        impacts: { D6: 3, D8: 2 },
+        impacts: { D5: -1, D6: 3, D8: 2, D9: -1 },
       },
       {
         id: "D",
@@ -102,17 +102,17 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "争取资源，把效果做到位",
-        impacts: { D7: -3, D6: 2 },
+        impacts: { D3: -1, D7: -3, D6: 2 },
       },
       {
         id: "B",
         text: "先算投入产出，再决定是否值得",
-        impacts: { D7: 3, D4: 1 },
+        impacts: { D5: -1, D7: 3, D4: 1, D9: -1 },
       },
       {
         id: "C",
         text: "寻找低成本版本，保留后续升级空间",
-        impacts: { D7: 1, D6: -1, D2: -1 },
+        impacts: { D4: -1, D7: 1, D6: -1, D2: -1 },
       },
       {
         id: "D",
@@ -139,7 +139,7 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "寻找替代资源或降低占用的方法",
-        impacts: { D2: 2, D7: 1 },
+        impacts: { D1: 1, D2: 2, D4: -1, D5: -1, D7: 1, D8: -2 },
       },
       {
         id: "D",
@@ -156,12 +156,12 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "先重试并记录复现条件",
-        impacts: { D4: -3, D9: -1 },
+        impacts: { D3: -2, D4: -3, D9: -1 },
       },
       {
         id: "B",
         text: "核对步骤、版本、配置和权限",
-        impacts: { D4: 3, D3: -1 },
+        impacts: { D4: 3, D3: -1, D5: -1, D10: -1 },
       },
       {
         id: "C",
@@ -188,7 +188,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "先小范围试用，再决定推广节奏",
-        impacts: { D2: 1, D8: -1, D6: 1 },
+        impacts: { D2: 1, D4: -1, D8: -1, D6: 1 },
       },
       {
         id: "B",
@@ -220,7 +220,7 @@ export const questions: Question[] = [
       {
         id: "B",
         text: "推迟决策，直到确认关键事实",
-        impacts: { D4: 3, D6: 1 },
+        impacts: { D3: -1, D4: 3, D5: -1, D6: 1, D9: -1, D10: -1 },
       },
       {
         id: "C",
@@ -247,7 +247,7 @@ export const questions: Question[] = [
       {
         id: "B",
         text: "自己先补齐空缺，保证任务继续",
-        impacts: { D5: -2, D6: -2 },
+        impacts: { D3: -1, D5: -2, D6: -2, D9: -1 },
       },
       {
         id: "C",
@@ -269,7 +269,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "重新排任务，锁定必须交付的范围",
-        impacts: { D6: -3, D2: -2 },
+        impacts: { D4: -1, D6: -3, D2: -2 },
       },
       {
         id: "B",
@@ -279,12 +279,12 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "检查是否有一次性补丁和长期隐患",
-        impacts: { D6: 3, D8: 2 },
+        impacts: { D5: -1, D6: 3, D8: 2, D9: -1 },
       },
       {
         id: "D",
         text: "寻找替代路径或降低范围",
-        impacts: { D2: 2, D7: 1 },
+        impacts: { D1: 1, D2: 2, D7: 1, D8: -2 },
       },
     ],
   },
@@ -301,12 +301,12 @@ export const questions: Question[] = [
       {
         id: "B",
         text: "先自行确认，再给出完整结论",
-        impacts: { D9: -3, D4: 2 },
+        impacts: { D3: -2, D5: -2, D9: -3, D10: -1, D4: 2 },
       },
       {
         id: "C",
         text: "只提醒最关键风险，避免打断节奏",
-        impacts: { D8: 1, D6: -2 },
+        impacts: { D8: 1, D6: -2, D10: -1 },
       },
       {
         id: "D",
@@ -323,7 +323,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "构建未来场景和技术雷达，寻找提前布局机会",
-        impacts: { D1: 3, D2: 3, D6: 3 },
+        impacts: { D1: 3, D2: 3, D5: -1, D6: 3, D7: -1 },
       },
       {
         id: "B",
@@ -350,7 +350,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "先深入一个最可疑的点",
-        impacts: { D3: -3, D4: 1 },
+        impacts: { D3: -3, D4: 1, D10: -1 },
       },
       {
         id: "B",
@@ -360,7 +360,7 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "快速尝试几种可能的解决方式",
-        impacts: { D4: -3, D2: 1 },
+        impacts: { D1: 1, D4: -3, D8: -2, D2: 1 },
       },
       {
         id: "D",
@@ -392,7 +392,7 @@ export const questions: Question[] = [
       {
         id: "D",
         text: "先核算复用收益、迁移成本和当前交付影响",
-        impacts: { D1: -2, D7: 3, D6: -2 },
+        impacts: { D1: -2, D5: -1, D7: 3, D6: -2, D9: -1 },
       },
       {
         id: "E",
@@ -409,12 +409,12 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "先复现一次统计过程",
-        impacts: { D4: -2, D3: -1 },
+        impacts: { D4: -2, D3: -1, D5: -1, D9: -1, D10: -1 },
       },
       {
         id: "B",
         text: "核对口径、范围、时间和过滤条件",
-        impacts: { D4: 3, D8: 1 },
+        impacts: { D4: 3, D5: -1, D8: 1 },
       },
       {
         id: "C",
@@ -441,7 +441,7 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "自己完整调研，关键结论更可靠",
-        impacts: { D10: -3, D5: -2 },
+        impacts: { D3: -2, D10: -3, D5: -2, D9: -1 },
       },
       {
         id: "B",
@@ -478,7 +478,7 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "完整人工处理，避免额外风险",
-        impacts: { D10: -3, D8: 1 },
+        impacts: { D3: -1, D5: -1, D9: -1, D10: -3, D8: 1 },
       },
       {
         id: "D",
@@ -505,7 +505,7 @@ export const questions: Question[] = [
       {
         id: "C",
         text: "坚持修复，避免留下隐患",
-        impacts: { D6: 3, D8: 3 },
+        impacts: { D6: 3, D7: -2, D8: 3 },
       },
       {
         id: "D",
@@ -527,7 +527,7 @@ export const questions: Question[] = [
       {
         id: "B",
         text: "整理成简短文档或 FAQ",
-        impacts: { D8: 2, D3: 2 },
+        impacts: { D5: -1, D8: 2, D3: 2, D10: -1 },
       },
       {
         id: "C",
@@ -576,17 +576,17 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "建立复盘清单，持续优化步骤",
-        impacts: { D2: 2, D6: 2, D8: 2, D10: 1 },
+        impacts: { D2: 2, D5: -1, D6: 2, D8: 2, D9: -1, D10: 1 },
       },
       {
         id: "B",
         text: "先按原方式完成，避免额外投入",
-        impacts: { D6: -3, D9: -1 },
+        impacts: { D3: -1, D6: -3, D9: -1, D10: -1 },
       },
       {
         id: "C",
         text: "尝试模板、脚本或 AI 辅助减少重复",
-        impacts: { D2: 2, D10: 3, D8: -1 },
+        impacts: { D1: 1, D2: 2, D10: 3, D8: -1 },
       },
       {
         id: "D",
@@ -618,7 +618,7 @@ export const questions: Question[] = [
       {
         id: "D",
         text: "维持现状，直到有明确要求再调整",
-        impacts: { D2: -3, D8: 3, D6: -2 },
+        impacts: { D2: -3, D5: -1, D8: 3, D6: -2, D9: -1, D10: -1 },
       },
     ],
   },
@@ -630,12 +630,12 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "锁定最重要目标，其余事项暂缓",
-        impacts: { D6: 3, D8: 2, D5: -1 },
+        impacts: { D6: 3, D8: 2, D5: -1, D10: -1 },
       },
       {
         id: "B",
         text: "在多个缺口之间快速切换补位",
-        impacts: { D3: 3, D8: -3, D5: 2, D6: -2 },
+        impacts: { D3: 3, D4: -1, D8: -3, D5: 2, D6: -2 },
       },
       {
         id: "C",
@@ -645,7 +645,7 @@ export const questions: Question[] = [
       {
         id: "D",
         text: "沉淀可复用模板，降低每次切换成本",
-        impacts: { D6: 2, D8: 2, D10: 2 },
+        impacts: { D1: 1, D2: 3, D6: 2, D7: -1, D10: 2 },
       },
     ],
   },
@@ -684,12 +684,12 @@ export const questions: Question[] = [
       {
         id: "A",
         text: "安排固定时间学习并做小实验",
-        impacts: { D2: 3, D6: 2, D10: 2 },
+        impacts: { D1: 1, D2: 3, D6: 2, D7: -1, D10: 2 },
       },
       {
         id: "B",
         text: "等实际工作明确需要时再学",
-        impacts: { D2: -2, D6: -2 },
+        impacts: { D2: -2, D6: -2, D9: -1, D10: -1 },
       },
       {
         id: "C",

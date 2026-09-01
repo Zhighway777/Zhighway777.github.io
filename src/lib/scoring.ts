@@ -74,7 +74,9 @@ export function matchPersonas(
             (dimensionScores[dimension.id] - persona.vector[dimension.id]) ** 2,
         0,
       );
-      const normalizedDistance = Math.sqrt(squaredDistance / denominator);
+      const normalizedDistance = Math.sqrt(
+        Math.max(0, squaredDistance - persona.distanceBonus) / denominator,
+      );
       return {
         persona,
         matchScore: Math.max(0, Math.min(1, 1 - normalizedDistance)),

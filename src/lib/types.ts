@@ -33,6 +33,7 @@ export interface Persona {
   collaborationStyle: string;
   recommendedPartnerIds: string[];
   vector: Record<DimensionId, number>;
+  distanceBonus: number;
 }
 
 export interface QuestionOption {
