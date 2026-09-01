@@ -1,5 +1,6 @@
 import { Check, Copy, Link2, Share2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import QRCode from "qrcode";
+import { useEffect, useMemo, useState } from "react";
 import { dimensions } from "../lib/personas";
 import type { AssessmentResult, Persona } from "../lib/types";
 
@@ -17,6 +18,14 @@ export default function ShareSummary({
   onMessage,
 }: ShareSummaryProps) {
   const [isSharing, setIsSharing] = useState(false);
+  const [qrImageUrl, setQrImageUrl] = useState("");
+  const [wechatShareImageUrl, setWechatShareImageUrl] = useState("");
+  const [showWeChatShare, setShowWeChatShare] = useState(false);
+
+  const isWeChat = useMemo(
+    () => /MicroMessenger/i.test(window.navigator.userAgent),
+    [],
+  );
 
   const topTensions = useMemo(() => {
     return dimensions
@@ -37,6 +46,25 @@ export default function ShareSummary({
     url.hash = "";
     return url.toString();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    QRCode.toDataURL(shareUrl, {
+      width: 420,
+      margin: 1,
+      errorCorrectionLevel: "M",
+      color: { dark: "#22303a", light: "#ffffff" },
+    }).then(value => {
+      if (!cancelled) setQrImageUrl(value);
+    }).catch(() => {
+      if (!cancelled) setQrImageUrl("");
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shareUrl]);
 
   const shareText = useMemo(() => {
     const tensionLines = topTensions
@@ -73,7 +101,23 @@ export default function ShareSummary({
     document.body.removeChild(textarea);
   }
 
-  async function createShareImage() {
+  async function createQrDataUrl() {
+    return QRCode.toDataURL(shareUrl, {
+      width: 420,
+      margin: 1,
+      errorCorrectionLevel: "M",
+      color: { dark: "#22303a", light: "#ffffff" },
+    });
+  }
+
+  async function loadImage(src: string) {
+    const image = new Image();
+    image.src = src;
+    await image.decode();
+    return image;
+  }
+
+  async function renderShareCanvas() {
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
     canvas.height = 1350;
@@ -86,9 +130,8 @@ export default function ShareSummary({
     context.fillStyle = gradient;
     context.fillRect(0, 0, 1080, 1350);
 
-    const image = new Image();
-    image.src = primary.imagePath;
-    await image.decode();
+    const image = await loadImage(primary.imagePath);
+    const qrImage = await loadImage(await createQrDataUrl());
     context.drawImage(image, 170, 110, 740, 740);
 
     context.fillStyle = "#22303a";
@@ -105,6 +148,25 @@ export default function ShareSummary({
     context.fillText(`副原型：${secondary.name}`, 170, 1165);
     context.fillText("公司人格图鉴｜仅供娱乐和团队交流", 170, 1230);
 
+    // Keep a quiet area around the QR code for WeChat long-press recognition.
+    context.fillStyle = "#ffffff";
+    context.fillRect(742, 1056, 236, 236);
+    context.strokeStyle = "#cfd5cf";
+    context.lineWidth = 2;
+    context.strokeRect(742, 1056, 236, 236);
+    context.drawImage(qrImage, 760, 1074, 200, 200);
+    context.fillStyle = "#52606b";
+    context.font = "500 27px 'Microsoft YaHei', sans-serif";
+    context.textAlign = "center";
+    context.fillText("扫码打开测试", 860, 1324);
+    context.textAlign = "left";
+
+    return canvas;
+  }
+
+  async function createShareImage() {
+    const canvas = await renderShareCanvas();
+
     return new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (blob) resolve(blob);
@@ -113,9 +175,21 @@ export default function ShareSummary({
     });
   }
 
+  async function createShareImageUrl() {
+    const canvas = await renderShareCanvas();
+    return canvas.toDataURL("image/png");
+  }
+
   async function nativeShare() {
     setIsSharing(true);
     try {
+      if (isWeChat) {
+        setWechatShareImageUrl(await createShareImageUrl());
+        setShowWeChatShare(true);
+        onMessage("请长按图片分享给朋友");
+        return;
+      }
+
       const blob = await createShareImage();
       const file = new File([blob], "company-persona.png", { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
@@ -170,10 +244,25 @@ export default function ShareSummary({
         ))}
       </div>
 
+      <div className="share-link-panel">
+        {qrImageUrl ? (
+          <img src={qrImageUrl} alt="打开公司人格测试的二维码" />
+        ) : (
+          <div className="share-qr-placeholder" aria-hidden="true" />
+        )}
+        <div>
+          <span>扫码或点击打开</span>
+          <a href={shareUrl} target="_blank" rel="noreferrer">
+            {shareUrl}
+          </a>
+          <p>分享图右下角也包含此二维码，微信长按图片可直接识别。</p>
+        </div>
+      </div>
+
       <div className="share-actions">
         <button className="button primary" type="button" onClick={nativeShare} disabled={isSharing}>
           <Share2 aria-hidden="true" />
-          {isSharing ? "生成中…" : "分享图片"}
+          {isSharing ? "生成中…" : isWeChat ? "生成微信分享图" : "分享图片"}
         </button>
         <button className="button ghost" type="button" onClick={copySummary}>
           <Copy aria-hidden="true" />
@@ -187,8 +276,49 @@ export default function ShareSummary({
 
       <p className="share-note">
         <Check aria-hidden="true" />
-        手机端可分享生成的人格摘要图；桌面端会自动复制文字摘要。
+        手机端可分享带二维码的人格摘要图；桌面端可点击链接或复制摘要。
       </p>
+
+      {showWeChatShare && (
+        <div
+          className="wechat-share-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="微信分享图"
+          onClick={() => setShowWeChatShare(false)}
+        >
+          <section
+            className="wechat-share-dialog"
+            onClick={event => event.stopPropagation()}
+          >
+            <div>
+              <h3>微信分享</h3>
+              <button
+                type="button"
+                onClick={() => setShowWeChatShare(false)}
+                aria-label="关闭微信分享图"
+              >
+                关闭
+              </button>
+            </div>
+            <p>长按下方图片，选择“发送给朋友”或“保存图片”。</p>
+            {wechatShareImageUrl && (
+              <img
+                src={wechatShareImageUrl}
+                alt="公司人格分享图，右下角包含测试链接二维码"
+              />
+            )}
+            <div>
+              <a href={shareUrl} target="_blank" rel="noreferrer">
+                直接打开测试链接
+              </a>
+              <button type="button" onClick={copyLink}>
+                复制链接
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </section>
   );
 }
