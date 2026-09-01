@@ -19,7 +19,10 @@ export default function PersonaCard({
         <img
           src={persona.imagePath}
           alt={`${persona.name}人格形象`}
-          loading="lazy"
+          width={768}
+          height={768}
+          loading="eager"
+          fetchPriority="high"
           decoding="async"
           draggable={false}
         />
