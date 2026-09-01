@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronLeft, RotateCcw } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import MilestoneToast, { type Milestone } from "../components/MilestoneToast";
 import QuestionCard from "../components/QuestionCard";
@@ -8,12 +8,24 @@ import { questions } from "../lib/questions";
 import { buildResult } from "../lib/scoring";
 import { sessionStore } from "../lib/session";
 
+const AUTO_ADVANCE_DELAY_MS = 360;
+
 export default function Test() {
   const [, navigate] = useLocation();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [restored, setRestored] = useState(false);
   const [milestone, setMilestone] = useState<Milestone | null>(null);
+  const advanceTimerRef = useRef<number | null>(null);
+
+  const clearPendingAdvance = () => {
+    if (advanceTimerRef.current !== null) {
+      window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => clearPendingAdvance, []);
 
   useEffect(() => {
     const savedAnswers = sessionStore.getAnswers();
@@ -51,6 +63,7 @@ export default function Test() {
   };
 
   const selectOption = (optionId: string) => {
+    clearPendingAdvance();
     const nextAnswers = { ...answers, [question.id]: optionId };
     const nextAnsweredCount = questions.filter((item) => nextAnswers[item.id]).length;
     setAnswers(nextAnswers);
@@ -72,19 +85,24 @@ export default function Test() {
       });
     }
 
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      finish(nextAnswers);
-    }
+    advanceTimerRef.current = window.setTimeout(() => {
+      advanceTimerRef.current = null;
+      if (currentIndex < questions.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      } else {
+        finish(nextAnswers);
+      }
+    }, AUTO_ADVANCE_DELAY_MS);
 
   };
 
   const goPrevious = () => {
+    clearPendingAdvance();
     setCurrentIndex(Math.max(0, currentIndex - 1));
   };
 
   const restart = () => {
+    clearPendingAdvance();
     sessionStore.clearProgress();
     setAnswers({});
     setCurrentIndex(0);
