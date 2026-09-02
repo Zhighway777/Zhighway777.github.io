@@ -22,7 +22,9 @@ export default function PersonaCard({
           width={768}
           height={768}
           loading="eager"
-          fetchPriority="high"
+          ref={element => {
+            element?.setAttribute("fetchpriority", "high");
+          }}
           decoding="async"
           draggable={false}
         />

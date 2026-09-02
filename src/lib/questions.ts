@@ -1,6 +1,6 @@
 import type { Question } from "./types";
 
-export const QUESTION_SET_VERSION = "question-set-v004";
+export const QUESTION_SET_VERSION = "question-set-v005";
 
 export const questions: Question[] = [
   {

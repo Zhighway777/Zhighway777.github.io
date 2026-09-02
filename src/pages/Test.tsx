@@ -5,7 +5,7 @@ import { useLocation } from "wouter";
 import MilestoneToast, { type Milestone } from "../components/MilestoneToast";
 import QuestionCard from "../components/QuestionCard";
 import { questions } from "../lib/questions";
-import { buildResult } from "../lib/scoring";
+import { buildResult, MINIMUM_EFFECTIVE_ANSWERS, SKIP_ANSWER } from "../lib/scoring";
 import { sessionStore } from "../lib/session";
 
 const AUTO_ADVANCE_DELAY_MS = 360;
@@ -16,6 +16,7 @@ export default function Test() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [restored, setRestored] = useState(false);
   const [milestone, setMilestone] = useState<Milestone | null>(null);
+  const [notice, setNotice] = useState("");
   const advanceTimerRef = useRef<number | null>(null);
 
   const clearPendingAdvance = () => {
@@ -49,27 +50,46 @@ export default function Test() {
   }, [milestone]);
 
   const question = questions[currentIndex];
-  const answeredCount = useMemo(
+  const handledCount = useMemo(
     () => questions.filter((item) => answers[item.id]).length,
     [answers],
   );
-  const progress = (answeredCount / questions.length) * 100;
+  const effectiveAnsweredCount = useMemo(
+    () => questions.filter((item) => answers[item.id] && answers[item.id] !== SKIP_ANSWER).length,
+    [answers],
+  );
+  const skippedCount = useMemo(
+    () => questions.filter((item) => answers[item.id] === SKIP_ANSWER).length,
+    [answers],
+  );
+  const progress = (handledCount / questions.length) * 100;
 
   const finish = (finalAnswers: Record<string, string>) => {
+    const nextEffectiveCount = questions.filter(
+      (item) => finalAnswers[item.id] && finalAnswers[item.id] !== SKIP_ANSWER,
+    ).length;
+    if (nextEffectiveCount < MINIMUM_EFFECTIVE_ANSWERS) {
+      setNotice(
+        `有效作答不足：还需回答 ${MINIMUM_EFFECTIVE_ANSWERS - nextEffectiveCount} 道有经验的题目。`,
+      );
+      return;
+    }
+
     const result = buildResult(questions, finalAnswers, sessionStore.getNickname());
     sessionStore.setResult(result);
     sessionStore.clearProgress();
     navigate("/results");
   };
 
-  const selectOption = (optionId: string) => {
+  const recordAnswer = (answer: string) => {
     clearPendingAdvance();
-    const nextAnswers = { ...answers, [question.id]: optionId };
-    const nextAnsweredCount = questions.filter((item) => nextAnswers[item.id]).length;
+    const nextAnswers = { ...answers, [question.id]: answer };
+    const nextHandledCount = questions.filter((item) => nextAnswers[item.id]).length;
     setAnswers(nextAnswers);
     setRestored(true);
+    setNotice("");
 
-    if (nextAnsweredCount === 13) {
+    if (nextHandledCount === 13) {
       setMilestone({
         id: "half",
         title: "过半啦",
@@ -77,7 +97,7 @@ export default function Test() {
       });
     }
 
-    if (nextAnsweredCount === 19) {
+    if (nextHandledCount === 19) {
       setMilestone({
         id: "quarter-left",
         title: "最后四分之一",
@@ -95,6 +115,9 @@ export default function Test() {
     }, AUTO_ADVANCE_DELAY_MS);
 
   };
+
+  const selectOption = (optionId: string) => recordAnswer(optionId);
+  const skipQuestion = () => recordAnswer(SKIP_ANSWER);
 
   const goPrevious = () => {
     clearPendingAdvance();
@@ -152,7 +175,7 @@ export default function Test() {
           <motion.span animate={{ width: `${progress}%` }} transition={{ duration: 0.25 }} />
         </div>
         <p>
-          已答 {answeredCount} 题 · 剩余 {questions.length - answeredCount} 题 · 进度本机保存
+          已答 {effectiveAnsweredCount} 题 · 跳过 {skippedCount} 题 · 未处理 {questions.length - handledCount} 题 · 进度本机保存
         </p>
       </div>
 
@@ -161,11 +184,14 @@ export default function Test() {
         question={question}
         selectedOption={answers[question.id]}
         onSelect={selectOption}
+        onSkip={skipQuestion}
       />
+
+      {notice && <div className="test-notice" role="alert">{notice}</div>}
 
       <footer className="test-footer">
         <p className="test-footer-copy">
-          点击选项会自动进入下一题；如需修改，请点上一题。
+          选择后会自动进入下一题；没经历过的场景可跳过。
         </p>
         <button
           className="button ghost"

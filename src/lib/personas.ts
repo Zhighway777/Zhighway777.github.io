@@ -1,6 +1,6 @@
 import type { Dimension, DimensionId, Persona } from "./types";
 
-export const MODEL_VERSION = "dimensions-v010/personas-v006";
+export const MODEL_VERSION = "dimensions-v010/personas-v007";
 
 export const dimensions: Dimension[] = [
   {

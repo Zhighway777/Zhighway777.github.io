@@ -31,15 +31,19 @@ export default function ShareSummary({
     return dimensions
       .map((dimension) => {
         const score = result.dimensionScores[dimension.id];
+        const coverage = result.dimensionCoverage?.[dimension.id] ?? 1;
         return {
           dimension,
           score,
+          coverage,
           label: score >= 50 ? dimension.rightPole : dimension.leftPole,
         };
       })
-      .sort((a, b) => Math.abs(b.score - 50) - Math.abs(a.score - 50))
+      .sort((a, b) =>
+        Math.abs(b.score - 50) * b.coverage - Math.abs(a.score - 50) * a.coverage,
+      )
       .slice(0, 3);
-  }, [result.dimensionScores]);
+  }, [result.dimensionCoverage, result.dimensionScores]);
 
   const shareUrl = useMemo(() => {
     const url = new URL(window.location.href);

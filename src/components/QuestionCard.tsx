@@ -1,17 +1,20 @@
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, CircleSlash } from "lucide-react";
 import type { Question } from "../lib/types";
+import { SKIP_ANSWER } from "../lib/scoring";
 
 interface QuestionCardProps {
   question: Question;
   selectedOption?: string;
   onSelect: (optionId: string) => void;
+  onSkip: () => void;
 }
 
 export default function QuestionCard({
   question,
   selectedOption,
   onSelect,
+  onSkip,
 }: QuestionCardProps) {
   return (
     <motion.article
@@ -51,6 +54,16 @@ export default function QuestionCard({
           </button>
         ))}
       </div>
+      <button
+        type="button"
+        className={`skip-button ${selectedOption === SKIP_ANSWER ? "selected" : ""}`}
+        onClick={onSkip}
+        aria-pressed={selectedOption === SKIP_ANSWER}
+      >
+        <CircleSlash aria-hidden="true" />
+        <span>跳过这道题</span>
+        <small>我没有经历过这个场景</small>
+      </button>
     </motion.article>
   );
 }

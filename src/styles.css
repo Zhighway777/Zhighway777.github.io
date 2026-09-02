@@ -418,6 +418,60 @@ h3 {
   border-radius: 50%;
 }
 
+.skip-button {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 3px 8px;
+  width: min(640px, 100%);
+  margin: 14px auto 0;
+  padding: 10px 14px;
+  color: #52606b;
+  background: #ffffff;
+  border: 1px dashed #b9c3bd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 650;
+  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.skip-button:hover,
+.skip-button:focus-visible {
+  color: #0f766e;
+  border-color: #0f766e;
+}
+
+.skip-button.selected {
+  color: #0f766e;
+  background: #edf7f4;
+  border-style: solid;
+}
+
+.skip-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.skip-button small {
+  grid-column: 1 / -1;
+  color: #687671;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.test-notice {
+  margin-top: 14px;
+  padding: 12px 14px;
+  color: #7c4a03;
+  background: #fff4dd;
+  border: 1px solid #eddcae;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: center;
+}
+
 .test-footer {
   display: grid;
   grid-template-columns: 132px;
@@ -1007,6 +1061,11 @@ h3 {
   .option-letter {
     width: 27px;
     height: 27px;
+  }
+
+  .skip-button {
+    padding: 9px 10px;
+    font-size: 13px;
   }
 
   .test-footer {

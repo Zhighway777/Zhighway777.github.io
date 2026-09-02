@@ -57,5 +57,9 @@ export interface AssessmentResult {
   secondaryPersonaId: string;
   matchScores: Record<string, number>;
   answeredCount: number;
+  effectiveAnsweredCount: number;
+  skippedCount: number;
+  dimensionCoverage: Record<DimensionId, number>;
+  resultConfidence: number;
   createdAt: string;
 }

@@ -4,6 +4,7 @@ import App from "./App";
 import {
   validateModel,
   validatePrimaryPersonaCoverage,
+  validateSkippedPrimaryPersonaCoverage,
 } from "./lib/modelValidation";
 import "./styles.css";
 
@@ -16,6 +17,13 @@ if (import.meta.env.DEV) {
   const coverageErrors = validatePrimaryPersonaCoverage();
   if (coverageErrors.length > 0) {
     throw new Error(`Invalid primary persona coverage:\n${coverageErrors.join("\n")}`);
+  }
+
+  const skippedCoverageErrors = validateSkippedPrimaryPersonaCoverage();
+  if (skippedCoverageErrors.length > 0) {
+    throw new Error(
+      `Invalid skipped primary persona coverage:\n${skippedCoverageErrors.join("\n")}`,
+    );
   }
 }
 

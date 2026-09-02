@@ -1,7 +1,12 @@
 import { dimensions, personas } from "./personas";
 import { questions } from "./questions";
 import { dimensionIds } from "./personas";
-import { calculateDimensionScores, matchPersonas } from "./scoring";
+import {
+  calculateDimensionScores,
+  calculateScoring,
+  matchPersonas,
+  SKIP_ANSWER,
+} from "./scoring";
 
 export const primaryCoveragePatterns: Record<string, string> = {
   P01: "BABDCCABCDBABABDDCACCBDAC",
@@ -20,6 +25,28 @@ export const primaryCoveragePatterns: Record<string, string> = {
   P14: "EBDBBCBCCAADBEECBBADCBCAD",
   P15: "AEABCCCDADDDBEDDDAABCABAD",
   P16: "BEDCAEDCABADDEDCADADDDCAD",
+};
+
+// Four no-experience scenarios are skipped in each pattern. This guards
+// against regressions where skipping unavailable scenarios makes a persona
+// unreachable.
+const skippedPrimaryCoveragePatterns: Record<string, string> = {
+  P01: "BSBDCCASCDBABSBDDCASCBDAC",
+  P02: "DSBDCCDSCDAABSBDDCBSDBAAA",
+  P03: "DSBADBASCCBAASBDDACSDBACB",
+  P04: "ASDCADCSAAADCSCCBAASDDBDB",
+  P05: "DSACDEDSAADBBSDDCDASDACBD",
+  P06: "ESBDBCCSCCADBSCAACBSDDCAB",
+  P07: "DSBAABCSCCBDASBBCCBSABDCB",
+  P08: "BSDBDCDSCBDCBSDDBDASDABAD",
+  P09: "DSBACBCSCCBDBSBBBACSCDADB",
+  P10: "DSCBCEASACAAASEBBCASAAABA",
+  P11: "ESCBBEBSCCADDSCACCBSDDAAD",
+  P12: "DSDBDCASCDDABSDDDDASDBDAA",
+  P13: "CSDBCEASCDDABSDDDDASCADAA",
+  P14: "ESDBBCBSCAADBSECBBASCBCAD",
+  P15: "ASABCCCSADDDBSDDDAASCABAD",
+  P16: "BSDCAEDSABADDSDCADASDDCAD",
 };
 
 export function validateModel(): string[] {
@@ -114,6 +141,38 @@ export function validatePrimaryPersonaCoverage(): string[] {
     if (primary.persona.id !== persona.id) {
       errors.push(
         `Primary coverage pattern for ${persona.id} resolves to ${primary.persona.id}.`,
+      );
+    }
+  });
+
+  return errors;
+}
+
+export function validateSkippedPrimaryPersonaCoverage(): string[] {
+  const errors: string[] = [];
+
+  personas.forEach((persona) => {
+    const pattern = skippedPrimaryCoveragePatterns[persona.id];
+    if (!pattern) {
+      errors.push(`Missing skipped coverage pattern for ${persona.id}.`);
+      return;
+    }
+
+    const answers = Object.fromEntries(
+      questions.map((question, index) => [
+        question.id,
+        pattern[index] === "S" ? SKIP_ANSWER : pattern[index],
+      ]),
+    );
+    const scoring = calculateScoring(questions, answers);
+    const [primary] = matchPersonas(
+      scoring.dimensionScores,
+      scoring.dimensionCoverage,
+    );
+
+    if (primary.persona.id !== persona.id) {
+      errors.push(
+        `Skipped coverage pattern for ${persona.id} resolves to ${primary.persona.id}.`,
       );
     }
   });
