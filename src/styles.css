@@ -419,20 +419,9 @@ h3 {
 }
 
 .skip-button {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  align-items: center;
-  gap: 3px 8px;
-  width: min(640px, 100%);
-  margin: 14px auto 0;
-  padding: 10px 14px;
+  min-width: 96px;
   color: #52606b;
-  background: #ffffff;
   border: 1px dashed #b9c3bd;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 650;
   transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
@@ -451,13 +440,6 @@ h3 {
 .skip-button svg {
   width: 18px;
   height: 18px;
-}
-
-.skip-button small {
-  grid-column: 1 / -1;
-  color: #687671;
-  font-size: 12px;
-  font-weight: 500;
 }
 
 .test-notice {
@@ -479,6 +461,13 @@ h3 {
   justify-content: center;
   gap: 12px;
   margin-top: 18px;
+}
+
+.test-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .test-footer-copy {
@@ -1063,11 +1052,6 @@ h3 {
     height: 27px;
   }
 
-  .skip-button {
-    padding: 9px 10px;
-    font-size: 13px;
-  }
-
   .test-footer {
     position: fixed;
     z-index: 30;
@@ -1090,6 +1074,14 @@ h3 {
     margin: 0;
     width: 100%;
     font-size: 11px;
+  }
+
+  .test-footer-actions {
+    width: 100%;
+  }
+
+  .test-footer-actions .button {
+    flex: 1;
   }
 
   .test-footer-label {

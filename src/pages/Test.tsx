@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronLeft, RotateCcw } from "lucide-react";
+import { ChevronLeft, CircleSlash, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import MilestoneToast, { type Milestone } from "../components/MilestoneToast";
@@ -184,7 +184,6 @@ export default function Test() {
         question={question}
         selectedOption={answers[question.id]}
         onSelect={selectOption}
-        onSkip={skipQuestion}
       />
 
       {notice && <div className="test-notice" role="alert">{notice}</div>}
@@ -193,16 +192,29 @@ export default function Test() {
         <p className="test-footer-copy">
           选择后会自动进入下一题；没经历过的场景可跳过。
         </p>
-        <button
-          className="button ghost"
-          type="button"
-          onClick={goPrevious}
-          disabled={currentIndex === 0}
-          aria-label="上一题"
-        >
-          <ChevronLeft aria-hidden="true" />
-          <span className="test-footer-label">上一题</span>
-        </button>
+        <div className="test-footer-actions">
+          <button
+            className="button ghost"
+            type="button"
+            onClick={goPrevious}
+            disabled={currentIndex === 0}
+            aria-label="上一题"
+          >
+            <ChevronLeft aria-hidden="true" />
+            <span className="test-footer-label">上一题</span>
+          </button>
+          <button
+            className={`button ghost skip-button ${
+              answers[question.id] === SKIP_ANSWER ? "selected" : ""
+            }`}
+            type="button"
+            onClick={skipQuestion}
+            aria-pressed={answers[question.id] === SKIP_ANSWER}
+          >
+            <CircleSlash aria-hidden="true" />
+            <span>Skip</span>
+          </button>
+        </div>
       </footer>
 
       <MilestoneToast milestone={milestone} />
