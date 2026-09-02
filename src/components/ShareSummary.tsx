@@ -83,7 +83,7 @@ export default function ShareSummary({
       `主原型匹配度：${Math.round(result.matchScores[primary.id] * 100)}%`,
       "关键倾向：",
       tensionLines,
-      "本结果仅供娱乐和团队交流。",
+      "本结果用于团队交流与自我觉察。",
       `测试链接：${shareUrl}`,
     ].join("\n");
   }, [primary, result, secondary, shareUrl, topTensions]);
@@ -150,7 +150,7 @@ export default function ShareSummary({
     context.fillStyle = "#52606b";
     context.font = "400 34px 'Microsoft YaHei', sans-serif";
     context.fillText(`副原型：${secondary.name}`, 170, 1165);
-    context.fillText("公司人格图鉴｜仅供娱乐和团队交流", 170, 1230);
+    context.fillText("公司人格图鉴｜用于团队交流与自我觉察", 170, 1230);
 
     // Keep a quiet area around the QR code for WeChat long-press recognition.
     context.fillStyle = "#ffffff";

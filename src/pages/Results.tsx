@@ -187,7 +187,7 @@ export default function Results() {
       </div>
 
       <footer className="ai-generation-note">
-        本测试内容由 AI 根据燧原公司文化价值观生成，仅供娱乐和团队交流，不作为评价、决策或任何正式参考。
+        本测试内容由 AI 根据燧原公司文化价值观生成，用于团队交流与自我觉察，不作为评价、决策或任何正式参考。
       </footer>
 
       {shareMessage && <div className="share-toast">{shareMessage}</div>}
